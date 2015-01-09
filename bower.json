@@ -1,0 +1,38 @@
+{
+  "name": "plumb-angular",
+  "main": [
+    "dist/plumb-angular.js",
+    "dist/styles/plumb-angular.css"
+  ],
+  "version": "0.1.26",
+  "authors": [
+    {
+      "name": "typefoo",
+      "email": "hello@typefoo.com"
+    }
+  ],
+  "description": "Kurrency AngularJS Library",
+  "keywords": [
+    "angular",
+    "angularjs",
+    "plumb"
+  ],
+  "license": "AGPL",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "/styles",
+    "plumb-templates",
+    "examples",
+    "public",
+    "/src",
+    "build",
+    "Gruntfile.js",
+    "npm-debug.log",
+    "package.json"
+  ],
+  "devDependencies": {
+    "angular": "~1.2.25"
+  }
+}

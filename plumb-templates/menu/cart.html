@@ -1,0 +1,34 @@
+<h1>Shopping Cart</h1>
+<div ng-show="!cart || !cart.length">
+  <p>You have nothing in your cart</p>
+  <button type="button" class="kurrency-button" ng-click="menuService.close()">Continue Shopping</button>
+</div>
+<div ng-show="cart && cart.length">
+  <ul class="cart-products">
+    <li class="cart-product" ng-repeat="product in cart">
+      <div class="clearfix">
+        <div class="left">
+          <div class="name" ng-bind="product.name"></div>
+        </div>
+        <div class="right">
+          <div class="price"><span ng-bind-html="displayProductPrice(product)"></span></div>
+        </div>
+      </div>
+      <div class="clearfix">
+        <div class="left">
+          <div class="variants" ng-repeat="v in product.variants">{{v.name}}: {{v.value}}</div>
+          <div class="quantity">Count: <input ng-model="product.qty" ng-change="updateQuantity(product)"></div>
+        </div>
+        <div class="right">
+          <div class="variants" ng-repeat="v in product.variants" ng-bind-html="displayVariantPrice(v)"></div>
+          <div class="remove"><a href ng-click="removeProduct(product)">remove</a></div>
+        </div>
+      </div>
+    </li>
+    <li class="cart-product total">
+      <div class="left">Product Total</div>
+      <div class="right product-total">{{product_total/100 | currency}}</div>
+    </li>
+  </ul>
+  <button type="button" class="kurrency-button checkout-button" ng-click="menuService.toggle('checkout', 'cart')">Checkout</button>
+</div>

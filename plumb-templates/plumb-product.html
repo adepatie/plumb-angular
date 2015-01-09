@@ -1,0 +1,28 @@
+<div class="kurrency-product">
+  <div class="kurrency-product-container">
+    <kurrency-image src="product.images[0]" options="{size: '300x200'}" alt="product.name"></kurrency-image>
+  </div>
+  <div class="kurrency-product-container">
+    <div class="column">
+      <h2 ng-bind="product.name"></h2>
+      <h3 ng-show="product.sub_title" ng-bind="product.sub_title"></h3>
+      <span class="price" ng-bind="kurrencyMenuService.getPrice(product)"></span>
+    </div>
+    <div class="column">
+      <div ng-show="product.attributes">
+        <div ng-repeat="variant in product.attributes">
+          <div ng-if="variant.type == 'select'">
+            <select class="form-control" ng-model="variant.$selected" ng-change="kurrencyMenuService.setVariant(product, variant.name, variant.$selected)" ng-options="option as variantDisplay(option) for option in variant.options"><option value>Select a {{variant.name}}</option></select>
+          </div>
+          <div ng-if="variant.type == 'multi'">
+            <div class="variant-option checkbox" ng-repeat="option in variant.options" ng-hide="!option.name.length">
+              <label><input type="checkbox" ng-click="kurrencyMenuService.setMultiVariant(product, variant.name, option)">{{option.name}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button class="add-to-cart" type="button" ng-click="kurrencyMenuService.addToCart(product, 1)">Buy Now</button>
+    </div>
+    <p ng-bind-html="product.short_description"></p>
+  </div>
+</div>
