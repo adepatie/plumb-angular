@@ -1237,6 +1237,9 @@
               var req = new Request($scope).post($scope.options.baseUrl + '/shipping/rates', params, $scope.handleError);
               req.success(function (res) {
                 var rates = res.pkg.data;
+                if(!rates) {
+                  return cb(res.pkg.meta, null);
+                }
                 rates.sort(function (a, b) {
                   return a.cost - b.cost;
                 });
@@ -1963,7 +1966,8 @@
               'checkout-3': [],
               wishlist: [],
               contact: [],
-              account: []
+              account: [],
+              'shipping-rates': []
             };
             scope.plumb = plumb;
 
@@ -2154,6 +2158,7 @@
             };
 
             scope.getRates = function() {
+              scope.wipeMessages();
               if(!scope.checkout.shipment.ship_to.address.postal_code
                 || scope.checkout.shipment.ship_to.address.postal_code.length < 5) {
                 return;
@@ -2171,6 +2176,9 @@
                 products: scope.cart
               }, function(err, packages) {
                 if(err) {
+                  for(var i = 0; i < err.length; i++) {
+                    scope.addMessage('error', err[i], 'shipping-rates');
+                  }
                   return console.log(err);
                 }
 
@@ -2280,10 +2288,9 @@
               });
             };
 
-            scope.addMessage = function(type, msg) {
-              var section = plumbMenuService.showing;
+            scope.addMessage = function(type, msg, section) {
               if(!section) {
-                section = 'none';
+                section = plumbMenuService.showing || 'none';
               }
 
               scope.messages[section].push({type: type, message: msg});

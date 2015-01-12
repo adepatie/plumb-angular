@@ -3,6 +3,9 @@
 <form>
   <div ng-show="requiresShipping">
     <p>Select a shipping method</p>
+    <div class="alerts">
+      <div ng-repeat="alert in messages['shipping-rates']" class="alert-{{alert.type}}">{{alert.message}}</div>
+    </div>
     <div ng-repeat="package in packages">
       <select class="plumb-input" ng-model="selectedRate" ng-disabled="rates.length <= 0" ng-options="rate as ((rate.cost | currency) + ' - ' + rate.name) for rate in package.rates">
         <option value="">Please Wait...</option>
