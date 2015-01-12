@@ -1213,7 +1213,7 @@
             return price;
           }
 
-          shipping.prototype.rates = function (data, cb) {
+          shipping.prototype.rates = function (data, cb, errCb) {
             if (!data.products) {
               return cb(new Error('Missing products'), null);
             }
@@ -1233,8 +1233,12 @@
               params.products.push({_id: data.products[i]._id, qty: data.products[i].qty});
             }
 
+            if(!errCb) {
+              errCb = $scope.handleError;
+            }
+
             $scope.session.get(function (err, session) {
-              var req = new Request($scope).post($scope.options.baseUrl + '/shipping/rates', params, $scope.handleError);
+              var req = new Request($scope).post($scope.options.baseUrl + '/shipping/rates', params, errCb);
               req.success(function (res) {
                 var rates = res.pkg.data;
                 if(!rates) {
@@ -2189,6 +2193,11 @@
                 scope.packages = packages;
                 scope.selectedRate = scope.packages[0].rates[0];
                 scope.updateFinalTotal();
+              }, function(err) {
+                for(var i = 0; i < err.pkg.statusMessage.length; i++) {
+                  scope.addMessage('error', err.pkg.statusMessage[i], 'shipping-rates');
+                }
+                return console.log(err);
               });
             };
 
