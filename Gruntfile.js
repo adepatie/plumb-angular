@@ -160,8 +160,8 @@ module.exports = function(grunt) {
         src:      'plumb-templates/**/*.html',
         dest:     '<%= build %>/templates.js',
         options: {
-          angular:  'w[KURRENCY_CONFIG.ANGULAR]',
-          module:   'KurrencyApp'
+          angular:  'w[PLUMB_CONFIG.ANGULAR]',
+          module:   'PlumbApp'
         }
       }
     },

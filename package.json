@@ -1,7 +1,7 @@
 {
   "name": "plumb-angular",
-  "version": "0.1.26",
-  "description": "Kurrency AngularJS Library",
+  "version": "0.0.1",
+  "description": "Plumb AngularJS Library",
   "main": [
     "dist/plumb-angular.js",
     "dist/styles/plumb-angular.css"

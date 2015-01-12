@@ -4,14 +4,14 @@
     "dist/plumb-angular.js",
     "dist/styles/plumb-angular.css"
   ],
-  "version": "0.1.26",
+  "version": "0.0.1",
   "authors": [
     {
       "name": "typefoo",
       "email": "hello@typefoo.com"
     }
   ],
-  "description": "Kurrency AngularJS Library",
+  "description": "Plumb AngularJS Library",
   "keywords": [
     "angular",
     "angularjs",
@@ -33,6 +33,6 @@
     "package.json"
   ],
   "devDependencies": {
-    "angular": "~1.2.25"
+    "angular": "~1.3.8"
   }
 }

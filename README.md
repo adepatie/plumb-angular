@@ -1,51 +1,51 @@
-# Kurrency JSAPI Angular Library
+# Plumb JSAPI Angular Library
 
-Depends on angular >= 1.2, it will be downloaded at runtime if you are using the script standalone or from www.kurrency.co.
+Depends on angular >= 1.2, it will be downloaded at runtime if you are using the script standalone or from www.plummb.com.
 
 # Getting Started
 
 ```
-bower install kurrency-angular --save
+bower install plumb-angular --save
 ```
 
 Add the script to your site
 
 ```html
-<script src="bower_components/dist/kurrency-angular.js"></script>
+<script src="bower_components/dist/plumb-angular.js"></script>
 ```
 
 Configure your app
 
 ```js
-angular.module('ExampleApp', ['kurrency'])
-  .config(['kurrencyConfig', function(kurrencyConfig) {
-    kurrencyConfig.cache = true; // enable caching of data
-    kurrencyConfig.local = false; // set true for local kurrency server testing
-    kurrencyConfig.accessToken = 'EFGHIJ123456789'; // get from your Kurrency account dashboard
-    kurrencyConfig.mode = 'test' // or live
+angular.module('ExampleApp', ['plumb'])
+  .config(['plumbConfig', function(plumbConfig) {
+    plumbConfig.cache = true; // enable caching of data
+    plumbConfig.local = false; // set true for local plumb server testing
+    plumbConfig.accessToken = 'EFGHIJ123456789'; // get from your Plumb account dashboard
+    plumbConfig.mode = 'test' // or live
   }])
 ```
 
 Use it in another service or controller
 
 ```js
-angular.module('ExampleApp').controller('TestController', function($scope, kurrency) {
+angular.module('ExampleApp').controller('TestController', function($scope, plumb) {
   $scope.product_lines = [];
   $scope.products = [];
   
-  kurrency.session.get(function(err, session) {
+  plumb.session.get(function(err, session) {
     if(err) {
       return console.log(err);
       // handle your error better than that!
     }
     
-    kurrency.product_lines.list({}, function(err, lines) {
+    plumb.product_lines.list({}, function(err, lines) {
       if(err) {
         return console.log(err);
       }
       
       $scope.product_lines = lines;
-      kurrency.products.list({conditions: {active: true, category: lines[0].name}}, function(err, products) {
+      plumb.products.list({conditions: {active: true, category: lines[0].name}}, function(err, products) {
         if(err) {
           return console.log(err);
         }
@@ -61,79 +61,79 @@ angular.module('ExampleApp').controller('TestController', function($scope, kurre
 
 ## Sessions
 
-In order to call most of the API functions you must have established a session with Kurrency. This session lasts as long as the browser session and will be deleted once the user closes the browser. Server side, the session information can be retained for up to 30 days for use in analytics, lost carts, or incomplete orders.
+In order to call most of the API functions you must have established a session with Plumb. This session lasts as long as the browser session and will be deleted once the user closes the browser. Server side, the session information can be retained for up to 30 days for use in analytics, lost carts, or incomplete orders.
 
-`kurrency.session.get(callback(err, session))`
+`plumb.session.get(callback(err, session))`
 
 Performs a GET session. If there is no `Session-Id`, one will be procured if the `Access-Token` is accepted.
 
-`kurrency.sessions.save(session, callback(err, session))`
+`plumb.sessions.save(session, callback(err, session))`
 
 Saves the current session data.
 
 ## Cart
 
-`kurrency.cart.get(callback(err, cart))`
+`plumb.cart.get(callback(err, cart))`
 
-`kurrency.cart.add(product, quantity, callback(err, cart))`
+`plumb.cart.add(product, quantity, callback(err, cart))`
 
-`kurrency.cart.update(product, quantity, callback(err, cart))`
+`plumb.cart.update(product, quantity, callback(err, cart))`
 
-`kurrency.cart.remove(product, callback(err, cart))`
+`plumb.cart.remove(product, callback(err, cart))`
 
-`kurrency.cart.empty(callback(err, cart))`
+`plumb.cart.empty(callback(err, cart))`
 
-`kurrency.cart.replace(new_cart, callback(err, cart))`
+`plumb.cart.replace(new_cart, callback(err, cart))`
 
 ## Authentication
 
 Authentication will create a User with an `Authentication-Key` based on the current API `Access-Token`.
 
-`kurrency.auth.login(email, password, callback(err, user))`
+`plumb.auth.login(email, password, callback(err, user))`
 
-`kurrency.auth.register(data, callback(err, user))`
+`plumb.auth.register(data, callback(err, user))`
 
-`kurrency.auth.forgotPassword(email, callback(err, success))`
+`plumb.auth.forgotPassword(email, callback(err, success))`
 
 ## Addresses
 
-`kurrency.addresses.list(callback(err, addresses))`
+`plumb.addresses.list(callback(err, addresses))`
 
-`kurrency.addresses.create(data, callback(err, address))`
+`plumb.addresses.create(data, callback(err, address))`
 
-`kurrency.addresses.edit(address, callback(err, address))`
+`plumb.addresses.edit(address, callback(err, address))`
 
-`kurrency.addresses.remove(address, callback(err, address))`
+`plumb.addresses.remove(address, callback(err, address))`
 
 ## Payment Methods
 
-`kurrency.payment_methods.list(callback(err, payment_methods))`
+`plumb.payment_methods.list(callback(err, payment_methods))`
 
-`kurrency.payment_methods.create(data, callback(err, payment_method))`
+`plumb.payment_methods.create(data, callback(err, payment_method))`
 
-`kurrency.payment_methods.edit(address, callback(err, payment_method))`
+`plumb.payment_methods.edit(address, callback(err, payment_method))`
 
-`kurrency.payment_methods.remove(address, callback(err, payment_method))`
+`plumb.payment_methods.remove(address, callback(err, payment_method))`
 
 ## Products
 
-`kurrency.products.list(options, callback(err, products))`
+`plumb.products.list(options, callback(err, products))`
 
 ## Product Lines
 
-`kurrency.product_lines.list(options, callback(err, product_lines))`
+`plumb.product_lines.list(options, callback(err, product_lines))`
 
 ## Orders
 
-`kurrency.orders.list(options, callback(err, orders))`
+`plumb.orders.list(options, callback(err, orders))`
 
-`kurrency.orders.create(data, callback(err, order))`
+`plumb.orders.create(data, callback(err, order))`
 
-`kurrency.orders.taxes(value, shipment, callback(err, tax))`
+`plumb.orders.taxes(value, shipment, callback(err, tax))`
 
 ## Shipping
 
-`kurrency.shipping.rates(data, callback(err, rates)`
+`plumb.shipping.rates(data, callback(err, rates)`
 
 data is an object:
 
@@ -156,28 +156,28 @@ data is an object:
 
 # AngularJS Directives
 
-This Kurrency library comes with several AngularJS directives for things like handling the menu widget, product, and product line listings. It also has a useful imager tool for resizing images in the CDN.
+This Plumb library comes with several AngularJS directives for things like handling the menu widget, product, and product line listings. It also has a useful imager tool for resizing images in the CDN.
 
 ## Menu Widget
 
 Should be placed near the ending </body> tag
 
-`<kurrency-menu></kurrency-menu>`
+`<plumb-menu></plumb-menu>`
 
 ## Product Widget
 
-`<kurrency-product id="'53ff8b2a35ed366c2b939f58'"></kurrency-product>`
+`<plumb-product id="'53ff8b2a35ed366c2b939f58'"></plumb-product>`
 
 
 ## Imager
 
 Place anywhere in your project
 
-`<kurrency-image src="product.images[0]" options="{size: '300x200'}" alt="product.name"></kurrency-image>
+`<plumb-image src="product.images[0]" options="{size: '300x200'}" alt="product.name"></plumb-image>
 
 Or for a static URL:
 
-`<kurrency-image src="'http://mywebsite.com/path/to/image.jpg" options="{size: '300x200'}" alt="product.name"></kurrency-image>
+`<plumb-image src="'http://mywebsite.com/path/to/image.jpg" options="{size: '300x200'}" alt="product.name"></plumb-image>
 
 
 # License

@@ -1,9 +1,9 @@
 /**
- *  Kurrency AngularJS Library
+ *  Plumb AngularJS Library
  *
- *  Service (factory) for kurrency operations utilizing the JSAPI
+ *  Service (factory) for plumb operations utilizing the JSAPI
  *
- *  Kurrency is a product of typefoo. Copyright 2013 uh-sem-blee, Co.
+ *  Plumb is a product of typefoo. Copyright 2013 uh-sem-blee, Co.
  *  You may distribute and reproduce this file, but may not claim ownership or manipulate
  *  for your own use.
  *
@@ -12,8 +12,9 @@
 (function(w, d) {
   'use strict';
 
-  if(!w.KURRENCY_CONFIG) {
-    w.KURRENCY_CONFIG = {
+  if(!w.PLUMB_CONFIG) {
+    console.log('no plumb config');
+    w.PLUMB_CONFIG = {
       ANGULAR: 'angular',
       MENU: {
 
@@ -21,12 +22,16 @@
       STRIPEJS: true
     };
   } else {
-    if(!w.KURRENCY_CONFIG.ANGULAR) {
-      w.KURRENCY_CONFIG.ANGULAR = 'angular';
+    if(!w.PLUMB_CONFIG.ANGULAR) {
+      w.PLUMB_CONFIG.ANGULAR = 'angular';
     }
   }
 
-  if(!w.KURRENCY_CONFIG.STRIPEJS) {
+  if(typeof w.PLUMB_CONFIG.STRIPEJS === 'undefined') {
+    w.PLUMB_CONFIG.STRIPEJS = true;
+  }
+
+  if(w.PLUMB_CONFIG.STRIPEJS) {
     var stripe_scrip = d.createElement('script');
     stripe_scrip.type = 'text/javascript';
     stripe_scrip.async = true;
@@ -44,43 +49,47 @@
     }
   }
 
-  if (!w[w.KURRENCY_CONFIG.ANGULAR] && (typeof w.KURRENCY_CONFIG.REQUIRE_ANGULAR === 'undefined' || w.KURRENCY_CONFIG.REQUIRE_ANGULAR === true)) {
+  if (!w[w.PLUMB_CONFIG.ANGULAR] && (typeof w.PLUMB_CONFIG.REQUIRE_ANGULAR === 'undefined' || w.PLUMB_CONFIG.REQUIRE_ANGULAR === true)) {
     var scrip = d.createElement('script');
     scrip.type = 'text/javascript';
     scrip.async = true;
-    scrip.src = '//ajax.googleapis.com/ajax/libs/angularjs/1.3.6/angular.min.js';
+    scrip.src = '//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js';
     d.getElementsByTagName('body')[0].appendChild(scrip);
     if (scrip.readyState) {
       scrip.onreadystatechange = function () {
         if (scrip.readyState == "loaded" || scrip.readyState == "complete") {
           scrip.onreadystatechange = null;
-          setupKurrency();
+          setupPlumb();
         }
       }
     } else {
       scrip.onload = function () {
-        setupKurrency();
+        setupPlumb();
       }
     }
   } else {
-    setupKurrency();
+    setupPlumb();
   }
 
-  function setupKurrency() {
-    w[KURRENCY_CONFIG.ANGULAR].module('KurrencyApp', []);
+  function setupPlumb() {
+    w[PLUMB_CONFIG.ANGULAR].module('PlumbApp', []);
     //$templateCache
-    w[KURRENCY_CONFIG.ANGULAR].module('KurrencyApp')
-      .constant('kurrencyConfig', {
-        cache: false,
-        local: false,
-        accessToken: 'ABC123',
-        mode: 'test',
-        display_logo: true,
-        phrases: {
+    w[PLUMB_CONFIG.ANGULAR].module('PlumbApp')
+      .provider('plumbConfig', function() {
+        this.cache = w.PLUMB_CONFIG.CACHE ? w.PLUMB_CONFIG.CACHE : false;
+        this.local = w.PLUMB_CONFIG.LOCAL ? w.PLUMB_CONFIG.LOCAL : false;
+        this.accessToken = w.PLUMB_CONFIG.ACCESS_TOKEN ? w.PLUMB_CONFIG.ACCESS_TOKEN : 'ABC123';
+        this.mode = w.PLUMB_CONFIG.MODE ? w.PLUMB_CONFIG.MODE : 'test';
+        this.display_logo = true;
+        this.phrases = {
           cart_empty: 'You don\'t have anything in your cart'
-        },
-        display_price_breakdown: true,
-        months: [
+        };
+        this.baseUrls = {
+          test: 'http://0.0.0.0:3458/jsapi',
+          production: 'https://api.plumb.io/api/jsapi'
+        };
+        this.display_price_breakdown = true;
+        this.months = [
           {
             name: 'January',
             value: 1
@@ -129,9 +138,9 @@
             name: 'December',
             value: 12
           }
-        ],
+        ];
         // this is so inefficient lol, change
-        years: [
+        this.years = [
           {
             name: new Date().getFullYear(),
             value: new Date().getFullYear()
@@ -164,8 +173,8 @@
             name: new Date().getFullYear()+7,
             value: new Date().getFullYear()+7
           }
-        ],
-        states:
+        ];
+        this.states =
           [
             {
               'name': 'Alberta',
@@ -447,8 +456,8 @@
               'name': 'Yukon',
               'value': 'YT'
             }
-          ],
-          countries: [
+          ];
+          this.countries = [
             {
               name: 'United States',
               value: 'US'
@@ -457,29 +466,33 @@
               name: 'Canada',
               value: 'CA'
             }
-          ]
+          ];
+
+        this.$get = function() {
+          return this;
+        };
       })
-      .factory('kurrency', ['$rootScope', '$http', 'kurrencyConfig', '$q', function ($rootScope, $http, kurrencyConfig, $q) {
-        function Request(kurrency, opts) {
+      .factory('plumb', ['$rootScope', '$http', 'plumbConfig', '$q', function ($rootScope, $http, plumbConfig, $q) {
+        function Request(plumb, opts) {
           var $scope = this;
           $scope.options = {};
 
-          if (!kurrency) {
-            return console.log('Missing Kurrency object');
+          if (!plumb) {
+            return console.log('Missing Plumb object');
           }
 
           var defaults = {
             type: 'get',
             url: '',
             path: '',
-            baseUrl: kurrency.options.baseUrl || '',
+            baseUrl: plumb.options.baseUrl || '',
             data: {},
             dataType: 'json',
             headers: {
-              'Access-Token': kurrency.options.accessToken,
-              'Authentication-Key': kurrency.options.authenticationKey ? kurrency.options.authenticationKey : undefined,
-              'Session-Id': kurrency.options.session ? kurrency.options.session._id : undefined,
-              'Kurrency-Mode': kurrency.options.mode ? kurrency.options.mode : 'test'
+              'Access-Token': plumb.options.accessToken,
+              'Authentication-Key': plumb.options.authenticationKey ? plumb.options.authenticationKey : undefined,
+              'Session-Id': plumb.options.session ? plumb.options.session._id : undefined,
+              'Kurrency-Mode': plumb.options.mode ? plumb.options.mode : 'test'
             },
             commonError: function (res, status, error) {
               console.log(res);
@@ -490,7 +503,7 @@
             if(!data) {
               return data;
             }
-            var newData = w[KURRENCY_CONFIG.ANGULAR].copy(data);
+            var newData = w[PLUMB_CONFIG.ANGULAR].copy(data);
             if(typeof newData !== 'object') {
               return newData;
             }
@@ -541,16 +554,16 @@
           };
 
           $scope.config = function (opts) {
-            $scope.options = w[KURRENCY_CONFIG.ANGULAR].extend({}, defaults, opts);
+            $scope.options = w[PLUMB_CONFIG.ANGULAR].extend({}, defaults, opts);
 
             return $scope;
           };
 
-          $scope.req = function (type, url, data, error) {
+          $scope.req = function doRequest(type, url, data, error) {
             $rootScope.$broadcast('apiLoading', true);
-            var opts = w[KURRENCY_CONFIG.ANGULAR].extend({}, $scope.options);
-            if(kurrency.options.user) {
-              opts.headers['authentication-key'] = kurrency.options.user.authenticationKey;
+            var opts = w[PLUMB_CONFIG.ANGULAR].extend({}, $scope.options);
+            if(plumb.options.user) {
+              opts.headers['authentication-key'] = plumb.options.user.authenticationKey;
             }
             opts.method = type;
             opts.url = url;
@@ -568,6 +581,8 @@
                 opts.params.conditions = JSON.stringify(opts.params.conditions);
               }
             }
+
+            console.log(opts.headers);
 
             var req = $http(opts);
 
@@ -692,17 +707,13 @@
           return $scope;
         }
 
-        var Kurrency = function (opts) {
+        var Plumb = function (opts) {
           var $scope = this;
           $scope.options = {};
           $scope.Stor = Stor;
           $scope.Request = Request;
 
           var storage = $scope.storage = new $scope.Stor();
-          var baseUrls = $scope.baseUrls = {
-            test: 'http://0.0.0.0:3458/jsapi',
-            production: 'https://api.kurrency.io/api/jsapi'
-          };
           var cache = {
             products: {},
             product_lines: {}
@@ -712,22 +723,22 @@
             throw Error('angular is missing');
           }
           var defaults = {
-            caching: true,
-            local: false,
-            accessToken: '',
-            authenticationKey: null, // if user is logged in
+            caching: plumbConfig.caching,
+            local: plumbConfig.local,
+            accessToken: plumbConfig.accessToken,
+            authenticationKey: plumbConfig.authenticationKey, // if user is logged in
             session: null,
             user: null,
-            mode: 'test',
-            baseUrl: baseUrls[this.local ? 'test' : 'production']
+            mode: plumbConfig.mode,
+            baseUrl: plumbConfig.baseUrls[plumbConfig.local ? 'test' : 'production']
           };
 
           $scope.config = function (opts) {
-            $scope.options = w[KURRENCY_CONFIG.ANGULAR].extend(defaults, opts);
+            $scope.options = w[PLUMB_CONFIG.ANGULAR].extend({}, defaults, opts);
             if ($scope.options.local) {
-              $scope.options.baseUrl = baseUrls.test;
+              $scope.options.baseUrl = plumbConfig.baseUrls.test;
             } else {
-              $scope.options.baseUrl = baseUrls.production;
+              $scope.options.baseUrl = plumbConfig.baseUrls.production;
             }
 
             $scope.options.user = storage.get('user');
@@ -741,7 +752,7 @@
               $scope.options.session = null;
             }
 
-            $rootScope.$broadcast('kurrencyError', res);
+            $rootScope.$broadcast('plumbError', res);
           };
 
           /*
@@ -832,7 +843,7 @@
                 requires_shipping: product.requires_shipping,
                 allow_presale: product.allow_presale,
                 taxable: product.taxable,
-                variants: w[KURRENCY_CONFIG.ANGULAR].copy(product.variants)
+                variants: w[PLUMB_CONFIG.ANGULAR].copy(product.variants)
               });
               $scope.session.get(function (err, session) {
                 session.data.cart = cart;
@@ -914,7 +925,7 @@
               session.user_id = res.pkg.data._id;
               $scope.session.get(function (err, session) {
                 $scope.auth.setUser(res.pkg.data);
-                $rootScope.$broadcast('kurrencyRegistered', res.pkg.data);
+                $rootScope.$broadcast('plumbRegistered', res.pkg.data);
                 return cb(null, res.pkg.data);
               }, true);
             });
@@ -927,7 +938,7 @@
             req.success(function (res) {
               $scope.session.get(function (err, session) {
                 $scope.auth.setUser(res.pkg.data);
-                $rootScope.$broadcast('kurrencySignIn', res.pkg.data);
+                $rootScope.$broadcast('plumbSignIn', res.pkg.data);
                 return cb(null, res.pkg.data);
               }, true);
             });
@@ -936,7 +947,7 @@
           auth.prototype.forgotPassword = function(email, cb) {
             var req = new Request($scope).post($scope.options.baseUrl + '/forgot-password', {email: email}, $scope.handleError);
             req.success(function(res) {
-              $rootScope.$broadcast('kurrencyForgotPassword', res);
+              $rootScope.$broadcast('plumbForgotPassword', res);
               return cb(null, res);
             });
           };
@@ -946,7 +957,7 @@
             storage.remove('user');
             $scope.options.session = null;
             $scope.options.user = null;
-            $rootScope.$broadcast('kurrencySignOut', true);
+            $rootScope.$broadcast('plumbSignOut', true);
           };
 
           auth.prototype.loggedIn = function() {
@@ -1206,7 +1217,7 @@
             if (!data.products) {
               return cb(new Error('Missing products'), null);
             }
-            var params = w[KURRENCY_CONFIG.ANGULAR].copy(data);
+            var params = w[PLUMB_CONFIG.ANGULAR].copy(data);
 
             delete params.products;
             params.packages = [
@@ -1278,7 +1289,7 @@
               $scope.ship_to.address = address;
             };
 
-            $scope = w[KURRENCY_CONFIG.ANGULAR].extend($scope, options);
+            $scope = w[PLUMB_CONFIG.ANGULAR].extend($scope, options);
             return $scope;
           }
 
@@ -1322,7 +1333,7 @@
               $scope.ship_to.address = address;
             };
 
-            $scope = w[KURRENCY_CONFIG.ANGULAR].extend($scope, options);
+            $scope = w[PLUMB_CONFIG.ANGULAR].extend($scope, options);
             return $scope;
           }
 
@@ -1336,7 +1347,7 @@
             $scope.type = 'credit_card';
             $scope.card = {};
             $scope.bank_account = {};
-            $scope = w[KURRENCY_CONFIG.ANGULAR].extend($scope, options);
+            $scope = w[PLUMB_CONFIG.ANGULAR].extend($scope, options);
 
             return $scope;
           }
@@ -1354,7 +1365,7 @@
             $scope._id = undefined;
             $scope.card_token = null;
 
-            $scope = w[KURRENCY_CONFIG.ANGULAR].extend($scope, options);
+            $scope = w[PLUMB_CONFIG.ANGULAR].extend($scope, options);
 
             /*
              * Tokenize a card in Stripe/Balanced
@@ -1402,7 +1413,7 @@
             $scope.bank_account.routing_number = undefined;
             $scope.bank_account.type = 'checking';
 
-            $scope = w[KURRENCY_CONFIG.ANGULAR].extend($scope, options);
+            $scope = w[PLUMB_CONFIG.ANGULAR].extend($scope, options);
             return $scope;
           }
 
@@ -1423,12 +1434,12 @@
           return $scope.config(opts);
         };
 
-        return new Kurrency(kurrencyConfig);
+        return new Plumb(plumbConfig);
       }])
       .config(function($sceProvider) {
         $sceProvider.enabled(false);
       })
-      .factory('kurrencyMenuService', ['kurrency', 'kurrencyConfig', '$rootScope', '$filter', function(kurrency, kurrencyConfig, $rootScope, $filter) {
+      .factory('plumbMenuService', ['plumb', 'plumbConfig', '$rootScope', '$filter', function(plumb, plumbConfig, $rootScope, $filter) {
         var $scope = this;
 
         $scope.menu = [];
@@ -1438,7 +1449,7 @@
         $scope.back = null;
         $scope.next = null;
 
-        kurrency.cart.get(function(err, cart) {
+        plumb.cart.get(function(err, cart) {
           $scope.cart = cart;
         });
 
@@ -1486,13 +1497,13 @@
             name: null,
             tag: null,
             uri: null,
-            buttonTemplateUrl: 'kurrency-templates/menu/button.html',
+            buttonTemplateUrl: 'plumb-templates/menu/button.html',
             showLoggedIn: false,
             showLoggedOut: false,
             onClick: null
           };
 
-          item = w[KURRENCY_CONFIG.ANGULAR].extend({}, defaults, item);
+          item = w[PLUMB_CONFIG.ANGULAR].extend({}, defaults, item);
 
           $scope.menu.splice(position, 0, item);
 
@@ -1506,7 +1517,7 @@
             templateUrl: null
           };
 
-          item = w[KURRENCY_CONFIG.ANGULAR].extend({}, defaults, item);
+          item = w[PLUMB_CONFIG.ANGULAR].extend({}, defaults, item);
 
           $scope.sidebars.push(item);
 
@@ -1525,7 +1536,7 @@
           if(variants && variants.length) {
             product.variants = variants;
           }
-          kurrency.cart.add(product, qty, function(err, cart) {
+          plumb.cart.add(product, qty, function(err, cart) {
             if(err) {
               $rootScope.$emit('cartError', err);
               return console.log(err);
@@ -1588,7 +1599,7 @@
         };
 
         $scope.checkShowing = function(item) {
-          var loggedIn = kurrency.auth.loggedIn();
+          var loggedIn = plumb.auth.loggedIn();
           if(loggedIn && item.showLoggedIn) {
             return true;
           }
@@ -1632,51 +1643,51 @@
 
         $scope.addSidebar({
           tag: 'login',
-          className: 'kurrency-login',
-          templateUrl: 'kurrency-templates/menu/sign-in.html'
+          className: 'plumb-login',
+          templateUrl: 'plumb-templates/menu/sign-in.html'
         }).addSidebar({
           tag: 'account',
-          className: 'kurrency-account',
-          templateUrl: 'kurrency-templates/menu/account.html'
+          className: 'plumb-account',
+          templateUrl: 'plumb-templates/menu/account.html'
         }).addSidebar({
           tag: 'cart',
-          className: 'kurrency-cart',
-          templateUrl: 'kurrency-templates/menu/cart.html'
+          className: 'plumb-cart',
+          templateUrl: 'plumb-templates/menu/cart.html'
         }).addSidebar({
           tag: 'checkout',
-          className: 'kurrency-checkout',
-          templateUrl: 'kurrency-templates/menu/checkout.html'
+          className: 'plumb-checkout',
+          templateUrl: 'plumb-templates/menu/checkout.html'
         }).addSidebar({
           tag: 'checkout-2',
-          className: 'kurrency-checkout',
-          templateUrl: 'kurrency-templates/menu/checkout-2.html'
+          className: 'plumb-checkout',
+          templateUrl: 'plumb-templates/menu/checkout-2.html'
         }).addSidebar({
           tag: 'checkout-3',
-          className: 'kurrency-checkout',
-          templateUrl: 'kurrency-templates/menu/checkout-3.html'
+          className: 'plumb-checkout',
+          templateUrl: 'plumb-templates/menu/checkout-3.html'
         }).addSidebar({
           tag: 'checkout-complete',
-          className: 'kurrency-checkout',
-          templateUrl: 'kurrency-templates/menu/checkout-complete.html'
+          className: 'plumb-checkout',
+          templateUrl: 'plumb-templates/menu/checkout-complete.html'
         }).addSidebar({
           tag: 'forgot-password',
-          className: 'kurrency-forgot-password',
-          templateUrl: 'kurrency-templates/menu/forgot-password.html'
+          className: 'plumb-forgot-password',
+          templateUrl: 'plumb-templates/menu/forgot-password.html'
         }).addSidebar({
           tag: 'register',
-          className: 'kurrency-register',
-          templateUrl: 'kurrency-templates/menu/register.html'
+          className: 'plumb-register',
+          templateUrl: 'plumb-templates/menu/register.html'
         });
 
         /*
          $scope.addSidebar({
            tag: 'wishlist',
-           className: 'kurrency-wishlist',
-           templateUrl: 'kurrency-templates/menu/wishlist.html'
+           className: 'plumb-wishlist',
+           templateUrl: 'plumb-templates/menu/wishlist.html'
          }).addSidebar({
            tag: 'contact',
-           className: 'kurrency-contact',
-           templateUrl: 'kurrency-templates/menu/contact.html'
+           className: 'plumb-contact',
+           templateUrl: 'plumb-templates/menu/contact.html'
          });
         */
 
@@ -1684,32 +1695,32 @@
           name: 'Sign In',
           tag: 'login',
           icon: 'kicon-login',
-          template: 'kurrency-templates/menu/sign-in.html',
+          template: 'plumb-templates/menu/sign-in.html',
           showLoggedIn: false,
           showLoggedOut: true
         }).addMenuItem({
           name: 'Account',
           tag: 'account',
           icon: 'kicon-account',
-          template: 'kurrency-templates/menu/account.html',
+          template: 'plumb-templates/menu/account.html',
           showLoggedIn: true,
           showLoggedOut: false
         }).addMenuItem({
           name: 'Shopping Cart',
           tag: 'cart',
-          buttonTemplateUrl: 'kurrency-templates/menu/button-cart.html',
-          template: 'kurrency-templates/menu/cart.html',
+          buttonTemplateUrl: 'plumb-templates/menu/button-cart.html',
+          template: 'plumb-templates/menu/cart.html',
           showLoggedIn: true,
           showLoggedOut: true
         });
 
         //Wishlist
         /*
-         kurrencyMenuService.addMenuItem({
+         plumbMenuService.addMenuItem({
          name: 'Wishlist',
          tag: 'wishlist',
          icon: 'kicon-wishlist',
-         template: 'kurrency-templates/menu/wishlist.html',
+         template: 'plumb-templates/menu/wishlist.html',
          showLoggedIn: true,
          showLoggedOut: true
          });
@@ -1717,11 +1728,11 @@
 
         //Contact
         /*
-         kurrencyMenuService.addMenuItem({
+         plumbMenuService.addMenuItem({
          name: 'Contact',
          tag: 'contact',
          icon: 'kicon-contact',
-         template: 'kurrency-templates/menu/contact.html',
+         template: 'plumb-templates/menu/contact.html',
          showLoggedIn: true,
          showLoggedOut: true
          });
@@ -1732,7 +1743,7 @@
           tag: 'sign-out',
           icon: 'kicon-sign_out',
           onClick: function (evt) {
-            kurrency.auth.signOut();
+            plumb.auth.signOut();
           },
           showLoggedIn: true,
           showLoggedOut: false
@@ -1740,13 +1751,13 @@
 
         return $scope;
       }])
-      .directive('kurrencyPopover', function() {
+      .directive('plumbPopover', function() {
         return {
-          scope: {kurrencyPopover: '=', showing: '@'},
+          scope: {plumbPopover: '=', showing: '@'},
           restrict: 'A',
           transclude: true,
           templateUrl: function(tElement, tAttrs) {
-            var url = 'kurrency-templates/kurrency-popover.html';
+            var url = 'plumb-templates/plumb-popover.html';
             if(tAttrs.templateUrl) {
               url = tAttrs.templateUrl;
             }
@@ -1754,7 +1765,7 @@
             return url;
           },
           link: function(scope, element, attr) {
-            var popover = w[KURRENCY_CONFIG.ANGULAR].element(element[0].querySelector('.kurrency-popover'));
+            var popover = w[PLUMB_CONFIG.ANGULAR].element(element[0].querySelector('.plumb-popover'));
             element.bind('mouseover', function(evt) {
               scope.showing = true;
               scope.$apply();
@@ -1775,7 +1786,7 @@
           }
         }
       })
-      .directive('kurrencyImage', ['kurrency', 'kurrencyConfig', '$parse', function(kurrency, kurrencyConfig, $parse) {
+      .directive('plumbImage', ['plumb', 'plumbConfig', '$parse', function(plumb, plumbConfig, $parse) {
         return {
           restrict: 'E',
           scope: {src: '=', options: '=?', alt: '='},
@@ -1790,8 +1801,8 @@
             });
 
             function buildUrl(src, options) {
-              var base = kurrencyConfig.local ? kurrency.baseUrls.test : kurrency.baseUrls.production;
-              var url = base + '/imager?access-token=' + kurrencyConfig.accessToken + '&url=' + encodeURIComponent(src);
+              var base = plumbConfig.local ? plumbConfig.baseUrls.test : plumbConfig.baseUrls.production;
+              var url = base + '/imager?access-token=' + plumbConfig.accessToken + '&url=' + encodeURIComponent(src);
               if(options.size) {
                 url += '&size=' + options.size;
               }
@@ -1807,12 +1818,12 @@
           }
         }
       }])
-      .directive('kurrencyProduct', ['kurrency', 'kurrencyConfig', 'kurrencyMenuService', '$filter', function(kurrency, kurrencyConfig, kurrencyMenuService, $filter) {
+      .directive('plumbProduct', ['plumb', 'plumbConfig', 'plumbMenuService', '$filter', function(plumb, plumbConfig, plumbMenuService, $filter) {
         return {
           restrict: 'E',
           scope: {id: '='},
           templateUrl: function(tElement, tAttrs) {
-            var url = 'kurrency-templates/kurrency-product.html';
+            var url = 'plumb-templates/plumb-product.html';
             if(tAttrs.templateUrl) {
               url = tAttrs.templateUrl;
             }
@@ -1821,12 +1832,12 @@
           },
           replace: true,
           link: function(scope, element, attr) {
-            scope.kurrency = kurrency;
-            scope.config = kurrencyConfig;
+            scope.plumb = plumb;
+            scope.config = plumbConfig;
             scope.product = {};
-            scope.kurrencyMenuService = kurrencyMenuService;
+            scope.plumbMenuService = plumbMenuService;
 
-            kurrency.products.list({_id: scope.id}, function(err, products) {
+            plumb.products.list({_id: scope.id}, function(err, products) {
               scope.product = products[0];
 
               if(scope.product.attributes && scope.product.attributes.length) {
@@ -1839,12 +1850,12 @@
                   if(scope.product.attributes[i].required) {
                     if(!scope.product.attributes[i].default) {
                       scope.product.attributes[i].$selected = scope.product.attributes[i].options[0];
-                      scope.product = kurrencyMenuService.setVariant(scope.product, scope.product.attributes[i].name, scope.product.attributes[i].options[0]);
+                      scope.product = plumbMenuService.setVariant(scope.product, scope.product.attributes[i].name, scope.product.attributes[i].options[0]);
                     } else {
                       for(var j = 0; j < scope.product.attributes[i].options.length; j++) {
                         if(scope.product.attributes[i].options[j].name === scope.product.attributes[i].default) {
                           scope.product.attributes[i].$selected = scope.product.attributes[i].options[j];
-                          scope.product = kurrencyMenuService.setVariant(scope.product, scope.product.attributes[i].name, scope.product.attributes[i].options[j]);
+                          scope.product = plumbMenuService.setVariant(scope.product, scope.product.attributes[i].name, scope.product.attributes[i].options[j]);
                         }
                       }
                     }
@@ -1852,7 +1863,7 @@
                     for(var j = 0; j < scope.product.attributes[i].options.length; j++) {
                       if(scope.product.attributes[i].options[j].name === scope.product.attributes[i].default) {
                         scope.product.attributes[i].$selected = scope.product.attributes[i].options[j];
-                        scope.product = kurrencyMenuService.setVariant(scope.product, scope.product.attributes[i].name, scope.product.attributes[i].options[j]);
+                        scope.product = plumbMenuService.setVariant(scope.product, scope.product.attributes[i].name, scope.product.attributes[i].options[j]);
                       }
                     }
                   }
@@ -1862,7 +1873,7 @@
 
             scope.variantDisplay = function(v) {
               var out = v.name;
-              if(!kurrencyConfig.display_price_breakdown) {
+              if(!plumbConfig.display_price_breakdown) {
                 return out;
               }
               if(v.price) {
@@ -1873,11 +1884,11 @@
           }
         }
       }])
-      .directive('kurrencyMenu', ['kurrency', 'kurrencyConfig', 'kurrencyMenuService', '$timeout', '$window', '$document', '$rootScope', '$filter', function(kurrency, kurrencyConfig, kurrencyMenuService, $timeout, $window, $document, $rootScope, $filter) {
+      .directive('plumbMenu', ['plumb', 'plumbConfig', 'plumbMenuService', '$timeout', '$window', '$document', '$rootScope', '$filter', function(plumb, plumbConfig, plumbMenuService, $timeout, $window, $document, $rootScope, $filter) {
         return {
           restrict: 'E',
           templateUrl: function(tElement, tAttrs) {
-            var url = 'kurrency-templates/kurrency-menu.html';
+            var url = 'plumb-templates/plumb-menu.html';
             if(tAttrs.templateUrl) {
               url = tAttrs.templateUrl;
             }
@@ -1886,8 +1897,8 @@
           },
           replace: true,
           link: function(scope, element, attr) {
-            scope.config = kurrencyConfig;
-            scope.menuService = kurrencyMenuService;
+            scope.config = plumbConfig;
+            scope.menuService = plumbMenuService;
             scope.cart = null;
             scope.wishlist = null;
             scope.apiLoading = 0;
@@ -1901,25 +1912,25 @@
             scope.checkout = {
               service_carrier: null,
               service_code: null,
-              shipment: new kurrency.customer(),
-              billing: new kurrency.customer(),
-              payment_method: new kurrency.credit_card(),
+              shipment: new plumb.customer(),
+              billing: new plumb.customer(),
+              payment_method: new plumb.credit_card(),
               products: null,
               notes: ''
             };
 
             scope.geocodeComplete = false;
-            scope.stateList = kurrencyConfig.states;
-            scope.countryList = kurrencyConfig.countries;
-            scope.expirationMonths = kurrencyConfig.months;
-            scope.expirationYears = kurrencyConfig.years;
+            scope.stateList = plumbConfig.states;
+            scope.countryList = plumbConfig.countries;
+            scope.expirationMonths = plumbConfig.months;
+            scope.expirationYears = plumbConfig.years;
             scope.shippingAddressCopied = false;
             scope.packages = [];
             scope.selectedRate = null;
             scope.tax_total = 0;
             scope.shipping_total = 0;
             scope.final_total = 0;
-            scope.cartAddText = kurrencyConfig.cartAddText ? kurrencyConfig.cartAddText : 'Added to cart';
+            scope.cartAddText = plumbConfig.cartAddText ? plumbConfig.cartAddText : 'Added to cart';
             scope.shoppingCartPopoverText = 'Shopping Cart';
             scope.cartAddActive = false;
             scope.order = null;
@@ -1954,7 +1965,7 @@
               contact: [],
               account: []
             };
-            scope.kurrency = kurrency;
+            scope.plumb = plumb;
 
             scope.updateProductTotal = function() {
               scope.product_total = 0;
@@ -1987,7 +1998,7 @@
               return p;
             };
 
-            kurrency.cart.get(function(err, cart) {
+            plumb.cart.get(function(err, cart) {
               scope.cart = cart;
               scope.updateProductTotal();
             });
@@ -2015,13 +2026,13 @@
 
             scope.updateQuantity = function(product) {
               scope.updateProductTotal();
-              kurrency.cart.update(product, product.qty, function(err, cart) {
+              plumb.cart.update(product, product.qty, function(err, cart) {
                 scope.cart = cart;
               });
             };
 
             scope.removeProduct = function(product) {
-              kurrency.cart.remove(product, function(err, cart) {
+              plumb.cart.remove(product, function(err, cart) {
                 scope.cart = cart;
                 scope.updateProductTotal();
               });
@@ -2029,22 +2040,22 @@
 
             scope.saveAddress = function(address) {
               scope.wipeMessages();
-              var user = kurrency.auth.loggedIn();
+              var user = plumb.auth.loggedIn();
               if(!user) {
                 return;
               }
               if(address._id) {
-                kurrency.addresses.edit(address, function(err, address) {
+                plumb.addresses.edit(address, function(err, address) {
                   scope.getUserDetails();
                 });
               }
-              kurrency.addresses.create(address, function(err, address) {
+              plumb.addresses.create(address, function(err, address) {
                 scope.getUserDetails();
               });
             };
 
             scope.deleteAddress = function(address) {
-              kurrency.addresses.remove({_id: address._id}, function(err, status){
+              plumb.addresses.remove({_id: address._id}, function(err, status){
                 if(err) {
                   return console.log(err);
                 }
@@ -2055,12 +2066,12 @@
 
             scope.savePaymentMethod = function(payment_method) {
               scope.wipeMessages();
-              var user = kurrency.auth.loggedIn();
+              var user = plumb.auth.loggedIn();
               if(!user) {
                 return;
               }
               if(payment_method._id) {
-                kurrency.payment_methods.edit(payment_method, function(err, address) {
+                plumb.payment_methods.edit(payment_method, function(err, address) {
                   scope.getUserDetails();
                 });
               }
@@ -2077,7 +2088,7 @@
             };
 
             scope.deletePaymentMethod = function(payment_method) {
-              kurrency.payment_methods.remove({_id: payment_method._id}, function(err, status){
+              plumb.payment_methods.remove({_id: payment_method._id}, function(err, status){
                 if(err) {
                   return console.log(err);
                 }
@@ -2087,7 +2098,7 @@
             };
 
             scope.copyShippingAddress = function() {
-              scope.checkout.billing.ship_to = w[KURRENCY_CONFIG.ANGULAR].extend(scope.checkout.billing.ship_to, scope.checkout.shipment.ship_to);
+              scope.checkout.billing.ship_to = w[PLUMB_CONFIG.ANGULAR].extend(scope.checkout.billing.ship_to, scope.checkout.shipment.ship_to);
               scope.shippingAddressCopied = true;
             };
 
@@ -2130,7 +2141,7 @@
                 scope.tax_total = 0;
                 return scope.updateFinalTotal();
               }
-              kurrency.orders.taxes(scope.product_total, {
+              plumb.orders.taxes(scope.product_total, {
                 ship_to: {
                   address: {
                     postal_code: scope.checkout.shipment.ship_to.address.postal_code
@@ -2148,7 +2159,7 @@
                 return;
               }
 
-              kurrency.shipping.rates({
+              plumb.shipping.rates({
                 ship_to: {
                   address: {
                     address_1: scope.checkout.shipment.ship_to.address.address_1,
@@ -2174,7 +2185,7 @@
             };
 
             scope.getUserDetails = function() {
-              var user = kurrency.auth.loggedIn();
+              var user = plumb.auth.loggedIn();
               if(!user) {
                 return;
               }
@@ -2182,7 +2193,7 @@
               scope.checkout.shipment.ship_to.name = user.first_name + ' ' + user.last_name;
               scope.checkout.shipment.ship_to.email = user.email;
               scope.checkout.shipment.ship_to.phone = user.phone;
-              kurrency.addresses.list(function(err, addresses) {
+              plumb.addresses.list(function(err, addresses) {
                 if(!addresses.length) {
                   return;
                 }
@@ -2191,7 +2202,7 @@
                 scope.geocodeComplete = true;
               });
 
-              kurrency.payment_methods.list(function(err, payment_methods) {
+              plumb.payment_methods.list(function(err, payment_methods) {
                 scope.paymentMethodList = payment_methods;
               });
             };
@@ -2200,15 +2211,15 @@
               scope.geocodeComplete = true;
             };
 
-            scope.$on('kurrencySignIn', function(evt, user) {
+            scope.$on('plumbSignIn', function(evt, user) {
               scope.getUserDetails();
             });
 
-            if(kurrency.auth.loggedIn()) {
+            if(plumb.auth.loggedIn()) {
               scope.getUserDetails();
             }
 
-            scope.$on('kurrencyRegistered', function(evt, user) {
+            scope.$on('plumbRegistered', function(evt, user) {
               scope.getUserDetails();
             });
 
@@ -2228,14 +2239,14 @@
                 return;
               }
               if(!scope.checkout.payment_method._id) {
-                new kurrency.credit_card().tokenizeCard({
+                new plumb.credit_card().tokenizeCard({
                   name: scope.checkout.payment_method.card.name,
                   number: scope.checkout.payment_method.card.card_number,
                   exp_month: scope.checkout.payment_method.card.expiration_month,
                   exp_year: scope.checkout.payment_method.card.expiration_year,
                   cvc: scope.checkout.payment_method.card.security_code,
                   address_zip: scope.checkout.billing.ship_to.postal_code
-                }, kurrency.options.session.stripe_publishable_key).then(function (card_id) {
+                }, plumb.options.session.stripe_publishable_key).then(function (card_id) {
                   scope.finishCompleteOrder({type: 'credit_card', card: {card_token: card_id}});
                 }).catch(function (err) {
                   scope.addMessage('error', err);
@@ -2246,13 +2257,13 @@
             };
 
             scope.finishCompleteOrder = function(payment) {
-              kurrency.orders.create({
+              plumb.orders.create({
                 service_carrier: scope.checkout.service_carrier,
                 service_code: scope.checkout.service_code,
                 ship_to: scope.checkout.shipment.ship_to,
                 customer: scope.checkout.billing.ship_to,
                 payment_method: payment,
-                products: w[KURRENCY_CONFIG.ANGULAR].copy(scope.cart),
+                products: w[PLUMB_CONFIG.ANGULAR].copy(scope.cart),
                 notes: ''
               }, function(err, order) {
                 if(err) {
@@ -2261,16 +2272,16 @@
 
                 scope.order = order;
 
-                kurrency.cart.empty(function(err, cart) {
+                plumb.cart.empty(function(err, cart) {
                   scope.cart = cart;
                   $rootScope.$emit('cartUpdated', cart);
-                  kurrencyMenuService.toggle('checkout-complete');
+                  plumbMenuService.toggle('checkout-complete');
                 });
               });
             };
 
             scope.addMessage = function(type, msg) {
-              var section = kurrencyMenuService.showing;
+              var section = plumbMenuService.showing;
               if(!section) {
                 section = 'none';
               }
@@ -2311,16 +2322,16 @@
 
             scope.loginUser = function(section) {
               scope.wipeMessages();
-              kurrency.auth.login(scope.login.username, scope.login.password, function(user) {
+              plumb.auth.login(scope.login.username, scope.login.password, function(user) {
                 scope.addMessage('success', 'Successfully logged in');
                 $timeout(function() {
-                  if(kurrencyMenuService.next) {
-                    kurrencyMenuService.toggle(kurrencyMenuService.next);
+                  if(plumbMenuService.next) {
+                    plumbMenuService.toggle(plumbMenuService.next);
                   } else {
                     if(section) {
-                      kurrencyMenuService.showing = section;
+                      plumbMenuService.showing = section;
                     } else {
-                      kurrencyMenuService.showing = null;
+                      plumbMenuService.showing = null;
                     }
                   }
                   scope.wipeMessages();
@@ -2331,16 +2342,16 @@
             scope.registerUser = function(section) {
               scope.wipeMessages();
               scope.register.confirm_password = scope.register.password;
-              kurrency.auth.register(scope.register, function(user) {
+              plumb.auth.register(scope.register, function(user) {
                 scope.addMessage('success', 'Account registered, and logged in');
                 $timeout(function() {
-                  if(kurrencyMenuService.next) {
-                    kurrencyMenuService.toggle(kurrencyMenuService.next);
+                  if(plumbMenuService.next) {
+                    plumbMenuService.toggle(plumbMenuService.next);
                   } else {
                     if(section) {
-                      kurrencyMenuService.showing = section;
+                      plumbMenuService.showing = section;
                     } else {
-                      kurrencyMenuService.showing = null;
+                      plumbMenuService.showing = null;
                     }
                   }
                   scope.wipeMessages();
@@ -2350,25 +2361,25 @@
 
             scope.forgotPassword = function() {
               scope.wipeMessages();
-              kurrency.auth.forgotPassword(scope.forgot.email, function(res) {
+              plumb.auth.forgotPassword(scope.forgot.email, function(res) {
                 scope.addMessage('success', 'Instructions sent to your email, go check it');
               });
             };
 
-            scope.$on('kurrencyError', function(evt, res) {
+            scope.$on('plumbError', function(evt, res) {
               console.log(res);
-              if(!res.pkg) {
-                return scope.addMessage('error', 'An error occurred connecting to Kurrency\'s servers, check your connection.');
+              if(!res || !res.pkg) {
+                return scope.addMessage('error', 'An error occurred connecting to Plumb\'s servers, check your connection.');
               }
 
               scope.addMessage('error', res.pkg.statusMessage);
             });
 
-            scope.$on('kurrencySignOut', function(evt) {
-              kurrencyMenuService.showing = null;
+            scope.$on('plumbSignOut', function(evt) {
+              plumbMenuService.showing = null;
               scope.paymentMethodList = [];
               scope.addressList = [];
-              kurrency.cart.get(function(err, cart) {
+              plumb.cart.get(function(err, cart) {
                 scope.cart = cart;
                 scope.updateProductTotal();
               });
@@ -2376,9 +2387,9 @@
               scope.checkout = {
                 service_carrier: null,
                 service_code: null,
-                shipment: new kurrency.customer(),
-                billing: new kurrency.customer(),
-                payment_method: new kurrency.credit_card(),
+                shipment: new plumb.customer(),
+                billing: new plumb.customer(),
+                payment_method: new plumb.credit_card(),
                 products: null,
                 notes: ''
               };
@@ -2402,15 +2413,15 @@
             });
 
             scope.displayProductPrice = function(p) {
-              if(!kurrencyConfig.display_price_breakdown) {
-                return kurrencyMenuService.getPrice(p);
+              if(!plumbConfig.display_price_breakdown) {
+                return plumbMenuService.getPrice(p);
               }
 
               return $filter('currency')(p.price/100);
             };
 
             scope.displayVariantPrice = function(v) {
-              if(!kurrencyConfig.display_price_breakdown) {
+              if(!plumbConfig.display_price_breakdown) {
                 return '&nbsp;';
               }
 
@@ -2422,26 +2433,21 @@
         }
       }]);
 
-    if(w.KURRENCY_CONFIG) {
-      // we are using kurrency from an embed standpoint
-      if(!w.KURRENCY_CONFIG.integrated) {
-        w[KURRENCY_CONFIG.ANGULAR].injector(['ng', 'KurrencyApp']).invoke(['$compile', '$rootScope', 'kurrency', 'kurrencyConfig', 'kurrencyMenuService', function ($compile, $rootScope, kurrency, kurrencyConfig, kurrencyMenuService) {
-          kurrencyConfig.cache = w.KURRENCY_CONFIG.CACHE ? w.KURRENCY_CONFIG.CACHE : true;
-          kurrencyConfig.accessToken = w.KURRENCY_CONFIG.ACCESS_TOKEN;
-          kurrencyConfig.mode = w.KURRENCY_CONFIG.MODE ? w.KURRENCY_CONFIG.MODE : 'test';
-          kurrencyConfig.local = w.KURRENCY_CONFIG.LOCAL ? w.KURRENCY_CONFIG.LOCAL : false;
-
-          var body = w[KURRENCY_CONFIG.ANGULAR].element(d).find('body');
-          if (kurrencyConfig.accessToken) {
-            body.append('<kurrency-menu></kurrency-menu>');
+    if(w.PLUMB_CONFIG) {
+      // we are using plumb from an embed standpoint
+      if(!w.PLUMB_CONFIG.integrated) {
+        w[PLUMB_CONFIG.ANGULAR].injector(['ng', 'PlumbApp']).invoke(['$compile', '$rootScope', 'plumb', 'plumbConfig', 'plumbMenuService', function ($compile, $rootScope, plumb, plumbConfig, plumbMenuService) {
+          var body = w[PLUMB_CONFIG.ANGULAR].element(d).find('body');
+          if (plumbConfig.accessToken) {
+            body.append('<plumb-menu></plumb-menu>');
           }
-          var injectors = w[KURRENCY_CONFIG.ANGULAR].element(d).injector();
+          var injectors = w[PLUMB_CONFIG.ANGULAR].element(d).injector();
           if(!d.querySelectorAll('[ng-app]').length && !injectors) {
-            w[KURRENCY_CONFIG.ANGULAR].bootstrap(body[0], ['KurrencyApp']);
+            w[PLUMB_CONFIG.ANGULAR].bootstrap(body[0], ['PlumbApp']);
           }
         }]);
 
-        if(!w.KURRENCY_CONFIG.GOOGLE_FONTS || w.KURRENCY_CONFIG.GOOGLE_FONTS === true) {
+        if(!w.PLUMB_CONFIG.GOOGLE_FONTS || w.PLUMB_CONFIG.GOOGLE_FONTS === true) {
           w.WebFontConfig = {
             google: { families: [ 'Questrial::latin' ] }
           };
