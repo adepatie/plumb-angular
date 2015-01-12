@@ -1,7 +1,7 @@
 <h1>Shopping Cart</h1>
 <div ng-show="!cart || !cart.length">
   <p>You have nothing in your cart</p>
-  <button type="button" class="kurrency-button" ng-click="menuService.close()">Continue Shopping</button>
+  <button type="button" class="plumb-button" ng-click="menuService.close()">Continue Shopping</button>
 </div>
 <div ng-show="cart && cart.length">
   <ul class="cart-products">
@@ -30,5 +30,5 @@
       <div class="right product-total">{{product_total/100 | currency}}</div>
     </li>
   </ul>
-  <button type="button" class="kurrency-button checkout-button" ng-click="menuService.toggle('checkout', 'cart')">Checkout</button>
+  <button type="button" class="plumb-button checkout-button" ng-click="menuService.toggle('checkout', 'cart')">Checkout</button>
 </div>

@@ -19,23 +19,23 @@
     </div>
     <div class="edit-holder" ng-show="address.$$editing">
       <form ng-submit="updateAddress(address)">
-        <input class="kurrency-input" type="text" ng-model="address.name" placeholder="Your Name">
-        <input class="kurrency-input" type="text" ng-model="address.company_name" placeholder="(optional) Company Name">
-        <input class="kurrency-input" type="text" ng-model="address.address.address_1" placeholder="Enter your address" ng-change="lookupGeoCode(address.address.address_1, address.address.postal_code, address)">
+        <input class="plumb-input" type="text" ng-model="address.name" placeholder="Your Name">
+        <input class="plumb-input" type="text" ng-model="address.company_name" placeholder="(optional) Company Name">
+        <input class="plumb-input" type="text" ng-model="address.address.address_1" placeholder="Enter your address" ng-change="lookupGeoCode(address.address.address_1, address.address.postal_code, address)">
         <div ng-show="geocodeComplete">
-          <input class="kurrency-input" type="text" ng-model="address.address.address_2" placeholder="(optional) Address Line 2">
-          <input class="kurrency-input" type="text" ng-model="address.address.city" placeholder="Enter your city">
-          <select class="kurrency-input" ng-model="address.address.state_code" ng-options="state.value as state.name for state in stateList"><option value>Select a State</option></select>
-          <select class="kurrency-input" ng-model="address.address.country_code" ng-options="country.value as country.name for country in countryList"><option value>Select a Country</option></select>
+          <input class="plumb-input" type="text" ng-model="address.address.address_2" placeholder="(optional) Address Line 2">
+          <input class="plumb-input" type="text" ng-model="address.address.city" placeholder="Enter your city">
+          <select class="plumb-input" ng-model="address.address.state_code" ng-options="state.value as state.name for state in stateList"><option value>Select a State</option></select>
+          <select class="plumb-input" ng-model="address.address.country_code" ng-options="country.value as country.name for country in countryList"><option value>Select a Country</option></select>
         </div>
-        <input class="kurrency-input" type="text" ng-model="address.address.postal_code" placeholder="Enter your postal/zip code" ng-change="lookupGeoCode(address.address.address_1, address.address.postal_code, address)">
-        <button class="kurrency-button small half cancel" ng-click="address.$$editing = false">Cancel</button>
-        <button class="kurrency-button small half submit" ng-click="saveAddress(address)">Save</button>
+        <input class="plumb-input" type="text" ng-model="address.address.postal_code" placeholder="Enter your postal/zip code" ng-change="lookupGeoCode(address.address.address_1, address.address.postal_code, address)">
+        <button class="plumb-button small half cancel" ng-click="address.$$editing = false">Cancel</button>
+        <button class="plumb-button small half submit" ng-click="saveAddress(address)">Save</button>
       </form>
     </div>
     <div ng-show="!address.$$editing">
-      <button class="kurrency-button small half edit" ng-click="address.$$editing = true">Edit</button>
-      <button class="kurrency-button small half delete" ng-click="deleteAddress(address)">Delete</button>
+      <button class="plumb-button small half edit" ng-click="address.$$editing = true">Edit</button>
+      <button class="plumb-button small half delete" ng-click="deleteAddress(address)">Delete</button>
     </div>
   </li>
 </ul>
@@ -51,14 +51,14 @@
     </div>
     <div class="edit-holder" ng-show="payment_method.$$editing">
       <form ng-submit="updatePaymentMethod(payment_method)">
-        <input class="kurrency-input" type="text" ng-model="payment_method.nickname" placeholder="Nickname">
-        <button class="kurrency-button small half cancel" ng-click="payment_method.$$editing = false">Cancel</button>
-        <button class="kurrency-button small half submit" ng-click="savePaymentMethod(payment_method)">Save</button>
+        <input class="plumb-input" type="text" ng-model="payment_method.nickname" placeholder="Nickname">
+        <button class="plumb-button small half cancel" ng-click="payment_method.$$editing = false">Cancel</button>
+        <button class="plumb-button small half submit" ng-click="savePaymentMethod(payment_method)">Save</button>
       </form>
     </div>
     <div ng-show="!payment_method.$$editing">
-      <button class="kurrency-button small half edit" ng-click="payment_method.$$editing = true">Edit</button>
-      <button class="kurrency-button small half delete" ng-click="deletePaymentMethod(payment_method)">Delete</button>
+      <button class="plumb-button small half edit" ng-click="payment_method.$$editing = true">Edit</button>
+      <button class="plumb-button small half delete" ng-click="deletePaymentMethod(payment_method)">Delete</button>
     </div>
   </li>
 </ul>

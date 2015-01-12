@@ -4,11 +4,11 @@
   <div ng-repeat="alert in messages['register']" class="alert-{{alert.type}}">{{alert.message}}</div>
 </div>
 <form ng-submit="registerUser()">
-  <input class="kurrency-input" type="text" ng-model="register.first_name" placeholder="Enter your first name">
-  <input class="kurrency-input" type="text" ng-model="register.last_name" placeholder="Enter your last name">
-  <input class="kurrency-input" type="email" ng-model="register.email" placeholder="Enter your email">
-  <input class="kurrency-input" type="password" ng-model="register.password" placeholder="Enter a password">
-  <button type="submit" class="kurrency-button register-button">Register</button>
+  <input class="plumb-input" type="text" ng-model="register.first_name" placeholder="Enter your first name">
+  <input class="plumb-input" type="text" ng-model="register.last_name" placeholder="Enter your last name">
+  <input class="plumb-input" type="email" ng-model="register.email" placeholder="Enter your email">
+  <input class="plumb-input" type="password" ng-model="register.password" placeholder="Enter a password">
+  <button type="submit" class="plumb-button register-button">Register</button>
   <p>Already have an account?</p>
-  <button type="button" class="kurrency-button small login-button" ng-click="menuService.toggle('login', 'register')">Sign in now</button>
+  <button type="button" class="plumb-button small login-button" ng-click="menuService.toggle('login', 'register')">Sign in now</button>
 </form>
