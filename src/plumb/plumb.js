@@ -582,8 +582,6 @@
               }
             }
 
-            console.log(opts.headers);
-
             var req = $http(opts);
 
             req.success(function () {
@@ -1933,7 +1931,7 @@
             scope.expirationYears = plumbConfig.years;
             scope.shippingAddressCopied = false;
             scope.packages = [];
-            scope.selectedRate = null;
+            scope.selectedRate = [];
             scope.tax_total = 0;
             scope.shipping_total = 0;
             scope.final_total = 0;
@@ -2191,11 +2189,17 @@
                 }
 
                 scope.packages = packages;
-                scope.selectedRate = scope.packages[0].rates[0];
+                for(var i = 0; i < scope.packages.length; i++) {
+                  scope.selectedRate[i] = scope.packages[i].rates[0];
+                }
                 scope.updateFinalTotal();
               }, function(err) {
-                for(var i = 0; i < err.pkg.statusMessage.length; i++) {
-                  scope.addMessage('error', err.pkg.statusMessage[i], 'shipping-rates');
+                if(err.pkg.statusMessage instanceof Array) {
+                  for (var i = 0; i < err.pkg.statusMessage.length; i++) {
+                    scope.addMessage('error', err.pkg.statusMessage[i], 'shipping-rates');
+                  }
+                } else {
+                  scope.addMessage('error', err.pkg.statusMessage, 'shipping-rates');
                 }
                 return console.log(err);
               });
@@ -2244,9 +2248,14 @@
               if(!scope.selectedRate) {
                 return;
               }
-              scope.shipping_total = scope.selectedRate.cost * 100;
-              scope.checkout.service_carrier = scope.selectedRate.carrier;
-              scope.checkout.service_code = scope.selectedRate.code;
+              scope.shipping_total = 0;
+              scope.checkout.service_carriers = [];
+              scope.checkout.service_code = [];
+              for(var i = 0; i < scope.selectedRate.length; i++) {
+                scope.shipping_total += scope.selectedRate[i].cost * 100;
+                scope.checkout.service_carriers.push(scope.selectedRate[i].carrier);
+                scope.checkout.service_code.push(scope.selectedRate[i].code);
+              }
               scope.updateFinalTotal();
             }, true);
 
