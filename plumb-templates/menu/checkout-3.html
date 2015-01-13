@@ -7,7 +7,7 @@
       <div ng-repeat="alert in messages['shipping-rates']" class="alert-{{alert.type}}">{{alert.message}}</div>
     </div>
     <div ng-repeat="package in packages" ng-show="package.rates.length">
-      <label>Package {{$index+1}}</label>
+      <label class="plumb-label">Package {{$index+1}}</label>
       <select class="plumb-input" ng-model="selectedRate[$index]" ng-disabled="rates.length <= 0" ng-options="rate as ((rate.cost | currency) + ' - ' + rate.name) for rate in package.rates">
         <option value="" ng-hide="package.rates">Please Wait...</option>
       </select>

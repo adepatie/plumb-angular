@@ -1453,13 +1453,22 @@
         $scope.showing = null;
         $scope.back = null;
         $scope.next = null;
+        $scope.quantity_total = 0;
 
         plumb.cart.get(function(err, cart) {
           $scope.cart = cart;
+          $scope.quantity_total = 0;
+          for(var i = 0; i < $scope.cart.length; i++) {
+            $scope.quantity_total += parseInt($scope.cart[i].qty, 10);
+          }
         });
 
         $rootScope.$on('cartUpdated', function(evt, cart) {
           $scope.cart = cart;
+          $scope.quantity_total = 0;
+          for(var i = 0; i < $scope.cart.length; i++) {
+            $scope.quantity_total += parseInt($scope.cart[i].qty, 10);
+          }
         });
 
         $scope.close = function() {
@@ -2166,6 +2175,9 @@
                 return;
               }
 
+              scope.packages = [];
+              scope.selectedRate = [];
+
               plumb.shipping.rates({
                 ship_to: {
                   address: {
@@ -2191,6 +2203,7 @@
                 scope.packages = packages;
                 for(var i = 0; i < scope.packages.length; i++) {
                   scope.selectedRate[i] = scope.packages[i].rates[0];
+                  scope.selectedRate[i].products = scope.packages[i].products;
                 }
                 scope.updateFinalTotal();
               }, function(err) {
@@ -2249,15 +2262,17 @@
                 return;
               }
               scope.shipping_total = 0;
-              scope.checkout.service_carriers = [];
-              scope.checkout.service_code = [];
+              scope.checkout.shipping_rates = [];
               for(var i = 0; i < scope.selectedRate.length; i++) {
                 scope.shipping_total += scope.selectedRate[i].cost * 100;
-                scope.checkout.service_carriers.push(scope.selectedRate[i].carrier);
-                scope.checkout.service_code.push(scope.selectedRate[i].code);
+                scope.checkout.shipping_rates.push(scope.selectedRate[i]);
               }
               scope.updateFinalTotal();
             }, true);
+
+            scope.onRateChange = function(i, rate, pkg) {
+              scope.selectedRate[i].products = pkg;
+            };
 
             scope.completeOrder = function() {
               if(scope.apiLoading > 0) {
@@ -2284,8 +2299,7 @@
 
             scope.finishCompleteOrder = function(payment) {
               plumb.orders.create({
-                service_carrier: scope.checkout.service_carrier,
-                service_code: scope.checkout.service_code,
+                shipping_rates: scope.checkout.shipping_rates,
                 ship_to: scope.checkout.shipment.ship_to,
                 customer: scope.checkout.billing.ship_to,
                 payment_method: payment,
