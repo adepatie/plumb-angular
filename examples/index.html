@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js">
+<html class="no-js" ng-app="plumbExampleApp">
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <link rel="icon" type="image/png" href="favicon.png">
@@ -9,11 +9,20 @@
 </head>
 <body>
   <div class="site">
-    <plumb-product id="'54ad4217e20e794fed4672c9'"></plumb-product>
-    <plumb-product id="'54ad6137e20e794fed4672cb'"></plumb-product>
+    <plumb-product id="'54bd26b950dba318ff24bb41'"></plumb-product>
+    <plumb-product id="'54bd26b850dba318ff24ba82'"></plumb-product>
   </div>
 
-  <script type="text/javascript">PLUMB_CONFIG = {'LOCAL': true, 'MODE': 'test', 'ACCESS_TOKEN': '81ee2146ea75e865d29f62b3131a35f91a20b48611d132fed2cd1b2f437097d5'};</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.10/angular.min.js"></script>
   <script src="dist/plumb-angular.js"></script>
+  <script>
+    angular.module('plumbExampleApp', ['PlumbApp']);
+    angular.module('plumbExampleApp').config(function(plumbConfigProvider) {
+      plumbConfigProvider.accessToken = 'e37e71f36ea24382e4a64a046f640917b53c5571acfb056fe0ff8e996684ead5';
+      plumbConfigProvider.local = true;
+      plumbConfigProvider.mode = 'test';
+      plumbConfigProvider.baseUrls.test = 'http://0.0.0.0:4458/jsapi';
+    });
+  </script>
 </body>
 </html>

@@ -1832,7 +1832,7 @@
           }
         }
       }])
-      .directive('plumbProduct', ['plumb', 'plumbConfig', 'plumbMenuService', '$filter', function(plumb, plumbConfig, plumbMenuService, $filter) {
+      .directive('plumbProduct', ['$rootScope', 'plumb', 'plumbConfig', 'plumbMenuService', '$filter', function($rootScope, plumb, plumbConfig, plumbMenuService, $filter) {
         return {
           restrict: 'E',
           scope: {id: '='},
@@ -1852,6 +1852,12 @@
             scope.plumbMenuService = plumbMenuService;
 
             plumb.products.list({_id: scope.id}, function(err, products) {
+              if(!products || !products.length) {
+                if(err) {
+                  return $rootScope.$broadcast('plumbError', err);
+                }
+                return $rootScope.$broadcast('plumbError', 'Could not find product');
+              }
               scope.product = products[0];
 
               if(scope.product.attributes && scope.product.attributes.length) {

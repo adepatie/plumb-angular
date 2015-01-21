@@ -256,14 +256,15 @@
   text-decoration: none;
 }
 .plumb-menu .plumb-sidebar .plumb-container .logo img {
+  margin-top: -5px;
   margin-left: 5px;
   width: 100px;
   vertical-align: middle;
   zoom: 1;
-  filter: alpha(opacity=80);
-  -webkit-opacity: 0.8;
-  -moz-opacity: 0.8;
-  opacity: 0.8;
+  filter: alpha(opacity=40);
+  -webkit-opacity: 0.4;
+  -moz-opacity: 0.4;
+  opacity: 0.4;
 }
 .plumb-menu .plumb-sidebar .plumb-container .logo:hover {
   color: #6f6e6e;
