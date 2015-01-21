@@ -2,7 +2,7 @@
  * plumb-angular
  * https://github.com/typefoo/plumb-angular
 
- * Version: 0.0.1 - 2015-01-21
+ * Version: 0.0.2 - 2015-01-21
  * License: AGPL
  */
 /**
@@ -509,7 +509,7 @@
                 'Access-Token': plumb.options.accessToken,
                 'Authentication-Key': plumb.options.authenticationKey ? plumb.options.authenticationKey : undefined,
                 'Session-Id': plumb.options.session ? plumb.options.session._id : undefined,
-                'Kurrency-Mode': plumb.options.mode ? plumb.options.mode : 'test'
+                'Plumb-Mode': plumb.options.mode ? plumb.options.mode : 'test'
               },
               commonError: function (res, status, error) {
                 console.log(res);

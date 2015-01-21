@@ -492,7 +492,7 @@
               'Access-Token': plumb.options.accessToken,
               'Authentication-Key': plumb.options.authenticationKey ? plumb.options.authenticationKey : undefined,
               'Session-Id': plumb.options.session ? plumb.options.session._id : undefined,
-              'Kurrency-Mode': plumb.options.mode ? plumb.options.mode : 'test'
+              'Plumb-Mode': plumb.options.mode ? plumb.options.mode : 'test'
             },
             commonError: function (res, status, error) {
               console.log(res);
