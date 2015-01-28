@@ -1228,7 +1228,7 @@
             for (var i = 0; i < data.products.length; i++) {
               params.packages[0].weight += getProductWeight(data.products[i]) * data.products[i].qty;
               params.packages[0].price += getProductPrice(data.products[i]) * data.products[i].qty;
-              params.products.push({_id: data.products[i]._id, qty: data.products[i].qty});
+              params.products.push(data.products[i]);
             }
 
             if(!errCb) {
@@ -2185,14 +2185,7 @@
               scope.selectedRate = [];
 
               plumb.shipping.rates({
-                ship_to: {
-                  address: {
-                    address_1: scope.checkout.shipment.ship_to.address.address_1,
-                    state_code: scope.checkout.shipment.ship_to.address.state_code,
-                    country_code: scope.checkout.shipment.ship_to.address.country_code,
-                    postal_code: scope.checkout.shipment.ship_to.address.postal_code
-                  }
-                },
+                ship_to: scope.checkout.shipment.ship_to,
                 products: scope.cart
               }, function(err, packages) {
                 if(err) {
@@ -2281,10 +2274,12 @@
             };
 
             scope.completeOrder = function() {
+              scope.wipeMessages();
               if(scope.apiLoading > 0) {
                 scope.addMessage('error', 'Please wait, we are processing your order');
                 return;
               }
+
               if(!scope.checkout.payment_method._id) {
                 new plumb.credit_card().tokenizeCard({
                   name: scope.checkout.payment_method.card.name,
