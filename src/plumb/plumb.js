@@ -53,7 +53,7 @@
     var scrip = d.createElement('script');
     scrip.type = 'text/javascript';
     scrip.async = true;
-    scrip.src = '//ajax.googleapis.com/ajax/libs/angularjs/1.3.8/angular.min.js';
+    scrip.src = '//ajax.googleapis.com/ajax/libs/angularjs/1.3.13/angular.min.js';
     d.getElementsByTagName('body')[0].appendChild(scrip);
     if (scrip.readyState) {
       scrip.onreadystatechange = function () {
@@ -86,7 +86,7 @@
         };
         this.baseUrls = {
           test: 'http://0.0.0.0:3458/jsapi',
-          production: 'https://api.plumb.io/api/jsapi'
+          production: 'https://www.plumb.com/api/jsapi'
         };
         this.display_price_breakdown = true;
         this.months = [
