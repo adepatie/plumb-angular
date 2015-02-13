@@ -2447,6 +2447,9 @@
               scope.wipeMessages();
               scope.resetForms();
               if(data.val === 'checkout-3') {
+                if(!scope.checkout.shipment.ship_to.address || !scope.checkout.shipment.ship_to.address.postal_code) {
+                  scope.checkout.shipment.ship_to.address = angular.copy(scope.checkout.billing.ship_to.address);
+                }
                 scope.getRates();
                 scope.getTaxes();
               }
