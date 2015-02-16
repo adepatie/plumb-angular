@@ -2,7 +2,7 @@
  * plumb-angular
  * https://github.com/typefoo/plumb-angular
 
- * Version: 0.0.3 - 2015-02-13
+ * Version: 0.0.5 - 2015-02-16
  * License: AGPL
  */
 /**
@@ -103,7 +103,7 @@
       this.phrases = { cart_empty: 'You don\'t have anything in your cart' };
       this.baseUrls = {
         test: 'http://0.0.0.0:3458/jsapi',
-        production: 'https://www.plumb.com/api/jsapi'
+        production: 'https://www.plummb.com/api/jsapi'
       };
       this.display_price_breakdown = true;
       this.months = [

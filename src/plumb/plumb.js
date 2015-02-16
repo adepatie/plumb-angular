@@ -86,7 +86,7 @@
         };
         this.baseUrls = {
           test: 'http://0.0.0.0:3458/jsapi',
-          production: 'https://www.plumb.com/api/jsapi'
+          production: 'https://www.plummb.com/api/jsapi'
         };
         this.display_price_breakdown = true;
         this.months = [
