@@ -2,7 +2,7 @@
  * plumb-angular
  * https://github.com/typefoo/plumb-angular
 
- * Version: 0.0.5 - 2015-02-16
+ * Version: 0.0.5 - 2015-02-19
  * License: AGPL
  */
 /**

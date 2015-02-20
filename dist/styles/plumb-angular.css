@@ -953,15 +953,15 @@ textarea.plumb-input {
 }
 @font-face {
   font-family: 'KurrencyIcons';
-  src: url('https://assets.kurrency.io/fonts/KurrencyIcons.eot?-orzlfj');
-  src: url('https://assets.kurrency.io/fonts/KurrencyIcons.eot?#iefix-orzlfj') format('embedded-opentype'), url('https://assets.kurrency.io/fonts/KurrencyIcons.woff?-orzlfj') format('woff'), url('https://assets.kurrency.io/fonts/KurrencyIcons.ttf?-orzlfj') format('truetype'), url('https://assets.kurrency.io/fonts/KurrencyIcons.svg?-orzlfj#KurrencyIcons') format('svg');
+  src: url('https://assets.plummb.com/fonts/KurrencyIcons.eot?-orzlfj');
+  src: url('https://assets.plummb.com/fonts/KurrencyIcons.eot?#iefix-orzlfj') format('embedded-opentype'), url('https://assets.plummb.com/fonts/KurrencyIcons.woff?-orzlfj') format('woff'), url('https://assets.plummb.com/fonts/KurrencyIcons.ttf?-orzlfj') format('truetype'), url('https://assets.plummb.com/fonts/KurrencyIcons.svg?-orzlfj#KurrencyIcons') format('svg');
   font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: 'WinterthurCondensedRegular';
-  src: url('https://assets.kurrency.io/fonts/WinterthurCondensed-webfont.eot');
-  src: url('https://assets.kurrency.io/fonts/WinterthurCondensed-webfont.eot?#iefix') format('embedded-opentype'), url('https://assets.kurrency.io/fonts/WinterthurCondensed-webfont.woff') format('woff'), url('https://assets.kurrency.io/fonts/WinterthurCondensed-webfont.ttf') format('truetype'), url('https://assets.kurrency.io/fonts/WinterthurCondensed-webfont.svg#winterthurcondensedregular') format('svg');
+  src: url('https://assets.plummb.com/fonts/WinterthurCondensed-webfont.eot');
+  src: url('https://assets.plummb.com/fonts/WinterthurCondensed-webfont.eot?#iefix') format('embedded-opentype'), url('https://assets.plummb.com/fonts/WinterthurCondensed-webfont.woff') format('woff'), url('https://assets.plummb.com/fonts/WinterthurCondensed-webfont.ttf') format('truetype'), url('https://assets.plummb.com/fonts/WinterthurCondensed-webfont.svg#winterthurcondensedregular') format('svg');
   font-weight: normal;
   font-style: normal;
 }
