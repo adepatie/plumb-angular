@@ -19,6 +19,7 @@
     <p>Enter a billing address</p>
     <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.name" placeholder="Your Name">
     <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.company_name" placeholder="(optional) Company Name">
+    <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.phone" placeholder="Your Phone Number">
     <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.address.address_1" placeholder="Enter your address" ng-change="lookupGeoCode(checkout.billing.ship_to.address.address_1, checkout.billing.ship_to.address.postal_code, checkout.billing)">
     <div ng-show="geocodeComplete">
       <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.address.address_2" placeholder="(optional) Address Line 2">
