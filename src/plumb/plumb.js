@@ -786,7 +786,9 @@
             req.success(function (res) {
               $scope.options.session = res.pkg.data;
               storage.set('session', $scope.options.session);
-              return cb(null, $scope.options.session);
+              if(cb) {
+                return cb(null, $scope.options.session);
+              }
             });
           };
 
@@ -1973,19 +1975,6 @@
               }
             }
 
-            scope.messages = {
-              none: [],
-              login: [],
-              'forgot-password': [],
-              register: [],
-              checkout: [],
-              'checkout-2': [],
-              'checkout-3': [],
-              wishlist: [],
-              contact: [],
-              account: [],
-              'shipping-rates': []
-            };
             scope.plumb = plumb;
 
             scope.updateProductTotal = function() {
@@ -2019,9 +2008,55 @@
               return p;
             };
 
+            scope.lookupGeoCode = function(address, postal_code, obj) {
+              if(!postal_code || postal_code.length < 5) {
+                return;
+              }
+
+              if(!$window.google) {
+                return scope.geocodeComplete = true;
+              }
+
+              var geocoder = new google.maps.Geocoder();
+              geocoder.geocode({
+                address: address + ' ' + postal_code
+              }, function(res, status) {
+                if(status !== google.maps.GeocoderStatus.OK) {
+                  return scope.geocodeComplete = true;
+                }
+
+                for(var i = 0; i < res[0].address_components.length; i++) {
+                  var part = res[0].address_components[i];
+                  if(part.types[0] === 'locality') {
+                    obj.ship_to.address.city = part.long_name;
+                  }
+                  if(part.types[0] === 'administrative_area_level_1') {
+                    obj.ship_to.address.state_code = part.short_name;
+                  }
+                  if(part.types[0] === 'country') {
+                    obj.ship_to.country_code = part.short_name;
+                  }
+                }
+                scope.geocodeComplete = true;
+                scope.$apply();
+              });
+            };
+
+            scope.updateCheckout = function() {
+              scope.checkout.shipment = plumb.session.get().data.shipment || new plumb.customer();
+              scope.checkout.billing = plumb.session.get().data.billing || new plumb.customer();
+              if(scope.checkout.shipment.ship_to.address.address_1) {
+                scope.lookupGeoCode(scope.checkout.shipment.ship_to.address.address_1, scope.checkout.shipment.ship_to.address.postal_code, scope.checkout.shipment);
+              }
+              if(scope.checkout.billing.ship_to.address.address_1) {
+                scope.lookupGeoCode(scope.checkout.billing.ship_to.address.address_1, scope.checkout.billing.ship_to.address.postal_code, scope.checkout.billing);
+              }
+            };
+
             plumb.cart.get(function(err, cart) {
               scope.cart = cart;
               scope.updateProductTotal();
+              scope.updateCheckout();
             });
 
             scope.updateFinalTotal = function() {
@@ -2060,7 +2095,6 @@
             };
 
             scope.saveAddress = function(address) {
-              scope.wipeMessages();
               var user = plumb.auth.loggedIn();
               if(!user) {
                 return;
@@ -2086,7 +2120,6 @@
             };
 
             scope.savePaymentMethod = function(payment_method) {
-              scope.wipeMessages();
               var user = plumb.auth.loggedIn();
               if(!user) {
                 return;
@@ -2123,40 +2156,6 @@
               scope.shippingAddressCopied = true;
             };
 
-            scope.lookupGeoCode = function(address, postal_code, obj) {
-              if(!postal_code || postal_code.length < 5) {
-                return;
-              }
-
-              if(!$window.google) {
-                return scope.geocodeComplete = true;
-              }
-
-              var geocoder = new google.maps.Geocoder();
-              geocoder.geocode({
-                address: address + ' ' + postal_code
-              }, function(res, status) {
-                if(status !== google.maps.GeocoderStatus.OK) {
-                  return scope.geocodeComplete = true;
-                }
-
-                for(var i = 0; i < res[0].address_components.length; i++) {
-                  var part = res[0].address_components[i];
-                  if(part.types[0] === 'locality') {
-                    obj.ship_to.address.city = part.long_name;
-                  }
-                  if(part.types[0] === 'administrative_area_level_1') {
-                    obj.ship_to.address.state_code = part.short_name;
-                  }
-                  if(part.types[0] === 'country') {
-                    obj.ship_to.country_code = part.short_name;
-                  }
-                }
-                scope.geocodeComplete = true;
-                scope.$apply();
-              });
-            };
-
             scope.getTaxes = function() {
               if(!scope.requiresTax) {
                 scope.tax_total = 0;
@@ -2175,7 +2174,6 @@
             };
 
             scope.getRates = function() {
-              scope.wipeMessages();
               if(!scope.checkout.shipment.ship_to.address.postal_code
                 || scope.checkout.shipment.ship_to.address.postal_code.length < 5) {
                 return;
@@ -2274,7 +2272,6 @@
             };
 
             scope.completeOrder = function() {
-              scope.wipeMessages();
               if(scope.apiLoading > 0) {
                 scope.addMessage('error', 'Please wait, we are processing your order');
                 return;
@@ -2291,7 +2288,7 @@
                 }, plumb.options.session.stripe_publishable_key).then(function (card_id) {
                   scope.finishCompleteOrder({type: 'credit_card', card: {card_token: card_id}});
                 }).catch(function (err) {
-                  scope.addMessage('error', err);
+                  //scope.addMessage('error', err);
                 });
               } else {
                 scope.finishCompleteOrder(scope.checkout.payment_method);
@@ -2307,10 +2304,6 @@
                 products: w[PLUMB_CONFIG.ANGULAR].copy(scope.cart),
                 notes: ''
               }, function(err, order) {
-                if(err) {
-                  scope.addMessage('error', err);
-                }
-
                 scope.order = order;
 
                 plumb.cart.empty(function(err, cart) {
@@ -2322,20 +2315,10 @@
             };
 
             scope.addMessage = function(type, msg, section) {
-              if(!section) {
-                section = plumbMenuService.showing || 'none';
+              if(type === 'error') {
+                return $rootScope.$broadcast('apiError', msg);
               }
-
-              scope.messages[section].push({type: type, message: msg});
-              //$timeout(function() {
-              //  scope.messages[section].pop();
-              //}, 5000);
-            };
-
-            scope.wipeMessages = function() {
-              for(var i in scope.messages) {
-                scope.messages[i] = [];
-              }
+              $rootScope.$broadcast('apiMessage', {type: type, msg: msg, section: section});
             };
 
             scope.resetForms = function() {
@@ -2361,7 +2344,6 @@
             };
 
             scope.loginUser = function(section) {
-              scope.wipeMessages();
               plumb.auth.login(scope.login.username, scope.login.password, function(user) {
                 scope.addMessage('success', 'Successfully logged in');
                 $timeout(function() {
@@ -2374,13 +2356,11 @@
                       plumbMenuService.showing = null;
                     }
                   }
-                  scope.wipeMessages();
                 }, 500);
               });
             };
 
             scope.registerUser = function(section) {
-              scope.wipeMessages();
               scope.register.confirm_password = scope.register.password;
               plumb.auth.register(scope.register, function(user) {
                 scope.addMessage('success', 'Account registered, and logged in');
@@ -2394,13 +2374,11 @@
                       plumbMenuService.showing = null;
                     }
                   }
-                  scope.wipeMessages();
                 }, 500);
               });
             };
 
             scope.forgotPassword = function() {
-              scope.wipeMessages();
               plumb.auth.forgotPassword(scope.forgot.email, function(res) {
                 scope.addMessage('success', 'Instructions sent to your email, go check it');
               });
@@ -2411,8 +2389,6 @@
               if(!res || !res.pkg) {
                 return scope.addMessage('error', 'An error occurred connecting to Plumb\'s servers, check your connection.');
               }
-
-              scope.addMessage('error', res.pkg.statusMessage);
             });
 
             scope.$on('plumbSignOut', function(evt) {
@@ -2444,9 +2420,13 @@
             });
 
             scope.$on('menuToggled', function(evt, data) {
-              scope.wipeMessages();
               scope.resetForms();
-              if(data.val === 'checkout-3') {
+              if(data.val === 'checkout-2') {
+                plumb.options.session.data.shipment = scope.checkout.shipment;
+                plumb.session.save(plumb.options.session);
+              } else if(data.val === 'checkout-3') {
+                plumb.options.session.data.billing = scope.checkout.billing;
+                plumb.session.save(plumb.options.session);
                 if(!scope.checkout.shipment.ship_to.address || !scope.checkout.shipment.ship_to.address.postal_code) {
                   scope.checkout.shipment.ship_to.address = angular.copy(scope.checkout.billing.ship_to.address);
                 }

@@ -2,7 +2,7 @@
  * plumb-angular
  * https://github.com/typefoo/plumb-angular
 
- * Version: 0.0.6 - 2015-02-26
+ * Version: 0.0.7 - 2015-03-03
  * License: AGPL
  */
 /**
@@ -80,14 +80,14 @@
         $templateCache.put('plumb-templates/menu/button-cart.html', '<a ng-click="menuService.toggle(\'cart\')" plumb-popover="shoppingCartPopoverText" showing="{{cartAddActive}}" ng-class="menuService.checkClass(\'cart\')"><span class="kicon-cart"></span><span class="count">{{quantity_total}}</span></a>');
         $templateCache.put('plumb-templates/menu/button.html', '<a ng-href="{{menuService.getUri(mi)}}" ng-click="mi.onClick ? mi.onClick() : menuService.toggle(mi.tag)" plumb-popover="mi.name" class="menuService.checkClass(mi.tag)"><span class="{{mi.icon}}"></span></a>');
         $templateCache.put('plumb-templates/menu/cart.html', '<h1>Shopping Cart</h1>\n' + '<div ng-show="!cart || !cart.length">\n' + '  <p>You have nothing in your cart</p>\n' + '  <button type="button" class="plumb-button" ng-click="menuService.close()">Continue Shopping</button>\n' + '</div>\n' + '<div ng-show="cart && cart.length">\n' + '  <ul class="cart-products">\n' + '    <li class="cart-product" ng-repeat="product in cart">\n' + '      <div class="clearfix">\n' + '        <div class="left">\n' + '          <div class="name" ng-bind="product.name"></div>\n' + '        </div>\n' + '        <div class="right">\n' + '          <div class="price"><span ng-bind-html="displayProductPrice(product)"></span></div>\n' + '        </div>\n' + '      </div>\n' + '      <div class="clearfix">\n' + '        <div class="left">\n' + '          <div class="variants" ng-repeat="v in product.variants">{{v.name}}: {{v.value}}</div>\n' + '          <div class="quantity">Count: <input ng-model="product.qty" ng-change="updateQuantity(product)"></div>\n' + '        </div>\n' + '        <div class="right">\n' + '          <div class="variants" ng-repeat="v in product.variants" ng-bind-html="displayVariantPrice(v)"></div>\n' + '          <div class="remove"><a href ng-click="removeProduct(product)">remove</a></div>\n' + '        </div>\n' + '      </div>\n' + '    </li>\n' + '    <li class="cart-product total">\n' + '      <div class="left">Product Total</div>\n' + '      <div class="right product-total">{{product_total/100 | currency}}</div>\n' + '    </li>\n' + '  </ul>\n' + '  <button type="button" class="plumb-button checkout-button" ng-click="menuService.toggle(\'checkout\', \'cart\')">Checkout</button>\n' + '</div>');
-        $templateCache.put('plumb-templates/menu/checkout-2.html', '<h1>Checkout</h1>\n' + '<p>Please complete the form below to finish checkout</p>\n' + '<div class="alerts">\n' + '  <div ng-repeat="alert in messages[\'checkout\']" class="alert-{{alert.type}}">{{alert.message}}</div>\n' + '</div>\n' + '<form>\n' + '  <div ng-show="addressList.length > 0">\n' + '    <p>Select from a billing address you have saved</p>\n' + '    <select class="plumb-input" ng-model="checkout.billing.ship_to" ng-options="address as address.address.address_1 for address in addressList" ng-change="changedAddress()"><option value>New Address</option></select>\n' + '  </div>\n' + '  <div>\n' + '    <button type="button" class="plumb-button small" ng-click="copyShippingAddress()" ng-hide="shippingAddressCopied">Copy Shipping Address</button>\n' + '  </div>\n' + '  <div>\n' + '    <p>Enter your email address</p>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.email" placeholder="Your email address">\n' + '  </div>\n' + '  <div>\n' + '    <p>Enter a billing address</p>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.name" placeholder="Your Name">\n' + '    <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.company_name" placeholder="(optional) Company Name">\n' + '    <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.phone" placeholder="Your Phone Number">\n' + '    <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.address.address_1" placeholder="Enter your address" ng-change="lookupGeoCode(checkout.billing.ship_to.address.address_1, checkout.billing.ship_to.address.postal_code, checkout.billing)">\n' + '    <div ng-show="geocodeComplete">\n' + '      <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.address.address_2" placeholder="(optional) Address Line 2">\n' + '      <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.address.city" placeholder="Enter your city">\n' + '      <select class="plumb-input" ng-model="checkout.billing.ship_to.address.state_code" ng-options="state.value as state.name for state in stateList"><option value>Select a State</option></select>\n' + '      <select class="plumb-input" ng-model="checkout.billing.ship_to.address.country_code" ng-options="country.value as country.name for country in countryList"><option value>Select a Country</option></select>\n' + '    </div>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.address.postal_code" placeholder="Enter your postal/zip code" ng-change="lookupGeoCode(checkout.billing.ship_to.address.address_1, checkout.billing.ship_to.address.postal_code, checkout.billing)">\n' + '  </div>\n' + '  <button type="submit" class="plumb-button contact-button" ng-click="menuService.toggle(\'checkout-3\', \'checkout-2\')">Continue</button>\n' + '</form>');
-        $templateCache.put('plumb-templates/menu/checkout-3.html', '<h1>Checkout</h1>\n' + '<p>Please complete the form below to finish checkout</p>\n' + '<form>\n' + '  <div ng-show="requiresShipping">\n' + '    <p>Select a shipping method</p>\n' + '    <div class="alerts">\n' + '      <div ng-repeat="alert in messages[\'shipping-rates\']" class="alert-{{alert.type}}">{{alert.message}}</div>\n' + '    </div>\n' + '    <div ng-repeat="package in packages" ng-show="package.rates.length">\n' + '      <label class="plumb-label" ng-show="packages.length > 1">Package {{$index+1}}</label>\n' + '      <select class="plumb-input" ng-model="selectedRate[$index]" ng-disabled="rates.length <= 0" ng-options="rate as ((rate.cost | currency) + \' - \' + rate.name) for rate in package.rates">\n' + '        <option value="" ng-hide="package.rates">Please Wait...</option>\n' + '      </select>\n' + '    </div>\n' + '  </div>\n' + '  <div ng-show="paymentMethodList.length > 0">\n' + '    <p>Select a payment method</p>\n' + '    <select class="plumb-input" ng-model="checkout.payment_method" ng-options="payment_method as (getPaymentMethodType(payment_method) + \': \' + payment_method.nickname) for payment_method in paymentMethodList"><option value>New Credit Card</option></select>\n' + '  </div>\n' + '  <div ng-show="!checkout.payment_method || !checkout.payment_method._id">\n' + '    <p>Enter your payment information</p>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.name" placeholder="Name on card">\n' + '    <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.card_number" placeholder="Card number">\n' + '    <select class="plumb-input" class="expiration" ng-model="checkout.payment_method.card.expiration_month" ng-options="option.value as option.name for option in expirationMonths"><option value>Expiration Month</option></select>\n' + '    <select class="plumb-input" class="expiration" ng-model="checkout.payment_method.card.expiration_year" ng-options="option.value as option.name for option in expirationYears"><option value>Expiration Year</option></select>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.security_code" placeholder="Security code on back">\n' + '  </div>\n' + '  <div class="order-total">\n' + '    <ul class="cart-products">\n' + '      <li class="cart-product total">\n' + '        <div class="left">Product Total</div>\n' + '        <div class="right product-total">{{product_total/100 | currency}}</div>\n' + '      </li>\n' + '      <li class="cart-product total">\n' + '        <div class="left">Tax Total</div>\n' + '        <div class="right product-total">{{tax_total/100 | currency}}</div>\n' + '      </li>\n' + '      <li class="cart-product total">\n' + '        <div class="left">Shipping Total</div>\n' + '        <div class="right product-total">{{shipping_total/100 | currency}}</div>\n' + '      </li>\n' + '      <li class="cart-product final total">\n' + '        <div class="left">Final Total</div>\n' + '        <div class="right product-total">{{final_total/100 | currency}}</div>\n' + '      </li>\n' + '    </ul>\n' + '  </div>\n' + '  <div class="alerts">\n' + '    <div ng-repeat="alert in messages[\'checkout-3\']" class="alert-{{alert.type}}">{{alert.message}}</div>\n' + '  </div>\n' + '  <button type="submit" class="plumb-button contact-button" ng-click="completeOrder()">Complete Order</button>\n' + '</form>');
+        $templateCache.put('plumb-templates/menu/checkout-2.html', '<h1>Checkout</h1>\n' + '<p>Please complete the form below to finish checkout</p>\n' + '<form>\n' + '  <div ng-show="addressList.length > 0">\n' + '    <p>Select from a billing address you have saved</p>\n' + '    <select class="plumb-input" ng-model="checkout.billing.ship_to" ng-options="address as address.address.address_1 for address in addressList" ng-change="changedAddress()"><option value>New Address</option></select>\n' + '  </div>\n' + '  <div>\n' + '    <button type="button" class="plumb-button small" ng-click="copyShippingAddress()" ng-hide="shippingAddressCopied">Copy Shipping Address</button>\n' + '  </div>\n' + '  <div>\n' + '    <p>Enter your email address</p>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.email" placeholder="Your email address">\n' + '  </div>\n' + '  <div>\n' + '    <p>Enter a billing address</p>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.name" placeholder="Your Name">\n' + '    <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.company_name" placeholder="(optional) Company Name">\n' + '    <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.phone" placeholder="Your Phone Number">\n' + '    <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.address.address_1" placeholder="Enter your address" ng-change="lookupGeoCode(checkout.billing.ship_to.address.address_1, checkout.billing.ship_to.address.postal_code, checkout.billing)">\n' + '    <div ng-show="geocodeComplete">\n' + '      <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.address.address_2" placeholder="(optional) Address Line 2">\n' + '      <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.address.city" placeholder="Enter your city">\n' + '      <select class="plumb-input" ng-model="checkout.billing.ship_to.address.state_code" ng-options="state.value as state.name for state in stateList"><option value>Select a State</option></select>\n' + '      <select class="plumb-input" ng-model="checkout.billing.ship_to.address.country_code" ng-options="country.value as country.name for country in countryList"><option value>Select a Country</option></select>\n' + '    </div>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.billing.ship_to.address.postal_code" placeholder="Enter your postal/zip code" ng-change="lookupGeoCode(checkout.billing.ship_to.address.address_1, checkout.billing.ship_to.address.postal_code, checkout.billing)">\n' + '  </div>\n' + '  <button type="submit" class="plumb-button contact-button" ng-click="menuService.toggle(\'checkout-3\', \'checkout-2\')">Continue</button>\n' + '</form>');
+        $templateCache.put('plumb-templates/menu/checkout-3.html', '<h1>Checkout</h1>\n' + '<p>Please complete the form below to finish checkout</p>\n' + '<form>\n' + '  <div ng-show="requiresShipping">\n' + '    <p>Select a shipping method</p>\n' + '    <div ng-repeat="package in packages" ng-show="package.rates.length">\n' + '      <label class="plumb-label" ng-show="packages.length > 1">Package {{$index+1}}</label>\n' + '      <select class="plumb-input" ng-model="selectedRate[$index]" ng-disabled="rates.length <= 0" ng-options="rate as ((rate.cost | currency) + \' - \' + rate.name) for rate in package.rates">\n' + '        <option value="" ng-hide="package.rates">Please Wait...</option>\n' + '      </select>\n' + '    </div>\n' + '  </div>\n' + '  <div ng-show="paymentMethodList.length > 0">\n' + '    <p>Select a payment method</p>\n' + '    <select class="plumb-input" ng-model="checkout.payment_method" ng-options="payment_method as (getPaymentMethodType(payment_method) + \': \' + payment_method.nickname) for payment_method in paymentMethodList"><option value>New Credit Card</option></select>\n' + '  </div>\n' + '  <div ng-show="!checkout.payment_method || !checkout.payment_method._id">\n' + '    <p>Enter your payment information</p>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.name" placeholder="Name on card">\n' + '    <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.card_number" placeholder="Card number">\n' + '    <select class="plumb-input" class="expiration" ng-model="checkout.payment_method.card.expiration_month" ng-options="option.value as option.name for option in expirationMonths"><option value>Expiration Month</option></select>\n' + '    <select class="plumb-input" class="expiration" ng-model="checkout.payment_method.card.expiration_year" ng-options="option.value as option.name for option in expirationYears"><option value>Expiration Year</option></select>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.security_code" placeholder="Security code on back">\n' + '  </div>\n' + '  <div class="order-total">\n' + '    <ul class="cart-products">\n' + '      <li class="cart-product total">\n' + '        <div class="left">Product Total</div>\n' + '        <div class="right product-total">{{product_total/100 | currency}}</div>\n' + '      </li>\n' + '      <li class="cart-product total">\n' + '        <div class="left">Tax Total</div>\n' + '        <div class="right product-total">{{tax_total/100 | currency}}</div>\n' + '      </li>\n' + '      <li class="cart-product total">\n' + '        <div class="left">Shipping Total</div>\n' + '        <div class="right product-total">{{shipping_total/100 | currency}}</div>\n' + '      </li>\n' + '      <li class="cart-product final total">\n' + '        <div class="left">Final Total</div>\n' + '        <div class="right product-total">{{final_total/100 | currency}}</div>\n' + '      </li>\n' + '    </ul>\n' + '  </div>\n' + '  <button type="submit" class="plumb-button contact-button" ng-click="completeOrder()">Complete Order</button>\n' + '</form>');
         $templateCache.put('plumb-templates/menu/checkout-complete.html', '<h1>Order Complete!</h1>\n' + '<p>Thank you for placing an order, you should receive an email confirmation soon</p>\n' + '<button type="button" class="plumb-button" ng-click="menuService.close()">Continue Shopping</button>');
-        $templateCache.put('plumb-templates/menu/checkout.html', '<h1>Checkout</h1>\n' + '<p>Please complete the form below to finish checkout</p>\n' + '<div class="alerts">\n' + '  <div ng-repeat="alert in messages[\'checkout\']" class="alert-{{alert.type}}">{{alert.message}}</div>\n' + '</div>\n' + '<form>\n' + '  <div ng-show="!plumb.auth.loggedIn()">\n' + '    <p>Have an account?</p>\n' + '    <button class="plumb-button small" type="button" ng-click="menuService.toggle(\'login\', \'checkout\', \'checkout\')">Login Now</button>\n' + '  </div>\n' + '  <div ng-show="addressList.length > 0">\n' + '    <p>Select from a shipping address you have saved</p>\n' + '    <select class="plumb-input" ng-model="checkout.shipment.ship_to" ng-options="address as address.address.address_1 for address in addressList" ng-change="changedAddress()"><option value>New Address</option></select>\n' + '  </div>\n' + '  <div>\n' + '    <p>Enter your email address</p>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.email" placeholder="Your email address">\n' + '  </div>\n' + '  <div ng-show="requiresShipping">\n' + '    <p>Enter a shipping address</p>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.name" placeholder="Your Name">\n' + '    <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.company_name" placeholder="(optional) Company Name">\n' + '    <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.phone" placeholder="Your Phone Number">\n' + '    <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.address.address_1" placeholder="Enter your address" ng-change="lookupGeoCode(checkout.shipment.ship_to.address.address_1, checkout.shipment.ship_to.address.postal_code, checkout.shipment)">\n' + '    <div ng-show="geocodeComplete">\n' + '      <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.address.address_2" placeholder="(optional) Address Line 2">\n' + '      <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.address.city" placeholder="Enter your city">\n' + '      <select class="plumb-input" ng-model="checkout.shipment.ship_to.address.state_code" ng-options="state.value as state.name for state in stateList"><option value>Select a State</option></select>\n' + '      <select class="plumb-input" ng-model="checkout.shipment.ship_to.address.country_code" ng-options="country.value as country.name for country in countryList"><option value>Select a Country</option></select>\n' + '    </div>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.address.postal_code" placeholder="Enter your postal/zip code" ng-change="lookupGeoCode(checkout.shipment.ship_to.address.address_1, checkout.shipment.ship_to.address.postal_code, checkout.shipment)">\n' + '  </div>\n' + '  <button type="submit" class="plumb-button contact-button" ng-click="saveAddress(checkout.shipment.ship_to); menuService.toggle(\'checkout-2\', \'checkout\')">Continue</button>\n' + '</form>');
+        $templateCache.put('plumb-templates/menu/checkout.html', '<h1>Checkout</h1>\n' + '<p>Please complete the form below to finish checkout</p>\n' + '<form>\n' + '  <div ng-show="!plumb.auth.loggedIn()">\n' + '    <p>Have an account?</p>\n' + '    <button class="plumb-button small" type="button" ng-click="menuService.toggle(\'login\', \'checkout\', \'checkout\')">Login Now</button>\n' + '  </div>\n' + '  <div ng-show="addressList.length > 0">\n' + '    <p>Select from a shipping address you have saved</p>\n' + '    <select class="plumb-input" ng-model="checkout.shipment.ship_to" ng-options="address as address.address.address_1 for address in addressList" ng-change="changedAddress()"><option value>New Address</option></select>\n' + '  </div>\n' + '  <div>\n' + '    <p>Enter your email address</p>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.email" placeholder="Your email address">\n' + '  </div>\n' + '  <div ng-show="requiresShipping">\n' + '    <p>Enter a shipping address</p>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.name" placeholder="Your Name">\n' + '    <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.company_name" placeholder="(optional) Company Name">\n' + '    <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.phone" placeholder="Your Phone Number">\n' + '    <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.address.address_1" placeholder="Enter your address" ng-change="lookupGeoCode(checkout.shipment.ship_to.address.address_1, checkout.shipment.ship_to.address.postal_code, checkout.shipment)">\n' + '    <div ng-show="geocodeComplete">\n' + '      <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.address.address_2" placeholder="(optional) Address Line 2">\n' + '      <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.address.city" placeholder="Enter your city">\n' + '      <select class="plumb-input" ng-model="checkout.shipment.ship_to.address.state_code" ng-options="state.value as state.name for state in stateList"><option value>Select a State</option></select>\n' + '      <select class="plumb-input" ng-model="checkout.shipment.ship_to.address.country_code" ng-options="country.value as country.name for country in countryList"><option value>Select a Country</option></select>\n' + '    </div>\n' + '    <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.address.postal_code" placeholder="Enter your postal/zip code" ng-change="lookupGeoCode(checkout.shipment.ship_to.address.address_1, checkout.shipment.ship_to.address.postal_code, checkout.shipment)">\n' + '  </div>\n' + '  <button type="submit" class="plumb-button contact-button" ng-click="saveAddress(checkout.shipment.ship_to); menuService.toggle(\'checkout-2\', \'checkout\')">Continue</button>\n' + '</form>');
         $templateCache.put('plumb-templates/menu/contact.html', '<h1>Contact Us</h1>\n' + '<p>Fill out the form below and we\'ll respond as soon as possible</p>\n' + '<div class="alerts">\n' + '  <div ng-repeat="alert in messages[\'contact\']" class="alert-{{alert.type}}">{{alert.message}}</div>\n' + '</div>\n' + '<form ng-submit="sendContact()">\n' + '  <input class="plumb-input" type="text" ng-model="contact.name" placeholder="Enter your name">\n' + '  <input class="plumb-input" type="email" ng-model="contact.email" placeholder="Enter your email">\n' + '  <textarea rows="3" class="plumb-input" ng-model="contact.message" placeholder="Enter a message or concern to send to us"></textarea>\n' + '  <button type="submit" class="plumb-button contact-button">Contact</button>\n' + '</form>');
         $templateCache.put('plumb-templates/menu/forgot-password.html', '<h1>Forgot My Password</h1>\n' + '<p>Enter your email address and we will send you instructions to reset your password</p>\n' + '<div class="alerts">\n' + '  <div ng-repeat="alert in messages[\'forgot-password\']" class="alert-{{alert.type}}">{{alert.message}}</div>\n' + '</div>\n' + '<form ng-submit="forgotPassword()">\n' + '  <input class="plumb-input" type="text" ng-model="forgot.email" placeholder="Enter your email address">\n' + '  <button class="plumb-button send-password-instructions" type="submit" class="login-button">Send Instructions</button>\n' + '</form>');
-        $templateCache.put('plumb-templates/menu/register.html', '<h1>Register</h1>\n' + '<p>Enter the fields below to get started</p>\n' + '<div class="alerts">\n' + '  <div ng-repeat="alert in messages[\'register\']" class="alert-{{alert.type}}">{{alert.message}}</div>\n' + '</div>\n' + '<form ng-submit="registerUser()">\n' + '  <input class="plumb-input" type="text" ng-model="register.first_name" placeholder="Enter your first name">\n' + '  <input class="plumb-input" type="text" ng-model="register.last_name" placeholder="Enter your last name">\n' + '  <input class="plumb-input" type="email" ng-model="register.email" placeholder="Enter your email">\n' + '  <input class="plumb-input" type="password" ng-model="register.password" placeholder="Enter a password">\n' + '  <button type="submit" class="plumb-button register-button">Register</button>\n' + '  <p>Already have an account?</p>\n' + '  <button type="button" class="plumb-button small login-button" ng-click="menuService.toggle(\'login\', \'register\')">Sign in now</button>\n' + '</form>');
-        $templateCache.put('plumb-templates/menu/sign-in.html', '<h1>Sign In</h1>\n' + '<p>Sign into your Plumb account.</p>\n' + '<div class="alerts">\n' + '  <div ng-repeat="alert in messages[\'login\']" class="alert-{{alert.type}}">{{alert.message}}</div>\n' + '</div>\n' + '<form ng-submit="loginUser()">\n' + '  <input class="plumb-input" type="text" ng-model="login.username" placeholder="Enter your username or email">\n' + '  <input class="plumb-input" type="password" ng-model="login.password" placeholder="Enter your password">\n' + '  <button type="submit" class="plumb-button login-button">Sign In</button>\n' + '  <div class="spacer"></div>\n' + '  <button type="button" class="plumb-button small forgot-password" ng-click="menuService.toggle(\'forgot-password\', \'login\')">Forgot your password?</button>\n' + '  <p>Don\'t have an account?</p>\n' + '  <button type="button" class="plumb-button small register-button" ng-click="menuService.toggle(\'register\', \'login\')">Register Now</button>\n' + '</form>');
+        $templateCache.put('plumb-templates/menu/register.html', '<h1>Register</h1>\n' + '<p>Enter the fields below to get started</p>\n' + '<form ng-submit="registerUser()">\n' + '  <input class="plumb-input" type="text" ng-model="register.first_name" placeholder="Enter your first name">\n' + '  <input class="plumb-input" type="text" ng-model="register.last_name" placeholder="Enter your last name">\n' + '  <input class="plumb-input" type="email" ng-model="register.email" placeholder="Enter your email">\n' + '  <input class="plumb-input" type="password" ng-model="register.password" placeholder="Enter a password">\n' + '  <button type="submit" class="plumb-button register-button">Register</button>\n' + '  <p>Already have an account?</p>\n' + '  <button type="button" class="plumb-button small login-button" ng-click="menuService.toggle(\'login\', \'register\')">Sign in now</button>\n' + '</form>');
+        $templateCache.put('plumb-templates/menu/sign-in.html', '<h1>Sign In</h1>\n' + '<p>Sign into your Plumb account.</p>\n' + '<form ng-submit="loginUser()">\n' + '  <input class="plumb-input" type="text" ng-model="login.username" placeholder="Enter your username or email">\n' + '  <input class="plumb-input" type="password" ng-model="login.password" placeholder="Enter your password">\n' + '  <button type="submit" class="plumb-button login-button">Sign In</button>\n' + '  <div class="spacer"></div>\n' + '  <button type="button" class="plumb-button small forgot-password" ng-click="menuService.toggle(\'forgot-password\', \'login\')">Forgot your password?</button>\n' + '  <p>Don\'t have an account?</p>\n' + '  <button type="button" class="plumb-button small register-button" ng-click="menuService.toggle(\'register\', \'login\')">Register Now</button>\n' + '</form>');
         $templateCache.put('plumb-templates/menu/wishlist.html', '<h1>Wishlist</h1>\n' + '<div ng-show="!wishlist || !wishlist.length">\n' + '  <p>You have nothing in your wishlist</p>\n' + '  <button type="button" class="plumb-button" ng-click="menuService.close()">Continue Shopping</button>\n' + '</div>\n' + '<div ng-show="wishlist && wishlist.length">\n' + '  <ul>\n' + '    <li ng-repeat="product in cart">\n' + '\n' + '    </li>\n' + '  </ul>\n' + '  <button type="button" class="plumb-button share-wishlist-button" ng-click="menuService.toggle(\'share-wishlist\', \'wishlist\')">Share my wishlist</button>\n' + '</div>');
         $templateCache.put('plumb-templates/plumb-menu.html', '<div class="plumb-menu" ng-class="{\'logged-in\': plumb.auth.loggedIn(), \'open\': menuService.showing}">\n' + '  <ul class="menu-wrapper">\n' + '    <li ng-repeat="mi in menuService.menu" ng-show="menuService.checkShowing(mi)" ng-class="menuService.checkButtonClass(mi)">\n' + '      <ng-include src="mi.buttonTemplateUrl"></ng-include>\n' + '    </li>\n' + '  </ul>\n' + '  <div class="plumb-loading" ng-class="{active: (apiLoading > 0)}"><div class="loading-indicator">Loading...</div></div>\n' + '  <div class="plumb-sidebar {{sidebar.className}}" ng-repeat="sidebar in menuService.sidebars" ng-class="{active: menuService.show(sidebar.tag)}">\n' + '    <div class="closer">\n' + '      <a href class="back" ng-show="menuService.back" ng-click="menuService.toggle(menuService.back)"><span class="kicon-arrow-left"></span></a>\n' + '      <a href ng-click="menuService.close()"><span class="kicon-close"></span></a>\n' + '    </div>\n' + '    <div class="plumb-container">\n' + '      <div ng-include="sidebar.templateUrl"></div>\n' + '      <a ng-show="config.display_logo" href="https://www.plumb.com" target="_blank" class="logo">powered by <img src="https://assets.plummb.com/images/plumb_logo.png"></a>\n' + '    </div>\n' + '  </div>\n' + '</div>');
         $templateCache.put('plumb-templates/plumb-popover.html', '<span ng-transclude></span>\n' + '<div class="plumb-popover">\n' + '  <span ng-bind="plumbPopover"></span>\n' + '</div>');
@@ -737,7 +737,9 @@
             req.success(function (res) {
               $scope.options.session = res.pkg.data;
               storage.set('session', $scope.options.session);
-              return cb(null, $scope.options.session);
+              if (cb) {
+                return cb(null, $scope.options.session);
+              }
             });
           };
           /*
@@ -1866,19 +1868,6 @@
                 d.getElementsByTagName('body')[0].appendChild(gscript);
               }
             }
-            scope.messages = {
-              none: [],
-              login: [],
-              'forgot-password': [],
-              register: [],
-              checkout: [],
-              'checkout-2': [],
-              'checkout-3': [],
-              wishlist: [],
-              contact: [],
-              account: [],
-              'shipping-rates': []
-            };
             scope.plumb = plumb;
             scope.updateProductTotal = function () {
               scope.product_total = 0;
@@ -1908,9 +1897,48 @@
               }
               return p;
             };
+            scope.lookupGeoCode = function (address, postal_code, obj) {
+              if (!postal_code || postal_code.length < 5) {
+                return;
+              }
+              if (!$window.google) {
+                return scope.geocodeComplete = true;
+              }
+              var geocoder = new google.maps.Geocoder();
+              geocoder.geocode({ address: address + ' ' + postal_code }, function (res, status) {
+                if (status !== google.maps.GeocoderStatus.OK) {
+                  return scope.geocodeComplete = true;
+                }
+                for (var i = 0; i < res[0].address_components.length; i++) {
+                  var part = res[0].address_components[i];
+                  if (part.types[0] === 'locality') {
+                    obj.ship_to.address.city = part.long_name;
+                  }
+                  if (part.types[0] === 'administrative_area_level_1') {
+                    obj.ship_to.address.state_code = part.short_name;
+                  }
+                  if (part.types[0] === 'country') {
+                    obj.ship_to.country_code = part.short_name;
+                  }
+                }
+                scope.geocodeComplete = true;
+                scope.$apply();
+              });
+            };
+            scope.updateCheckout = function () {
+              scope.checkout.shipment = plumb.session.get().data.shipment || new plumb.customer();
+              scope.checkout.billing = plumb.session.get().data.billing || new plumb.customer();
+              if (scope.checkout.shipment.ship_to.address.address_1) {
+                scope.lookupGeoCode(scope.checkout.shipment.ship_to.address.address_1, scope.checkout.shipment.ship_to.address.postal_code, scope.checkout.shipment);
+              }
+              if (scope.checkout.billing.ship_to.address.address_1) {
+                scope.lookupGeoCode(scope.checkout.billing.ship_to.address.address_1, scope.checkout.billing.ship_to.address.postal_code, scope.checkout.billing);
+              }
+            };
             plumb.cart.get(function (err, cart) {
               scope.cart = cart;
               scope.updateProductTotal();
+              scope.updateCheckout();
             });
             scope.updateFinalTotal = function () {
               scope.final_total = scope.product_total + scope.shipping_total + scope.tax_total;
@@ -1942,7 +1970,6 @@
               });
             };
             scope.saveAddress = function (address) {
-              scope.wipeMessages();
               var user = plumb.auth.loggedIn();
               if (!user) {
                 return;
@@ -1965,7 +1992,6 @@
               });
             };
             scope.savePaymentMethod = function (payment_method) {
-              scope.wipeMessages();
               var user = plumb.auth.loggedIn();
               if (!user) {
                 return;
@@ -1997,34 +2023,6 @@
               scope.checkout.billing.ship_to = w[PLUMB_CONFIG.ANGULAR].extend(scope.checkout.billing.ship_to, scope.checkout.shipment.ship_to);
               scope.shippingAddressCopied = true;
             };
-            scope.lookupGeoCode = function (address, postal_code, obj) {
-              if (!postal_code || postal_code.length < 5) {
-                return;
-              }
-              if (!$window.google) {
-                return scope.geocodeComplete = true;
-              }
-              var geocoder = new google.maps.Geocoder();
-              geocoder.geocode({ address: address + ' ' + postal_code }, function (res, status) {
-                if (status !== google.maps.GeocoderStatus.OK) {
-                  return scope.geocodeComplete = true;
-                }
-                for (var i = 0; i < res[0].address_components.length; i++) {
-                  var part = res[0].address_components[i];
-                  if (part.types[0] === 'locality') {
-                    obj.ship_to.address.city = part.long_name;
-                  }
-                  if (part.types[0] === 'administrative_area_level_1') {
-                    obj.ship_to.address.state_code = part.short_name;
-                  }
-                  if (part.types[0] === 'country') {
-                    obj.ship_to.country_code = part.short_name;
-                  }
-                }
-                scope.geocodeComplete = true;
-                scope.$apply();
-              });
-            };
             scope.getTaxes = function () {
               if (!scope.requiresTax) {
                 scope.tax_total = 0;
@@ -2036,7 +2034,6 @@
               });
             };
             scope.getRates = function () {
-              scope.wipeMessages();
               if (!scope.checkout.shipment.ship_to.address.postal_code || scope.checkout.shipment.ship_to.address.postal_code.length < 5) {
                 return;
               }
@@ -2120,7 +2117,6 @@
               scope.selectedRate[i].products = pkg;
             };
             scope.completeOrder = function () {
-              scope.wipeMessages();
               if (scope.apiLoading > 0) {
                 scope.addMessage('error', 'Please wait, we are processing your order');
                 return;
@@ -2139,7 +2135,6 @@
                     card: { card_token: card_id }
                   });
                 }).catch(function (err) {
-                  scope.addMessage('error', err);
                 });
               } else {
                 scope.finishCompleteOrder(scope.checkout.payment_method);
@@ -2154,9 +2149,6 @@
                 products: w[PLUMB_CONFIG.ANGULAR].copy(scope.cart),
                 notes: ''
               }, function (err, order) {
-                if (err) {
-                  scope.addMessage('error', err);
-                }
                 scope.order = order;
                 plumb.cart.empty(function (err, cart) {
                   scope.cart = cart;
@@ -2166,20 +2158,14 @@
               });
             };
             scope.addMessage = function (type, msg, section) {
-              if (!section) {
-                section = plumbMenuService.showing || 'none';
+              if (type === 'error') {
+                return $rootScope.$broadcast('apiError', msg);
               }
-              scope.messages[section].push({
+              $rootScope.$broadcast('apiMessage', {
                 type: type,
-                message: msg
-              });  //$timeout(function() {
-                   //  scope.messages[section].pop();
-                   //}, 5000);
-            };
-            scope.wipeMessages = function () {
-              for (var i in scope.messages) {
-                scope.messages[i] = [];
-              }
+                msg: msg,
+                section: section
+              });
             };
             scope.resetForms = function () {
               scope.login = {
@@ -2201,7 +2187,6 @@
               };
             };
             scope.loginUser = function (section) {
-              scope.wipeMessages();
               plumb.auth.login(scope.login.username, scope.login.password, function (user) {
                 scope.addMessage('success', 'Successfully logged in');
                 $timeout(function () {
@@ -2214,12 +2199,10 @@
                       plumbMenuService.showing = null;
                     }
                   }
-                  scope.wipeMessages();
                 }, 500);
               });
             };
             scope.registerUser = function (section) {
-              scope.wipeMessages();
               scope.register.confirm_password = scope.register.password;
               plumb.auth.register(scope.register, function (user) {
                 scope.addMessage('success', 'Account registered, and logged in');
@@ -2233,12 +2216,10 @@
                       plumbMenuService.showing = null;
                     }
                   }
-                  scope.wipeMessages();
                 }, 500);
               });
             };
             scope.forgotPassword = function () {
-              scope.wipeMessages();
               plumb.auth.forgotPassword(scope.forgot.email, function (res) {
                 scope.addMessage('success', 'Instructions sent to your email, go check it');
               });
@@ -2248,7 +2229,6 @@
               if (!res || !res.pkg) {
                 return scope.addMessage('error', 'An error occurred connecting to Plumb\'s servers, check your connection.');
               }
-              scope.addMessage('error', res.pkg.statusMessage);
             });
             scope.$on('plumbSignOut', function (evt) {
               plumbMenuService.showing = null;
@@ -2276,9 +2256,13 @@
               }
             });
             scope.$on('menuToggled', function (evt, data) {
-              scope.wipeMessages();
               scope.resetForms();
-              if (data.val === 'checkout-3') {
+              if (data.val === 'checkout-2') {
+                plumb.options.session.data.shipment = scope.checkout.shipment;
+                plumb.session.save(plumb.options.session);
+              } else if (data.val === 'checkout-3') {
+                plumb.options.session.data.billing = scope.checkout.billing;
+                plumb.session.save(plumb.options.session);
                 if (!scope.checkout.shipment.ship_to.address || !scope.checkout.shipment.ship_to.address.postal_code) {
                   scope.checkout.shipment.ship_to.address = angular.copy(scope.checkout.billing.ship_to.address);
                 }
