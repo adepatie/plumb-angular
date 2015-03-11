@@ -1178,6 +1178,72 @@
 
           /*
            *
+           * Store Settings
+           *
+           */
+
+          function settings(options) {
+            if(options) {
+              $scope.config(options);
+            }
+          }
+
+          settings.prototype.get = function(cb) {
+            var req = new Request($scope).get($scope.options.baseUrl + '/store/settings', $scope.handleError);
+            req.success(function(res) {
+              return cb(null, res.pkg.data);
+            });
+          };
+
+          /*
+           *
+           * Store discounts & gift cards
+           *
+           */
+
+          function discounts(options) {
+            if(options) {
+              $scope.config(options);
+            }
+          }
+
+          /*
+           * getDiscounts - returns an array of discounts for the store
+           *
+           */
+          discounts.prototype.getDiscounts = function(cb) {
+            var req = new Request($scope).get($scope.options.baseUrl + '/discounts', $scope.handleError);
+            req.success(function(res) {
+              return cb(null, res.pkg.data);
+            });
+          };
+
+          /*
+           * checkDiscount - check a code for a discount
+           *
+           */
+          discounts.prototype.checkDiscount = function(code, cb) {
+            var stringOptions = JSON.stringify({code: code});
+            var req = new Request($scope).get($scope.options.baseUrl + '/discounts/check', stringOptions, $scope.handleError);
+            req.success(function(err, res) {
+              return cb(null, res.pkg.data);
+            });
+          };
+
+          /*
+           * checkGiftCard - check a code for a gift card
+           *
+           */
+          discounts.prototype.checkGiftCard = function(code, cb) {
+            var stringOptions = JSON.stringify({code: code});
+            var req = new Request($scope).get($scope.options.baseUrl + '/gift-cards/check', stringOptions, $scope.handleError);
+            req.success(function(err, res) {
+              return cb(null, res.pkg.data);
+            });
+          };
+
+          /*
+           *
            * Shipping methods
            *
            */
@@ -1433,6 +1499,7 @@
           $scope.product_lines = new product_lines();
           $scope.orders = new orders();
           $scope.shipping = new shipping();
+          $scope.settings = new settings();
           $scope.shipment = shipment;
           $scope.customer = customer;
           $scope.credit_card = credit_card;
@@ -1924,8 +1991,6 @@
             scope.cart = null;
             scope.wishlist = null;
             scope.apiLoading = 0;
-            scope.product_total = 0;
-            scope.quantity_total = 0;
             scope.paymentEnabled = false;
             scope.requiresShipping = false;
             scope.requiresTax = false;
@@ -1938,7 +2003,8 @@
               billing: new plumb.customer(),
               payment_method: new plumb.credit_card(),
               products: null,
-              notes: ''
+              notes: '',
+              discounts: []
             };
 
             scope.geocodeComplete = false;
@@ -1949,13 +2015,17 @@
             scope.shippingAddressCopied = false;
             scope.packages = [];
             scope.selectedRate = [];
+            scope.product_total = 0;
+            scope.quantity_total = 0;
             scope.tax_total = 0;
             scope.shipping_total = 0;
+            scope.discount_total = 0;
             scope.final_total = 0;
             scope.cartAddText = plumbConfig.cartAddText ? plumbConfig.cartAddText : 'Added to cart';
             scope.shoppingCartPopoverText = 'Shopping Cart';
             scope.cartAddActive = false;
             scope.order = null;
+            scope.settings = null;
 
             // load Gmaps if it isn't on the page
             if(!$window.google) {
@@ -2045,6 +2115,7 @@
             scope.updateCheckout = function() {
               scope.checkout.shipment = plumb.session.get().data.shipment || new plumb.customer();
               scope.checkout.billing = plumb.session.get().data.billing || new plumb.customer();
+              scope.checkout.discounts = plumb.session.get().data.discounts || [];
               if(scope.checkout.shipment.ship_to.address.address_1) {
                 scope.lookupGeoCode(scope.checkout.shipment.ship_to.address.address_1, scope.checkout.shipment.ship_to.address.postal_code, scope.checkout.shipment);
               }
@@ -2059,10 +2130,14 @@
               scope.updateCheckout();
             });
 
+            plumb.settings.get(function(err, settings) {
+              console.log(settings);
+            });
+
             scope.updateFinalTotal = function() {
               scope.final_total = scope.product_total +
                 scope.shipping_total +
-                scope.tax_total;
+                scope.tax_total - scope.discount_total;
             };
 
             scope.$on('cartUpdated', function(evt, cart) {
