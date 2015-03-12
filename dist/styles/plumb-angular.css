@@ -962,6 +962,13 @@ textarea.plumb-input {
 .plumb-account .addresses-list {
   margin-top: 0;
 }
+.plumb-cart .discount-list > div > span,
+.plumb-checkout .discount-list > div > span,
+.plumb-account .discount-list > div > span {
+  display: block;
+  padding: 4px 0;
+  font-size: 14px;
+}
 @font-face {
   font-family: 'KurrencyIcons';
   src: url('https://assets.plummb.com/fonts/KurrencyIcons.eot?-orzlfj');

@@ -1223,9 +1223,8 @@
            *
            */
           discounts.prototype.checkDiscount = function(code, cb) {
-            var stringOptions = JSON.stringify({code: code});
-            var req = new Request($scope).get($scope.options.baseUrl + '/discounts/check', stringOptions, $scope.handleError);
-            req.success(function(err, res) {
+            var req = new Request($scope).get($scope.options.baseUrl + '/discounts/check', {code: code}, $scope.handleError);
+            req.success(function(res) {
               return cb(null, res.pkg.data);
             });
           };
@@ -1235,9 +1234,8 @@
            *
            */
           discounts.prototype.checkGiftCard = function(code, cb) {
-            var stringOptions = JSON.stringify({code: code});
-            var req = new Request($scope).get($scope.options.baseUrl + '/gift-cards/check', stringOptions, $scope.handleError);
-            req.success(function(err, res) {
+            var req = new Request($scope).get($scope.options.baseUrl + '/gift-cards/check', {code: code}, $scope.handleError);
+            req.success(function(res) {
               return cb(null, res.pkg.data);
             });
           };
@@ -1500,6 +1498,7 @@
           $scope.orders = new orders();
           $scope.shipping = new shipping();
           $scope.settings = new settings();
+          $scope.discounts = new discounts();
           $scope.shipment = shipment;
           $scope.customer = customer;
           $scope.credit_card = credit_card;
@@ -1564,6 +1563,12 @@
             $scope.next = null;
           }
 
+          for(var i = 0; i < $scope.sidebars.length; i++) {
+            if($scope.sidebars[i].tag === val && $scope.sidebars[i].back) {
+              $scope.back = $scope.sidebars[i].back;
+            }
+          }
+
           $rootScope.$broadcast('menuToggled', {val: val, back: back, next: next});
         };
 
@@ -1597,7 +1602,8 @@
           var defaults = {
             tag: null,
             className: null,
-            templateUrl: null
+            templateUrl: null,
+            back: null
           };
 
           item = w[PLUMB_CONFIG.ANGULAR].extend({}, defaults, item);
@@ -1739,15 +1745,18 @@
         }).addSidebar({
           tag: 'checkout',
           className: 'plumb-checkout',
-          templateUrl: 'plumb-templates/menu/checkout.html'
+          templateUrl: 'plumb-templates/menu/checkout.html',
+          back: 'cart'
         }).addSidebar({
           tag: 'checkout-2',
           className: 'plumb-checkout',
-          templateUrl: 'plumb-templates/menu/checkout-2.html'
+          templateUrl: 'plumb-templates/menu/checkout-2.html',
+          back: 'checkout'
         }).addSidebar({
           tag: 'checkout-3',
           className: 'plumb-checkout',
-          templateUrl: 'plumb-templates/menu/checkout-3.html'
+          templateUrl: 'plumb-templates/menu/checkout-3.html',
+          back: 'checkout-2'
         }).addSidebar({
           tag: 'checkout-complete',
           className: 'plumb-checkout',
@@ -2135,9 +2144,19 @@
             });
 
             scope.updateFinalTotal = function() {
+              scope.discount_total = 0;
+              for(var i = 0; i < scope.checkout.discounts.length; i++) {
+                console.log(scope.checkout.discounts[i]);
+                scope.discount_total += scope.checkout.discounts[i].amount;
+              }
+              console.log(scope.discount_total);
               scope.final_total = scope.product_total +
                 scope.shipping_total +
                 scope.tax_total - scope.discount_total;
+
+              if(scope.final_total < 0) {
+                scope.final_total = 0;
+              }
             };
 
             scope.$on('cartUpdated', function(evt, cart) {
@@ -2352,6 +2371,10 @@
                 return;
               }
 
+              if(scope.final_total === 0) {
+                return scope.finishCompleteOrder(null);
+              }
+
               if(!scope.checkout.payment_method._id) {
                 new plumb.credit_card().tokenizeCard({
                   name: scope.checkout.payment_method.card.name,
@@ -2377,6 +2400,7 @@
                 customer: scope.checkout.billing.ship_to,
                 payment_method: payment,
                 products: w[PLUMB_CONFIG.ANGULAR].copy(scope.cart),
+                discounts: scope.checkout.discounts,
                 notes: ''
               }, function(err, order) {
                 scope.order = order;
@@ -2540,6 +2564,22 @@
 
             scope.updateDiscountStatus = function(d) {
               console.log(d.code);
+              switch(d.type) {
+                case 'code':
+                  plumb.discounts.checkDiscount(d.code, function(err, res) {
+                    d.amount = res.value;
+
+                    scope.updateFinalTotal();
+                  });
+                  break;
+                case 'gift-card':
+                  plumb.discounts.checkGiftCard(d.code, function(err, res) {
+                    d.amount = res.amount;
+
+                    scope.updateFinalTotal();
+                  });
+                  break;
+              }
             };
 
             scope.getDiscountType = function(type) {
@@ -2558,7 +2598,7 @@
                 return 'Amount: ' + $filter('currency')(d.amount / 100);
               }
 
-              return 'Amount: --';
+              return 'Enter code to get amount';
             };
 
             scope.resetForms();
