@@ -41,6 +41,7 @@
 @buttonAltHoverBgColor: #b3b4b3;
 @buttonAltActiveColor: #fff;
 @buttonAltActiveBgColor: #545f68;
+@buttonTinyFontSize: 15px;
 
 @inputFontFamily: 'Questrial';
 @inputFontSize: 15px;
@@ -380,6 +381,11 @@
     .box-shadow(0 0 1px 2px rgba(102, 175, 233, 1));
     z-index: 1;
   }
+  &[type=number]::-webkit-inner-spin-button,
+  &[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
 }
 
 .plumb-label {
@@ -414,6 +420,8 @@ textarea.plumb-input {
   text-transform: uppercase;
   font-family: @buttonFontFamily;
   -webkit-tap-highlight-color: rgba(0,0,0,0);
+  text-decoration: none;
+  text-align: center;
   &:hover {
     background: @buttonHoverBgColor;
     color: @buttonHoverColor;
@@ -446,6 +454,10 @@ textarea.plumb-input {
       color: @buttonAltActiveColor;
       background: @buttonAltActiveBgColor;
     }
+  }
+  &.tiny {
+    line-height: 20px;
+    font-size: @buttonTinyFontSize;
   }
   &[type="submit"] {
     margin-top: 6px;

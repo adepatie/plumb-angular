@@ -17,10 +17,19 @@
   <div ng-show="!checkout.payment_method || !checkout.payment_method._id">
     <p>Enter your payment information</p>
     <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.name" placeholder="Name on card">
-    <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.card_number" placeholder="Card number">
+    <input class="plumb-input" type="number" ng-model="checkout.payment_method.card.card_number" placeholder="Card number">
     <select class="plumb-input" class="expiration" ng-model="checkout.payment_method.card.expiration_month" ng-options="option.value as option.name for option in expirationMonths"><option value>Expiration Month</option></select>
     <select class="plumb-input" class="expiration" ng-model="checkout.payment_method.card.expiration_year" ng-options="option.value as option.name for option in expirationYears"><option value>Expiration Year</option></select>
     <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.security_code" placeholder="Security code on back">
+  </div>
+  <div>
+    <p>Have a discount code or gift card?</p>
+    <p><a href class="plumb-button tiny" ng-click="addDiscount('code')">Add Discount Code</a> <a href class="plumb-button tiny" ng-click="addDiscount('gift-card')">Use A Gift Card</a></p>
+    <div class="discount-list">
+      <div ng-repeat="d in checkout.discounts">
+        <input class="plumb-input" type="text" code-input ng-blur="updateDiscountStatus(d)" ng-model="d.code" placeholder="Enter a {{getDiscountType(d.type)}} code"><span class="d-status" ng-bind="getDiscountStatus(d)"></span>
+      </div>
+    </div>
   </div>
   <div class="order-total">
     <ul class="cart-products">

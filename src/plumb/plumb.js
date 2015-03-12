@@ -2526,7 +2526,85 @@
               return $filter('currency')(v.price/100);
             };
 
+            /*
+             * Discount Methods
+             */
+
+            scope.addDiscount = function(type) {
+              scope.checkout.discounts.push({
+                type: type,
+                code: null,
+                amount: null
+              })
+            };
+
+            scope.updateDiscountStatus = function(d) {
+              console.log(d.code);
+            };
+
+            scope.getDiscountType = function(type) {
+              switch(type) {
+                case 'code':
+                  return 'Discount Code';
+                  break;
+                case 'gift-card':
+                  return 'Gift Card';
+                  break;
+              }
+            };
+
+            scope.getDiscountStatus = function(d) {
+              if(d.amount) {
+                return 'Amount: ' + $filter('currency')(d.amount / 100);
+              }
+
+              return 'Amount: --';
+            };
+
             scope.resetForms();
+          }
+        }
+      }])
+      .directive('codeInput', [function() {
+        return {
+          restrict: 'A',
+          require: 'ngModel',
+          link: function(scope, element, attrs, ctrl) {
+            ctrl.$parsers.push(function(data) {
+              if(!data) {
+                return data;
+              }
+
+              var dataArr = data.toUpperCase().replace(/-/g, '').split('');
+              var copy = dataArr.slice(0);
+              for(var i = 0; i < dataArr.length; i++) {
+                if(i > 0 && i % 4 === 0) {
+                  copy.splice(i + (i / 4)-1, 0, '-');
+                }
+              }
+              var newData = copy.join('');
+
+              if(newData !== data) {
+                ctrl.$setViewValue(newData);
+                ctrl.$render();
+              }
+
+              return newData.replace(/-/g, '');
+            });
+
+            ctrl.$formatters.push(function(data) {
+              if(!data) {
+                return data;
+              }
+              var dataArr = data.toUpperCase().split('');
+              var copy = dataArr.slice(0);
+              for(var i = 0; i < dataArr.length; i++) {
+                if(i > 0 && i % 4 === 0) {
+                  copy.splice(i + (i / 4)-1, 0, '-');
+                }
+              }
+              return copy.join('');
+            });
           }
         }
       }]);
