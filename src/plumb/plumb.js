@@ -1240,6 +1240,65 @@
             });
           };
 
+          discounts.prototype.getDiscountOrderValue = function(discount, products) {
+            console.log(discount, products);
+            if(discount.value_type === 'fixed') {
+              if(discount.product_restriction && discount.products.length) {
+                for(var i = 0; i < discount.products.length; i++) {
+                  for(var j = 0; j < products.length; j++) {
+                    if(discount.products[i]._id === products[j]._id) {
+                      return discount.value;
+                    }
+                  }
+                }
+                return 0;
+              }
+              if(discount.product_line_restrictions && discount.product_lines.length) {
+                for(var i = 0; i < discount.product_lines.length; i++) {
+                  for(var j = 0; j < products.length; j++) {
+                    for(var k = 0; k < products[j].product_lines.length; k++) {
+                      if (discount.product_lines[i]._id === products[j].product_lines._id) {
+                        return discount.value;
+                      }
+                    }
+                  }
+                }
+                return 0;
+              }
+              return discount.value;
+            } else if(discount.value_type === 'percent') {
+              var value = 0;
+              if(discount.product_restriction) {
+                for(var i = 0; i < discount.products.length; i++) {
+                  for(var j = 0; j < products.length; j++) {
+                    if(discount.products[i]._id === products[j]._id) {
+                      value += products[j].price;
+                    }
+                  }
+                }
+                return parseFloat(discount.value)/100 * value;
+              }
+              if(discount.product_line_restriction) {
+                for(var i = 0; i < discount.product_lines.length; i++) {
+                  for(var j = 0; j < products.length; j++) {
+                    for(var k = 0; k < products[j].product_lines.length; k++) {
+                      if (discount.product_lines[i]._id === products[j].product_lines._id) {
+                        value += products[j].price;
+                      }
+                    }
+                  }
+                }
+                return parseFloat(discount.value)/100 * value;
+              }
+
+              for(var i = 0; i < products.length; i++) {
+                value += parseInt(products[i].price, 10) * parseInt(products[i].qty, 10);
+              }
+
+              return parseFloat(discount.value)/100 * value;
+            }
+          };
+
           /*
            *
            * Shipping methods
@@ -2143,13 +2202,23 @@
               console.log(settings);
             });
 
-            scope.updateFinalTotal = function() {
-              scope.discount_total = 0;
+            function getDiscountTotal() {
+              var total = 0;
               for(var i = 0; i < scope.checkout.discounts.length; i++) {
-                console.log(scope.checkout.discounts[i]);
-                scope.discount_total += scope.checkout.discounts[i].amount;
+                switch(scope.checkout.discounts[i].type) {
+                  case 'code':
+                    total += plumb.discounts.getDiscountOrderValue(scope.checkout.discounts[i], scope.cart);
+                    break;
+                  case 'gift-card':
+                    total += parseInt(scope.checkout.discounts[i].amount, 10);
+                    break;
+                }
               }
-              console.log(scope.discount_total);
+
+              return total;
+            }
+
+            scope.updateFinalTotal = function() {
               scope.final_total = scope.product_total +
                 scope.shipping_total +
                 scope.tax_total - scope.discount_total;
@@ -2251,11 +2320,19 @@
             };
 
             scope.getTaxes = function() {
+              var total = 0;
+              scope.discount_total = getDiscountTotal();
+              total = scope.product_total - scope.discount_total;
+              if(total < 0) {
+                total = 0;
+                scope.tax_total = 0;
+                return scope.updateFinalTotal();
+              }
               if(!scope.requiresTax) {
                 scope.tax_total = 0;
                 return scope.updateFinalTotal();
               }
-              plumb.orders.taxes(scope.product_total, {
+              plumb.orders.taxes(total, {
                 ship_to: {
                   address: {
                     postal_code: scope.checkout.shipment.ship_to.address.postal_code
@@ -2563,20 +2640,19 @@
             };
 
             scope.updateDiscountStatus = function(d) {
-              console.log(d.code);
               switch(d.type) {
                 case 'code':
                   plumb.discounts.checkDiscount(d.code, function(err, res) {
-                    d.amount = res.value;
+                    angular.extend(d, res);
 
-                    scope.updateFinalTotal();
+                    scope.getTaxes();
                   });
                   break;
                 case 'gift-card':
                   plumb.discounts.checkGiftCard(d.code, function(err, res) {
-                    d.amount = res.amount;
+                    angular.extend(d, res);
 
-                    scope.updateFinalTotal();
+                    scope.getTaxes();
                   });
                   break;
               }
@@ -2594,11 +2670,23 @@
             };
 
             scope.getDiscountStatus = function(d) {
-              if(d.amount) {
-                return 'Amount: ' + $filter('currency')(d.amount / 100);
+              if(d.value === null) {
+                return 'Enter code to get amount';
               }
-
-              return 'Enter code to get amount';
+              switch(d.type) {
+                case 'code':
+                  var val = plumb.discounts.getDiscountOrderValue(d, scope.cart);
+                  if(!val) {
+                    return 'Code is expired or invalid for this discount';
+                  }
+                  return 'Amount: ' + $filter('currency')(val / 100);
+                  break;
+                case 'gift-card':
+                  if(d.amount) {
+                    return 'Amount: ' + $filter('currency')(d.amount / 100);
+                  }
+                  break;
+              }
             };
 
             scope.resetForms();
