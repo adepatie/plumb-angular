@@ -1083,6 +1083,9 @@
                 }
                 return cb(null, res.pkg.data);
               });
+              req.error(function(data, status, headers) {
+                return cb(new Error(data.pkg.statusMessage || 'Request failed'))
+              });
             });
           };
 
@@ -1092,6 +1095,9 @@
               var req = new Request($scope).post($scope.options.baseUrl + '/products/total', options, $scope.handleError);
               req.success(function (res) {
                 return cb(null, res.pkg.data);
+              });
+              req.error(function(data, status, headers) {
+                return cb(new Error(data.pkg.statusMessage || 'Request failed'))
               });
             });
           };
@@ -1120,6 +1126,9 @@
                 }
                 return cb(null, res.pkg.data);
               });
+              req.error(function(data, status, headers) {
+                return cb(new Error(data.pkg.statusMessage || 'Request failed'))
+              });
             });
           };
 
@@ -1129,6 +1138,9 @@
               var req = new Request($scope).post($scope.options.baseUrl + '/product-lines/total', options, $scope.handleError);
               req.success(function (res) {
                 return cb(null, res.pkg.data);
+              });
+              req.error(function(data, status, headers) {
+                return cb(new Error(data.pkg.statusMessage || 'Request failed'))
               });
             });
           };
@@ -1150,6 +1162,9 @@
               req.success(function (res) {
                 return cb(null, res.pkg.data);
               });
+              req.error(function(data, status, headers) {
+                return cb(new Error(data.pkg.statusMessage || 'Request failed'))
+              });
             });
           };
           orders.prototype.create = function (data, cb) {
@@ -1157,6 +1172,9 @@
               var req = new Request($scope).post($scope.options.baseUrl + '/orders', data, $scope.handleError);
               req.success(function (res) {
                 return cb(null, res.pkg.data);
+              });
+              req.error(function(data, status, headers) {
+                return cb(new Error(data.pkg.statusMessage || 'Request failed'))
               });
             });
           };
@@ -1172,6 +1190,9 @@
               var req = new Request($scope).post($scope.options.baseUrl + '/orders/taxes', params, $scope.handleError);
               req.success(function (res) {
                 return cb(null, res.pkg.data);
+              });
+              req.error(function(data, status, headers) {
+                return cb(new Error(data.pkg.statusMessage || 'Request failed'))
               });
             });
           };
@@ -2448,6 +2469,8 @@
                 return;
               }
 
+              scope.apiLoading++;
+
               if(scope.final_total === 0) {
                 return scope.finishCompleteOrder(null);
               }
@@ -2464,6 +2487,7 @@
                   scope.finishCompleteOrder({type: 'credit_card', card: {card_token: card_id}});
                 }).catch(function (err) {
                   //scope.addMessage('error', err);
+                  scope.apiLoading--;
                 });
               } else {
                 scope.finishCompleteOrder(scope.checkout.payment_method);
@@ -2480,10 +2504,14 @@
                 discounts: scope.checkout.discounts,
                 notes: ''
               }, function(err, order) {
+                if(err) {
+                  return scope.apiLoading--;
+                }
                 scope.order = order;
 
                 plumb.cart.empty(function(err, cart) {
                   scope.cart = cart;
+                  scope.apiLoading--;
                   $rootScope.$emit('cartUpdated', cart);
                   plumbMenuService.toggle('checkout-complete');
                 });
