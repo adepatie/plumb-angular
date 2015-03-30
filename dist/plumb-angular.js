@@ -2,7 +2,7 @@
  * plumb-angular
  * https://github.com/typefoo/plumb-angular
 
- * Version: 0.0.7 - 2015-03-23
+ * Version: 0.1.0 - 2015-03-30
  * License: AGPL
  */
 /**
@@ -1033,6 +1033,18 @@
               });
             });
           };
+          products.prototype.getProductPrice = function (product) {
+            var p = product.price;
+            if (!product.variants) {
+              return p;
+            }
+            for (var i = 0; i < product.variants.length; i++) {
+              if (product.variants[i].price) {
+                p += parseInt(product.variants[i].price, 10);
+              }
+            }
+            return p;
+          };
           /*
            *
            * Product Line methods
@@ -1211,7 +1223,7 @@
                 for (var i = 0; i < discount.products.length; i++) {
                   for (var j = 0; j < products.length; j++) {
                     if (discount.products[i]._id === products[j]._id) {
-                      value += products[j].price;
+                      value += parseInt($scope.products.getProductPrice(products[j]), 10) * parseInt(products[j].qty, 10);
                     }
                   }
                 }
@@ -1222,7 +1234,7 @@
                   for (var j = 0; j < products.length; j++) {
                     for (var k = 0; k < products[j].product_lines.length; k++) {
                       if (discount.product_lines[i]._id === products[j].product_lines._id) {
-                        value += products[j].price;
+                        value += parseInt($scope.products.getProductPrice(products[j]), 10) * parseInt(products[j].qty, 10);
                       }
                     }
                   }
@@ -1230,7 +1242,7 @@
                 return parseFloat(discount.value) / 100 * value;
               }
               for (var i = 0; i < products.length; i++) {
-                value += parseInt(products[i].price, 10) * parseInt(products[i].qty, 10);
+                value += parseInt($scope.products.getProductPrice(products[i]), 10) * parseInt(products[i].qty, 10);
               }
               return parseFloat(discount.value) / 100 * value;
             }
