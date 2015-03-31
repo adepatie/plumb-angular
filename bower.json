@@ -4,7 +4,7 @@
     "dist/plumb-angular.js",
     "dist/styles/plumb-angular.css"
   ],
-  "version": "0.1.1",
+  "version": "0.1.2",
   "authors": [
     {
       "name": "typefoo",

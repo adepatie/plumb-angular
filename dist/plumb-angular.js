@@ -2,7 +2,7 @@
  * plumb-angular
  * https://github.com/typefoo/plumb-angular
 
- * Version: 0.1.0 - 2015-03-30
+ * Version: 0.1.1 - 2015-03-31
  * License: AGPL
  */
 /**
@@ -2206,7 +2206,7 @@
             scope.getTaxes = function () {
               var total = 0;
               scope.discount_total = getDiscountTotal();
-              total = scope.product_total - scope.discount_total;
+              total = scope.product_total + scope.shipping_total - scope.discount_total;
               if (total < 0) {
                 total = 0;
                 scope.tax_total = 0;
@@ -2245,7 +2245,7 @@
                   scope.selectedRate[i] = scope.packages[i].rates[0];
                   scope.selectedRate[i].products = scope.packages[i].products;
                 }
-                scope.updateFinalTotal();
+                scope.getTaxes();
               }, function (err) {
                 if (err.pkg.statusMessage instanceof Array) {
                   for (var i = 0; i < err.pkg.statusMessage.length; i++) {
@@ -2299,7 +2299,7 @@
                 scope.shipping_total += scope.selectedRate[i].cost * 100;
                 scope.checkout.shipping_rates.push(scope.selectedRate[i]);
               }
-              scope.updateFinalTotal();
+              scope.getTaxes();
             }, true);
             scope.onRateChange = function (i, rate, pkg) {
               scope.selectedRate[i].products = pkg;
