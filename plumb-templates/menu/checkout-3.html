@@ -15,7 +15,7 @@
     <select class="plumb-input" ng-model="checkout.payment_method" ng-options="payment_method as (getPaymentMethodType(payment_method) + ': ' + payment_method.nickname) for payment_method in paymentMethodList"><option value>New Credit Card</option></select>
   </div>
   <div ng-show="final_total > 0 && (!checkout.payment_method || !checkout.payment_method._id)">
-    <p>Enter your payment information<span ng-show="plumb.options.session.enable_po"> or <a href ng-click="switchPaymentMethod(altPaymentType)" ng-bind="altPaymentText"></a></span></p>
+    <p>Enter your payment information<p ng-show="plumb.options.session.enable_po"> or <a href ng-click="switchPaymentMethod(altPaymentType)" ng-bind="altPaymentText"></a></p></p>
     <div ng-show="checkout.payment_method.type === 'credit_card'">
       <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.name" placeholder="Name on card">
       <input class="plumb-input" type="number" ng-model="checkout.payment_method.card.card_number" placeholder="Card number">
