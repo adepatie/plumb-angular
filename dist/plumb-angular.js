@@ -2,7 +2,7 @@
  * plumb-angular
  * https://github.com/typefoo/plumb-angular
 
- * Version: 0.1.1 - 2015-03-31
+ * Version: 0.1.3 - 2015-04-10
  * License: AGPL
  */
 /**
@@ -2097,11 +2097,11 @@
             };
             plumb.cart.get(function (err, cart) {
               scope.cart = cart;
+              plumb.settings.get(function (err, settings) {
+                console.log(settings);
+              });
               scope.updateProductTotal();
               scope.updateCheckout();
-            });
-            plumb.settings.get(function (err, settings) {
-              console.log(settings);
             });
             function getDiscountTotal() {
               var total = 0;

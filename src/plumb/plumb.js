@@ -2228,12 +2228,11 @@
 
             plumb.cart.get(function(err, cart) {
               scope.cart = cart;
+              plumb.settings.get(function(err, settings) {
+                console.log(settings);
+              });
               scope.updateProductTotal();
               scope.updateCheckout();
-            });
-
-            plumb.settings.get(function(err, settings) {
-              console.log(settings);
             });
 
             function getDiscountTotal() {
