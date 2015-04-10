@@ -493,6 +493,26 @@ textarea.plumb-input {
 .plumb-product {
   width: 800px;
 }
+.plumb-cart .payment-options,
+.plumb-checkout .payment-options,
+.plumb-account .payment-options {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.plumb-cart .payment-options li,
+.plumb-checkout .payment-options li,
+.plumb-account .payment-options li {
+  display: inline-block;
+  width: 50%;
+  margin: 0;
+  float: left;
+}
+.plumb-cart .payment-options li a.plumb-button,
+.plumb-checkout .payment-options li a.plumb-button,
+.plumb-account .payment-options li a.plumb-button {
+  margin: 0;
+}
 .plumb-cart .cart-products,
 .plumb-checkout .cart-products,
 .plumb-account .cart-products,

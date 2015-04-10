@@ -15,7 +15,11 @@
     <select class="plumb-input" ng-model="checkout.payment_method" ng-options="payment_method as (getPaymentMethodType(payment_method) + ': ' + payment_method.nickname) for payment_method in paymentMethodList"><option value>New Credit Card</option></select>
   </div>
   <div ng-show="final_total > 0 && (!checkout.payment_method || !checkout.payment_method._id)">
-    <p>Enter your payment information<p ng-show="plumb.options.session.enable_po"> or <a href ng-click="switchPaymentMethod(altPaymentType)" ng-bind="altPaymentText"></a></p></p>
+    <p>Enter your payment information</p>
+    <ul class="payment-options" ng-show="plumb.options.session.enable_po">
+      <li><a href class="plumb-button tiny" ng-class="getActivePayment('credit_card')" ng-click="switchPaymentMethod('credit_card')">Credit Card</a></li>
+      <li><a href class="plumb-button tiny" ng-class="getActivePayment('purchase_order')" ng-click="switchPaymentMethod('purchase_order')">PO Number</a></li>
+    </ul>
     <div ng-show="checkout.payment_method.type === 'credit_card'">
       <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.name" placeholder="Name on card">
       <input class="plumb-input" type="number" ng-model="checkout.payment_method.card.card_number" placeholder="Card number">
@@ -24,7 +28,7 @@
       <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.security_code" placeholder="Security code on back">
     </div>
     <div ng-show="checkout.payment_method.type === 'purchase_order'">
-      <input class="plumb-input" type="text" ng-model="checkout.payment_method.reference_number" placeholder="Enter a Reference/PO Number">
+      <input class="plumb-input" type="text" ng-model="checkout.payment_method.reference_number" placeholder="Enter PO Number">
     </div>
   </div>
   <div>

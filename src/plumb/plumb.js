@@ -2140,8 +2140,7 @@
             scope.order = null;
             scope.settings = null;
 
-            scope.altPaymentText = 'pay with a PO Account';
-            scope.altPaymentType = 'purchase_order';
+            scope.altPaymentType = 'credit_card';
 
             // load Gmaps if it isn't on the page
             if(!$window.google) {
@@ -2166,13 +2165,19 @@
             scope.switchPaymentMethod = function(type) {
               if(type === 'purchase_order') {
                 scope.checkout.payment_method = new plumb.purchase_order();
-                scope.altPaymentText = 'pay with a Credit Card';
-                scope.altPaymentType = 'credit_card';
+                scope.altPaymentType = 'purchase_order';
               } else if(type === 'credit_card') {
                 scope.checkout.payment_method = new plumb.credit_card();
-                scope.altPaymentText = 'pay with a PO Account';
-                scope.altPaymentType = 'purchase_order';
+                scope.altPaymentType = 'credit_card';
               }
+            };
+
+            scope.getActivePayment = function(type) {
+              if(type === scope.altPaymentType) {
+                return {active: true};
+              }
+
+              return null;
             };
 
             scope.updateProductTotal = function() {
