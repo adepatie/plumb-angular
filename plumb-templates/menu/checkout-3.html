@@ -15,12 +15,17 @@
     <select class="plumb-input" ng-model="checkout.payment_method" ng-options="payment_method as (getPaymentMethodType(payment_method) + ': ' + payment_method.nickname) for payment_method in paymentMethodList"><option value>New Credit Card</option></select>
   </div>
   <div ng-show="final_total > 0 && (!checkout.payment_method || !checkout.payment_method._id)">
-    <p>Enter your payment information</p>
-    <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.name" placeholder="Name on card">
-    <input class="plumb-input" type="number" ng-model="checkout.payment_method.card.card_number" placeholder="Card number">
-    <select class="plumb-input" class="expiration" ng-model="checkout.payment_method.card.expiration_month" ng-options="option.value as option.name for option in expirationMonths"><option value>Expiration Month</option></select>
-    <select class="plumb-input" class="expiration" ng-model="checkout.payment_method.card.expiration_year" ng-options="option.value as option.name for option in expirationYears"><option value>Expiration Year</option></select>
-    <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.security_code" placeholder="Security code on back">
+    <p>Enter your payment information<span ng-show="plumb.options.session.enable_po"> or <a href ng-click="switchPaymentMethod(altPaymentType)" ng-bind="altPaymentText"></a></span></p>
+    <div ng-show="checkout.payment_method.type === 'credit_card'">
+      <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.name" placeholder="Name on card">
+      <input class="plumb-input" type="number" ng-model="checkout.payment_method.card.card_number" placeholder="Card number">
+      <select class="plumb-input" class="expiration" ng-model="checkout.payment_method.card.expiration_month" ng-options="option.value as option.name for option in expirationMonths"><option value>Expiration Month</option></select>
+      <select class="plumb-input" class="expiration" ng-model="checkout.payment_method.card.expiration_year" ng-options="option.value as option.name for option in expirationYears"><option value>Expiration Year</option></select>
+      <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.security_code" placeholder="Security code on back">
+    </div>
+    <div ng-show="checkout.payment_method.type === 'purchase_order'">
+      <input class="plumb-input" type="text" ng-model="checkout.payment_method.reference_number" placeholder="Enter a Reference/PO Number">
+    </div>
   </div>
   <div>
     <p>Have a discount code or gift card?</p>

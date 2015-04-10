@@ -1511,6 +1511,7 @@
             $scope.type = 'credit_card';
             $scope.card = {};
             $scope.bank_account = {};
+            $scope.reference_number = undefined;
             $scope = w[PLUMB_CONFIG.ANGULAR].extend($scope, options);
 
             return $scope;
@@ -1581,6 +1582,15 @@
             return $scope;
           }
 
+          function purchase_order(options) {
+            var $scope = new payment_method({
+              type: 'purchase_order'
+            });
+
+            $scope = w[PLUMB_CONFIG.ANGULAR].extend($scope, options);
+            return $scope;
+          }
+
           $scope.session = new session();
           $scope.cart = new cart();
           $scope.auth = new auth();
@@ -1596,6 +1606,7 @@
           $scope.customer = customer;
           $scope.credit_card = credit_card;
           $scope.bank_account = bank_account;
+          $scope.purchase_order = purchase_order;
 
           return $scope.config(opts);
         };
@@ -2129,6 +2140,9 @@
             scope.order = null;
             scope.settings = null;
 
+            scope.altPaymentText = 'pay with a PO Account';
+            scope.altPaymentType = 'purchase_order';
+
             // load Gmaps if it isn't on the page
             if(!$window.google) {
               var check = $document[0].getElementsByTagName('script');
@@ -2148,6 +2162,18 @@
             }
 
             scope.plumb = plumb;
+
+            scope.switchPaymentMethod = function(type) {
+              if(type === 'purchase_order') {
+                scope.checkout.payment_method = new plumb.purchase_order();
+                scope.altPaymentText = 'pay with a Credit Card';
+                scope.altPaymentType = 'credit_card';
+              } else if(type === 'credit_card') {
+                scope.checkout.payment_method = new plumb.credit_card();
+                scope.altPaymentText = 'pay with a PO Account';
+                scope.altPaymentType = 'purchase_order';
+              }
+            };
 
             scope.updateProductTotal = function() {
               scope.product_total = 0;
@@ -2488,19 +2514,23 @@
               }
 
               if(!scope.checkout.payment_method._id) {
-                new plumb.credit_card().tokenizeCard({
-                  name: scope.checkout.payment_method.card.name,
-                  number: scope.checkout.payment_method.card.card_number,
-                  exp_month: scope.checkout.payment_method.card.expiration_month,
-                  exp_year: scope.checkout.payment_method.card.expiration_year,
-                  cvc: scope.checkout.payment_method.card.security_code,
-                  address_zip: scope.checkout.billing.ship_to.postal_code
-                }, plumb.options.session.stripe_publishable_key).then(function (card_id) {
-                  scope.finishCompleteOrder({type: 'credit_card', card: {card_token: card_id}});
-                }).catch(function (err) {
-                  //scope.addMessage('error', err);
-                  scope.apiLoading--;
-                });
+                if(scope.checkout.payment_method.type === 'credit_card') {
+                  new plumb.credit_card().tokenizeCard({
+                    name: scope.checkout.payment_method.card.name,
+                    number: scope.checkout.payment_method.card.card_number,
+                    exp_month: scope.checkout.payment_method.card.expiration_month,
+                    exp_year: scope.checkout.payment_method.card.expiration_year,
+                    cvc: scope.checkout.payment_method.card.security_code,
+                    address_zip: scope.checkout.billing.ship_to.postal_code
+                  }, plumb.options.session.stripe_publishable_key).then(function (card_id) {
+                    scope.finishCompleteOrder({type: 'credit_card', card: {card_token: card_id}});
+                  }).catch(function (err) {
+                    //scope.addMessage('error', err);
+                    scope.apiLoading--;
+                  });
+                } else {
+                  scope.finishCompleteOrder(scope.checkout.payment_method);
+                }
               } else {
                 scope.finishCompleteOrder(scope.checkout.payment_method);
               }
