@@ -2490,7 +2490,7 @@
             });
 
             scope.$watch('selectedRate', function() {
-              if(!scope.selectedRate) {
+              if(!scope.selectedRate || !scope.checkout.shipment.ship_to.address.postal_code) {
                 return;
               }
               scope.shipping_total = 0;
