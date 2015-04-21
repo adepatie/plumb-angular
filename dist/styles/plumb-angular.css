@@ -500,6 +500,13 @@ textarea.plumb-input {
   margin: 0;
   padding: 0;
 }
+.plumb-cart .payment-options:after,
+.plumb-checkout .payment-options:after,
+.plumb-account .payment-options:after {
+  content: "";
+  display: table;
+  clear: both;
+}
 .plumb-cart .payment-options li,
 .plumb-checkout .payment-options li,
 .plumb-account .payment-options li {

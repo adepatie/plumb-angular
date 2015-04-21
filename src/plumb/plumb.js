@@ -2530,7 +2530,7 @@
                   }, plumb.options.session.stripe_publishable_key).then(function (card_id) {
                     scope.finishCompleteOrder({type: 'credit_card', card: {card_token: card_id}});
                   }).catch(function (err) {
-                    //scope.addMessage('error', err);
+                    scope.addMessage('error', err);
                     scope.apiLoading--;
                   });
                 } else {
