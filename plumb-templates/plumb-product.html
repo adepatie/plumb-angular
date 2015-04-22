@@ -6,7 +6,7 @@
     <div class="column">
       <h2 ng-bind="product.name"></h2>
       <h3 ng-show="product.sub_title" ng-bind="product.sub_title"></h3>
-      <span class="price" ng-bind="plumbMenuService.getPrice(product)"></span>
+      <span class="price" ng-bind="plumbMenuService.getPrice(product)"></span> <span class="quantity-in-box" ng-show="product.quantity_in_box">({{product.quantity_in_box}} in box)</span>
     </div>
     <div class="column">
       <div ng-show="product.attributes">
@@ -21,7 +21,11 @@
           </div>
         </div>
       </div>
-      <button class="add-to-cart" type="button" ng-click="plumbMenuService.addToCart(product, 1)">Buy Now</button>
+      <div class="product-quantity">
+        <input class="qty-input" type="text" ng-model="options.quantity" placeholder="QTY">
+        <span ng-show="product.minimum_quantity">({{product.minimum_quantity}} minimum)</span>
+      </div>
+      <button class="add-to-cart" type="button" ng-click="plumbMenuService.addToCart(product, options.quantity)">Buy Now</button>
     </div>
     <p ng-bind-html="product.short_description"></p>
   </div>

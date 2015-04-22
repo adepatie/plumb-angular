@@ -2032,6 +2032,9 @@
             scope.config = plumbConfig;
             scope.product = {};
             scope.plumbMenuService = plumbMenuService;
+            scope.options = {
+              quantity: 1
+            };
 
             plumb.products.list({_id: scope.id}, function(err, products) {
               if(!products || !products.length) {
