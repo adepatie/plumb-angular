@@ -843,6 +843,8 @@
                 requires_shipping: product.requires_shipping,
                 allow_presale: product.allow_presale,
                 taxable: product.taxable,
+                minimum_quantity: product.minimum_quantity,
+                quantity_in_box: product.quantity_in_box,
                 variants: w[PLUMB_CONFIG.ANGULAR].copy(product.variants)
               });
               $scope.session.get(function (err, session) {
@@ -1729,6 +1731,9 @@
           if(variants && variants.length) {
             product.variants = variants;
           }
+          if(product.minimum_quantity && parseInt(qty, 10) < product.minimum_quantity) {
+            return $rootScope.$emit('cartError', 'Minimum Quantity of ' + product.minimum_quantity + ' required');
+          }
           plumb.cart.add(product, qty, function(err, cart) {
             if(err) {
               $rootScope.$emit('cartError', err);
@@ -2311,6 +2316,9 @@
             });
 
             scope.updateQuantity = function(product) {
+              if(product.minimum_quantity > product.qty) {
+                product.qty = product.minimum_quantity;
+              }
               scope.updateProductTotal();
               plumb.cart.update(product, product.qty, function(err, cart) {
                 scope.cart = cart;

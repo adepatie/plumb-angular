@@ -9,6 +9,7 @@
       <div class="clearfix">
         <div class="left">
           <div class="name" ng-bind="product.name"></div>
+          <span class="quantity-in-box" ng-show="product.quantity_in_box > 1">({{product.quantity_in_box}} in box)</span>
         </div>
         <div class="right">
           <div class="price"><span ng-bind-html="displayProductPrice(product)"></span></div>
@@ -17,7 +18,7 @@
       <div class="clearfix">
         <div class="left">
           <div class="variants" ng-repeat="v in product.variants">{{v.name}}: {{v.value}}</div>
-          <div class="quantity">Count: <input ng-model="product.qty" ng-change="updateQuantity(product)"></div>
+          <div class="quantity">Count: <input ng-model="product.qty" ng-change="updateQuantity(product)" ng-model-options="{updateOn: 'blur'}"></div>
         </div>
         <div class="right">
           <div class="variants" ng-repeat="v in product.variants" ng-bind-html="displayVariantPrice(v)"></div>

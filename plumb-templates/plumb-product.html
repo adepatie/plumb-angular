@@ -6,7 +6,7 @@
     <div class="column">
       <h2 ng-bind="product.name"></h2>
       <h3 ng-show="product.sub_title" ng-bind="product.sub_title"></h3>
-      <span class="price" ng-bind="plumbMenuService.getPrice(product)"></span> <span class="quantity-in-box" ng-show="product.quantity_in_box">({{product.quantity_in_box}} in box)</span>
+      <span class="price" ng-bind="plumbMenuService.getPrice(product)"></span> <span class="quantity-in-box" ng-show="product.quantity_in_box > 1">({{product.quantity_in_box}} in box)</span>
     </div>
     <div class="column">
       <div ng-show="product.attributes">
