@@ -1066,6 +1066,7 @@ textarea.plumb-input {
   .plumb-menu .plumb-loading,
   .plumb-menu .plumb-sidebar {
     width: 320px;
+    left: 43px;
   }
   .plumb-menu .plumb-loading .plumb-container,
   .plumb-menu .plumb-sidebar .plumb-container {
