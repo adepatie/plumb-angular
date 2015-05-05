@@ -37,7 +37,7 @@
   display: block;
   background-color: #555555;
   line-height: 45px;
-  font-size: 0px;
+  font-size: 0;
   list-style: none;
   margin: 0;
   padding: 0 0 4px 0;
@@ -995,6 +995,89 @@ textarea.plumb-input {
   display: block;
   padding: 4px 0;
   font-size: 14px;
+}
+@media (max-width: 320px) {
+  .plumb-menu [class^="kicon-"] {
+    font-size: 32px;
+    line-height: 32px;
+    vertical-align: middle;
+  }
+  .plumb-menu > .menu-wrapper {
+    display: block;
+    background-color: #555555;
+    line-height: 35px;
+    font-size: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0 0 4px 0;
+  }
+  .plumb-menu > .menu-wrapper > li {
+    display: block;
+    text-align: center;
+    padding: 0 4px;
+  }
+  .plumb-menu > .menu-wrapper > li a {
+    cursor: pointer;
+    display: block;
+    height: 35px;
+    width: 35px;
+    line-height: 35px;
+    border-bottom: 2px solid #555555;
+    position: relative;
+    text-decoration: none;
+    color: #d7d5d4;
+    background-color: #555555;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  }
+  .plumb-menu > .menu-wrapper > li a:hover {
+    color: #ffffff;
+    background-color: #555555;
+  }
+  .plumb-menu > .menu-wrapper > li a.active,
+  .plumb-menu > .menu-wrapper > li a:active {
+    background-color: #555555;
+    color: #ffffff;
+  }
+  .plumb-menu > .menu-wrapper > li.cart a .count {
+    width: 13px;
+    height: 13px;
+    background: #e8e8e8;
+    color: #6f6e6e;
+    line-height: 14px;
+    font-size: 11px;
+    -webkit-border-radius: 6.5px;
+    -webkit-background-clip: padding-box;
+    -moz-border-radius: 6.5px;
+    -moz-background-clip: padding;
+    border-radius: 6.5px;
+    background-clip: padding-box;
+    top: 5px;
+    right: 1px;
+    zoom: 1;
+    filter: alpha(opacity=10000);
+    -webkit-opacity: 100;
+    -moz-opacity: 100;
+    opacity: 100;
+    -webkit-transition: opacity 0.5s linear;
+    -moz-transition: opacity 0.5s linear;
+    -o-transition: opacity 0.5s linear;
+    transition: opacity 0.5s linear;
+  }
+  .plumb-menu .plumb-loading,
+  .plumb-menu .plumb-sidebar {
+    width: 320px;
+  }
+  .plumb-menu .plumb-loading .plumb-container,
+  .plumb-menu .plumb-sidebar .plumb-container {
+    width: 320px;
+  }
+  .plumb-menu.open {
+    -webkit-transform: translate3d(-320px, 0, 0);
+    -moz-transform: translate3d(-320px, 0, 0);
+    -o-transform: translate3d(-320px, 0, 0);
+    -ms-transform: translate3d(-320px, 0, 0);
+    transform: translate3d(-320px, 0, 0);
+  }
 }
 @font-face {
   font-family: 'KurrencyIcons';

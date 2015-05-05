@@ -23,7 +23,7 @@
       </div>
       <div class="product-quantity">
         <input class="qty-input" type="text" ng-model="options.quantity" placeholder="QTY">
-        <span ng-show="product.minimum_quantity">({{product.minimum_quantity}} minimum)</span>
+        <span ng-show="product.minimum_quantity > 0">({{product.minimum_quantity}} minimum)</span>
       </div>
       <button class="add-to-cart" type="button" ng-click="plumbMenuService.addToCart(product, options.quantity)">Buy Now</button>
     </div>

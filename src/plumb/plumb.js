@@ -2268,7 +2268,7 @@
             plumb.cart.get(function(err, cart) {
               scope.cart = cart;
               plumb.settings.get(function(err, settings) {
-                console.log(settings);
+                plumb.options.store_settings = settings;
               });
               scope.updateProductTotal();
               scope.updateCheckout();
