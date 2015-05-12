@@ -1277,7 +1277,6 @@
           };
 
           discounts.prototype.getDiscountOrderValue = function(discount, products) {
-            console.log(discount, products);
             if(discount.value_type === 'fixed') {
               if(discount.product_restriction && discount.products.length) {
                 for(var i = 0; i < discount.products.length; i++) {
@@ -2395,9 +2394,8 @@
             };
 
             scope.getTaxes = function() {
-              var total = 0;
               scope.discount_total = getDiscountTotal();
-              total = scope.product_total + scope.shipping_total - scope.discount_total;
+              var total = scope.product_total + scope.shipping_total;
               if(total < 0) {
                 total = 0;
                 scope.tax_total = 0;
@@ -2572,6 +2570,7 @@
                   scope.apiLoading--;
                   $rootScope.$emit('cartUpdated', cart);
                   plumbMenuService.toggle('checkout-complete');
+                  scope.checkout.discounts = [];
                 });
               });
             };
@@ -2726,6 +2725,14 @@
             };
 
             scope.updateDiscountStatus = function(d) {
+              if(!d.code || !d.code.length) {
+                for(var i = 0; i < scope.checkout.discounts.length; i++) {
+                  if(scope.checkout.discounts[i].$$hashKey === d.$$hashKey) {
+                    scope.checkout.discounts.splice(i, 1);
+                    return;
+                  }
+                }
+              }
               switch(d.type) {
                 case 'code':
                   plumb.discounts.checkDiscount(d.code, function(err, res) {
@@ -2756,7 +2763,7 @@
             };
 
             scope.getDiscountStatus = function(d) {
-              if(d.value === null) {
+              if(d.value === null || d.code === null || !d.code.length) {
                 return 'Enter code to get amount';
               }
               switch(d.type) {
@@ -2771,6 +2778,7 @@
                   if(d.amount) {
                     return 'Amount: ' + $filter('currency')(d.amount / 100);
                   }
+                  return 'Amount: ' + $filter('currency')(d.amount / 100);
                   break;
               }
             };
