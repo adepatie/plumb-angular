@@ -2428,7 +2428,8 @@
 
               plumb.shipping.rates({
                 ship_to: scope.checkout.shipment.ship_to,
-                products: scope.cart
+                products: scope.cart,
+                discounts: scope.checkout.discounts
               }, function(err, packages) {
                 if(err) {
                   for(var i = 0; i < err.length; i++) {
@@ -2454,6 +2455,10 @@
                   }
                 } else {
                   scope.addMessage('error', err.pkg.statusMessage, 'shipping-rates');
+                }
+                if(err.pkg.meta.discounts && err.pkg.meta.discounts === 'invalid') {
+                  scope.checkout.discounts = [];
+                  scope.getRates();
                 }
                 return console.log(err);
               });
@@ -2738,14 +2743,14 @@
                   plumb.discounts.checkDiscount(d.code, function(err, res) {
                     angular.extend(d, res);
 
-                    scope.getTaxes();
+                    scope.getRates();
                   });
                   break;
                 case 'gift-card':
                   plumb.discounts.checkGiftCard(d.code, function(err, res) {
                     angular.extend(d, res);
 
-                    scope.getTaxes();
+                    scope.getRates();
                   });
                   break;
               }
