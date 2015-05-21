@@ -18,7 +18,7 @@
       <div class="clearfix">
         <div class="left">
           <div class="variants" ng-repeat="v in product.variants">{{v.name}}: {{v.value}}</div>
-          <div class="quantity">Count: <input ng-model="product.qty" ng-change="updateQuantity(product)" ng-model-options="{updateOn: 'blur'}"></div>
+          <div class="quantity">Quantity: <input ng-model="product.qty" ng-change="updateQuantity(product)" ng-model-options="{updateOn: 'blur'}"></div>
         </div>
         <div class="right">
           <div class="variants" ng-repeat="v in product.variants" ng-bind-html="displayVariantPrice(v)"></div>
