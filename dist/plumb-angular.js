@@ -2,7 +2,7 @@
  * plumb-angular
  * https://github.com/typefoo/plumb-angular
 
- * Version: 0.1.11 - 2015-05-21
+ * Version: 0.1.11 - 2015-05-22
  * License: AGPL
  */
 /**
@@ -2166,7 +2166,7 @@
               }(tmp));
             });
             scope.updateQuantity = function (product) {
-              if (product.minimum_quantity > product.qty) {
+              if (product.minimum_quantity && product.minimum_quantity > product.qty) {
                 product.qty = product.minimum_quantity;
               }
               scope.updateProductTotal();

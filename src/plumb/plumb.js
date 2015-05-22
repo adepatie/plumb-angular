@@ -2315,7 +2315,7 @@
             });
 
             scope.updateQuantity = function(product) {
-              if(product.minimum_quantity > product.qty) {
+              if(product.minimum_quantity && product.minimum_quantity > product.qty) {
                 product.qty = product.minimum_quantity;
               }
               scope.updateProductTotal();
