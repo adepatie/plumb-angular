@@ -59,6 +59,7 @@
   color: #d7d5d4;
   background-color: #555555;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  outline: none;
 }
 .plumb-menu > .menu-wrapper > li a:hover {
   color: #ffffff;
