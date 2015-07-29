@@ -26,6 +26,12 @@
       <select class="plumb-input" ng-model="checkout.shipment.ship_to.address.country_code" ng-options="country.value as country.name for country in countryList"><option value>Select a Country</option></select>
     </div>
     <input class="plumb-input" type="text" ng-model="checkout.shipment.ship_to.address.postal_code" placeholder="Enter your postal/zip code" ng-change="lookupGeoCode(checkout.shipment.ship_to.address.address_1, checkout.shipment.ship_to.address.postal_code, checkout.shipment)">
+    <input class="plumb-input" type="checkbox" ng-model="checkout.shipment.ship_to.residential" id="checkout.shipment.ship_to.residential"><label for="checkout.shipment.ship_to.residential">Residential Address</label>
+    <div ng-show="!checkout.shipment.ship_to.residential">
+      <input class="plumb-input" type="checkbox" ng-model="checkout.shipment.ship_to.lift_gate" id="checkout.shipment.ship_to.lift_gate"><label for="checkout.shipment.ship_to.lift_gate">Has lift gate available</label>
+      <input class="plumb-input" type="checkbox" ng-model="checkout.shipment.ship_to.call_before" id="checkout.shipment.ship_to.call_before"><label for="checkout.shipment.ship_to.call_before">Call before delivery</label>
+      <input class="plumb-input" type="checkbox" ng-model="checkout.shipment.ship_to.inside_delivery" id="checkout.shipment.ship_to.inside_delivery"><label for="checkout.shipment.ship_to.inside_delivery">Inside Delivery</label>
+    </div>
   </div>
   <button type="submit" class="plumb-button contact-button" ng-click="saveAddress(checkout.shipment.ship_to); menuService.toggle('checkout-2', 'checkout')">Continue</button>
 </form>
