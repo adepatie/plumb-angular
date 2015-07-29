@@ -353,6 +353,9 @@
   border-width: 5px 0 5px 8.7px;
   border-color: transparent transparent transparent #555555;
 }
+.plumb-checkbox {
+  padding: 4px 0;
+}
 .plumb-input {
   display: block;
   width: 100%;

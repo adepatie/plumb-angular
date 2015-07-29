@@ -1484,7 +1484,11 @@
                 postal_code: undefined,
                 state_code: undefined,
                 country_code: 'US'
-              }
+              },
+              residential: true,
+              call_before: false,
+              lift_gate: false,
+              inside_delivery: false
             };
 
             $scope.setShipTo = function (ship_to) {
