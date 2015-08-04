@@ -763,6 +763,38 @@ textarea.plumb-input {
 .plumb-account .payment-methods .payment-method .name {
   margin-bottom: 10px;
   font-weight: bold;
+  font-size: 12px;
+}
+.plumb-cart .cart-products .cart-product .sku,
+.plumb-checkout .cart-products .cart-product .sku,
+.plumb-account .cart-products .cart-product .sku,
+.plumb-cart .addresses-list .cart-product .sku,
+.plumb-checkout .addresses-list .cart-product .sku,
+.plumb-account .addresses-list .cart-product .sku,
+.plumb-cart .payment-methods .cart-product .sku,
+.plumb-checkout .payment-methods .cart-product .sku,
+.plumb-account .payment-methods .cart-product .sku,
+.plumb-cart .cart-products .address .sku,
+.plumb-checkout .cart-products .address .sku,
+.plumb-account .cart-products .address .sku,
+.plumb-cart .addresses-list .address .sku,
+.plumb-checkout .addresses-list .address .sku,
+.plumb-account .addresses-list .address .sku,
+.plumb-cart .payment-methods .address .sku,
+.plumb-checkout .payment-methods .address .sku,
+.plumb-account .payment-methods .address .sku,
+.plumb-cart .cart-products .payment-method .sku,
+.plumb-checkout .cart-products .payment-method .sku,
+.plumb-account .cart-products .payment-method .sku,
+.plumb-cart .addresses-list .payment-method .sku,
+.plumb-checkout .addresses-list .payment-method .sku,
+.plumb-account .addresses-list .payment-method .sku,
+.plumb-cart .payment-methods .payment-method .sku,
+.plumb-checkout .payment-methods .payment-method .sku,
+.plumb-account .payment-methods .payment-method .sku {
+  margin-top: -10px;
+  margin-bottom: 10px;
+  font-size: 12px;
 }
 .plumb-cart .cart-products .cart-product .price,
 .plumb-checkout .cart-products .cart-product .price,
@@ -791,6 +823,33 @@ textarea.plumb-input {
 .plumb-cart .payment-methods .payment-method .price,
 .plumb-checkout .payment-methods .payment-method .price,
 .plumb-account .payment-methods .payment-method .price,
+.plumb-cart .cart-products .cart-product .total-price,
+.plumb-checkout .cart-products .cart-product .total-price,
+.plumb-account .cart-products .cart-product .total-price,
+.plumb-cart .addresses-list .cart-product .total-price,
+.plumb-checkout .addresses-list .cart-product .total-price,
+.plumb-account .addresses-list .cart-product .total-price,
+.plumb-cart .payment-methods .cart-product .total-price,
+.plumb-checkout .payment-methods .cart-product .total-price,
+.plumb-account .payment-methods .cart-product .total-price,
+.plumb-cart .cart-products .address .total-price,
+.plumb-checkout .cart-products .address .total-price,
+.plumb-account .cart-products .address .total-price,
+.plumb-cart .addresses-list .address .total-price,
+.plumb-checkout .addresses-list .address .total-price,
+.plumb-account .addresses-list .address .total-price,
+.plumb-cart .payment-methods .address .total-price,
+.plumb-checkout .payment-methods .address .total-price,
+.plumb-account .payment-methods .address .total-price,
+.plumb-cart .cart-products .payment-method .total-price,
+.plumb-checkout .cart-products .payment-method .total-price,
+.plumb-account .cart-products .payment-method .total-price,
+.plumb-cart .addresses-list .payment-method .total-price,
+.plumb-checkout .addresses-list .payment-method .total-price,
+.plumb-account .addresses-list .payment-method .total-price,
+.plumb-cart .payment-methods .payment-method .total-price,
+.plumb-checkout .payment-methods .payment-method .total-price,
+.plumb-account .payment-methods .payment-method .total-price,
 .plumb-cart .cart-products .cart-product .variants,
 .plumb-checkout .cart-products .cart-product .variants,
 .plumb-account .cart-products .cart-product .variants,
@@ -819,6 +878,7 @@ textarea.plumb-input {
 .plumb-checkout .payment-methods .payment-method .variants,
 .plumb-account .payment-methods .payment-method .variants {
   margin-bottom: 10px;
+  font-size: 12px;
 }
 .plumb-cart .cart-products .cart-product .variants,
 .plumb-checkout .cart-products .cart-product .variants,
@@ -848,6 +908,36 @@ textarea.plumb-input {
 .plumb-checkout .payment-methods .payment-method .variants,
 .plumb-account .payment-methods .payment-method .variants {
   font-size: 11px;
+  font-size: 12px;
+}
+.plumb-cart .cart-products .cart-product .quantity,
+.plumb-checkout .cart-products .cart-product .quantity,
+.plumb-account .cart-products .cart-product .quantity,
+.plumb-cart .addresses-list .cart-product .quantity,
+.plumb-checkout .addresses-list .cart-product .quantity,
+.plumb-account .addresses-list .cart-product .quantity,
+.plumb-cart .payment-methods .cart-product .quantity,
+.plumb-checkout .payment-methods .cart-product .quantity,
+.plumb-account .payment-methods .cart-product .quantity,
+.plumb-cart .cart-products .address .quantity,
+.plumb-checkout .cart-products .address .quantity,
+.plumb-account .cart-products .address .quantity,
+.plumb-cart .addresses-list .address .quantity,
+.plumb-checkout .addresses-list .address .quantity,
+.plumb-account .addresses-list .address .quantity,
+.plumb-cart .payment-methods .address .quantity,
+.plumb-checkout .payment-methods .address .quantity,
+.plumb-account .payment-methods .address .quantity,
+.plumb-cart .cart-products .payment-method .quantity,
+.plumb-checkout .cart-products .payment-method .quantity,
+.plumb-account .cart-products .payment-method .quantity,
+.plumb-cart .addresses-list .payment-method .quantity,
+.plumb-checkout .addresses-list .payment-method .quantity,
+.plumb-account .addresses-list .payment-method .quantity,
+.plumb-cart .payment-methods .payment-method .quantity,
+.plumb-checkout .payment-methods .payment-method .quantity,
+.plumb-account .payment-methods .payment-method .quantity {
+  font-size: 12px;
 }
 .plumb-cart .cart-products .cart-product .quantity input,
 .plumb-checkout .cart-products .cart-product .quantity input,
@@ -911,6 +1001,7 @@ textarea.plumb-input {
 .plumb-cart .payment-methods .payment-method .remove a,
 .plumb-checkout .payment-methods .payment-method .remove a,
 .plumb-account .payment-methods .payment-method .remove a {
+  font-size: 12px;
   color: #6f6e6e;
   text-decoration: none;
   font-style: italic;
@@ -1024,7 +1115,20 @@ textarea.plumb-input {
 .plumb-cart .order-detail,
 .plumb-checkout .order-detail,
 .plumb-account .order-detail {
-  margin-top: 8px;
+  margin-top: 15px;
+}
+.plumb-cart .order-detail .cart-products,
+.plumb-checkout .order-detail .cart-products,
+.plumb-account .order-detail .cart-products {
+  margin: 10px 0 -15px;
+}
+.plumb-cart .order-detail .cart-products .cart-product .sku,
+.plumb-checkout .order-detail .cart-products .cart-product .sku,
+.plumb-account .order-detail .cart-products .cart-product .sku,
+.plumb-cart .order-detail .cart-products .cart-product .total-price,
+.plumb-checkout .order-detail .cart-products .cart-product .total-price,
+.plumb-account .order-detail .cart-products .cart-product .total-price {
+  margin-bottom: 0;
 }
 .plumb-cart .order-detail .detail-heading,
 .plumb-checkout .order-detail .detail-heading,

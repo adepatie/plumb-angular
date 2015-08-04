@@ -48,9 +48,10 @@
     </div>
   </div>
   <div class="order-total">
-    <a href class="plumb-link" ng-click="toggleDetail()"><span ng-show="!showDetail">Show</span><span ng-show="showDetail">Hide</span> Order Details</a>
+    <!--<a href class="plumb-link" ng-click="toggleDetail()"><span ng-show="!showDetail">Show</span><span ng-show="showDetail">Hide</span> Order Details</a>-->
     <div ng-show="showDetail">
       <div class="order-detail products">
+        <div class="detail-heading">Products in Order</div>
         <div class="product-list">
           <ul class="cart-products">
             <li class="cart-product" ng-repeat="product in cart">
@@ -61,17 +62,8 @@
                   <span class="quantity-in-box" ng-show="product.quantity_in_box > 1">({{product.quantity_in_box}} in box)</span>
                 </div>
                 <div class="right">
-                  <div class="price"><span ng-bind-html="displayProductPrice(product)"></span></div>
-                </div>
-              </div>
-              <div class="clearfix">
-                <div class="left">
-                  <div class="variants" ng-repeat="v in product.variants">{{v.name}}: {{v.value}}</div>
-                  <div class="quantity">Quantity: <input ng-model="product.qty" ng-change="updateQuantity(product)" ng-model-options="{updateOn: 'blur'}"></div>
-                </div>
-                <div class="right">
-                  <div class="variants" ng-repeat="v in product.variants" ng-bind-html="displayVariantPrice(v)"></div>
-                  <div class="remove"><a href ng-click="removeProduct(product)">remove</a></div>
+                  <div class="price">{{product.qty}} x <span ng-bind-html="displayProductPrice(product)"></span></div>
+                  <div class="total-price">Line Total: ${{((product.qty * product.price/100)).toFixed(2)}}</div>
                 </div>
               </div>
             </li>

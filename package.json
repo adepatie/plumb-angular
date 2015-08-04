@@ -1,6 +1,6 @@
 {
   "name": "plumb-angular",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "Plumb AngularJS Library",
   "main": [
     "dist/plumb-angular.js",

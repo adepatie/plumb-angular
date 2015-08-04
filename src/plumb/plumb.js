@@ -2618,7 +2618,7 @@
                 message: null
               }
 
-              scope.showDetail = false;
+              scope.showDetail = true;
               scope.packages = [];
               scope.selectedRate = [];
             };

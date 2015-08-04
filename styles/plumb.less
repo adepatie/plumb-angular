@@ -571,15 +571,25 @@ textarea.plumb-input {
       .name {
         margin-bottom: 10px;
         font-weight: bold;
+        font-size: 12px;
+      }
+      .sku {
+        margin-top: -10px;
+        margin-bottom: 10px;
+        font-size: 12px;
       }
       .price,
+      .total-price,
       .variants {
         margin-bottom: 10px;
+        font-size: 12px;
       }
       .variants {
         font-size: 11px;
+        font-size: 12px;
       }
       .quantity {
+        font-size: 12px;
         input {
           width: 40px;
           border: none;
@@ -592,6 +602,7 @@ textarea.plumb-input {
       }
       .remove {
         a {
+          font-size: 12px;
           color: @defaultColor;
           text-decoration: none;
           font-style: italic;
@@ -630,7 +641,16 @@ textarea.plumb-input {
     }
   }
   .order-detail {
-    margin-top: 8px;
+    margin-top: 15px;
+    .cart-products {
+      margin: 10px 0 -15px;
+      .cart-product {
+        .sku,
+        .total-price {
+          margin-bottom: 0;
+        }
+      }
+    }
     .detail-heading {
       margin-bottom: 8px;
     }
