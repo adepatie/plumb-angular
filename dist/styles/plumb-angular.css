@@ -33,6 +33,21 @@
   line-height: 42px;
   vertical-align: middle;
 }
+.plumb-menu .plumb-link {
+  font-weight: bold;
+  color: #6f6e6e;
+}
+.plumb-menu .small-link {
+  font-weight: bold;
+  color: #6f6e6e;
+  font-size: 11px;
+}
+.plumb-menu .float-left {
+  float: left;
+}
+.plumb-menu .float-right {
+  float: right;
+}
 .plumb-menu > .menu-wrapper {
   display: block;
   background-color: #555555;
@@ -988,6 +1003,12 @@ textarea.plumb-input {
 .plumb-account .payment-methods .payment-method.final {
   font-weight: bold;
 }
+.plumb-cart .shipping-method .shipping-address p,
+.plumb-checkout .shipping-method .shipping-address p,
+.plumb-account .shipping-method .shipping-address p {
+  margin-top: 0;
+  margin-bottom: 0;
+}
 .plumb-cart .addresses-list,
 .plumb-checkout .addresses-list,
 .plumb-account .addresses-list {
@@ -999,6 +1020,22 @@ textarea.plumb-input {
   display: block;
   padding: 4px 0;
   font-size: 14px;
+}
+.plumb-cart .order-detail,
+.plumb-checkout .order-detail,
+.plumb-account .order-detail {
+  margin-top: 8px;
+}
+.plumb-cart .order-detail .detail-heading,
+.plumb-checkout .order-detail .detail-heading,
+.plumb-account .order-detail .detail-heading {
+  margin-bottom: 8px;
+}
+.plumb-cart .order-detail p,
+.plumb-checkout .order-detail p,
+.plumb-account .order-detail p {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 @media (max-width: 320px) {
   .plumb-menu [class^="kicon-"] {

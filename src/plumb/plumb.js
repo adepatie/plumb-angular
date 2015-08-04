@@ -835,6 +835,7 @@
                 name: product.name,
                 sub_title: product.sub_title,
                 qty: parseInt(qty, 10),
+                sku: product.sku,
                 image: product.images[0],
                 weight: product.weight,
                 dimensions: product.dimensions,
@@ -2329,6 +2330,7 @@
               scope.updateProductTotal();
               plumb.cart.update(product, product.qty, function(err, cart) {
                 scope.cart = cart;
+                scope.getRates();
               });
             };
 
@@ -2615,6 +2617,10 @@
                 phone: null,
                 message: null
               }
+
+              scope.showDetail = false;
+              scope.packages = [];
+              scope.selectedRate = [];
             };
 
             scope.loginUser = function(section) {
@@ -2794,6 +2800,10 @@
                   return 'Amount: ' + $filter('currency')(d.amount / 100);
                   break;
               }
+            };
+
+            scope.toggleDetail = function() {
+              scope.showDetail = !scope.showDetail;
             };
 
             scope.resetForms();

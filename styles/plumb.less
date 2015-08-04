@@ -79,6 +79,25 @@
     vertical-align: middle;
   }
 
+  .plumb-link {
+    font-weight: bold;
+    color: @defaultColor;
+  }
+
+  .small-link {
+    font-weight: bold;
+    color: @defaultColor;
+    font-size: 11px;
+  }
+
+  .float-left {
+    float: left;
+  }
+
+  .float-right {
+    float: right;
+  }
+
   > .menu-wrapper {
     display: block;
     background-color: @backgroundColor;
@@ -590,6 +609,14 @@ textarea.plumb-input {
       }
     }
   }
+  .shipping-method {
+    .shipping-address {
+      p {
+        margin-top: 0;
+        margin-bottom: 0;
+      }
+    }
+  }
   .addresses-list {
     margin-top: 0;
   }
@@ -600,6 +627,16 @@ textarea.plumb-input {
         padding: 4px 0;
         font-size: 14px;
       }
+    }
+  }
+  .order-detail {
+    margin-top: 8px;
+    .detail-heading {
+      margin-bottom: 8px;
+    }
+    p {
+      margin-top: 0;
+      margin-bottom: 0;
     }
   }
 }

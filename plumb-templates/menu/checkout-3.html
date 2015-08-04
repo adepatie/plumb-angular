@@ -1,8 +1,15 @@
 <h1>Checkout</h1>
 <p>Please complete the form below to finish checkout</p>
 <form>
-  <div ng-show="requiresShipping">
-    <p>Select a shipping method</p>
+  <div ng-show="requiresShipping" class="shipping-method">
+    <p><b>Select a shipping method for:</b></p>
+    <div class="float-right"><a href class="small-link" ng-click="menuService.toggle('checkout', 'cart')">Edit</a></div>
+    <div class="shipping-address">
+      <p>{{checkout.shipment.ship_to.address.address_1}}</p>
+      <p ng-show="checkout.shipment.ship_to.address.address_2">{{checkout.shipment.ship_to.address.addres_2}}</p>
+      <p>{{checkout.shipment.ship_to.address.city}}, {{checkout.shipment.ship_to.address.state_code}} {{checkout.shipment.ship_to.address.postal_code}}</p>
+      <p>{{checkout.shipment.ship_to.address.country_code}}</p>
+    </div>
     <div ng-repeat="package in packages" ng-show="package.rates.length">
       <label class="plumb-label" ng-show="packages.length > 1">Package {{$index+1}}</label>
       <select class="plumb-input" ng-model="selectedRate[$index]" ng-disabled="rates.length <= 0" ng-options="rate as ((rate.cost | currency) + ' - ' + rate.name) for rate in package.rates">
@@ -10,7 +17,7 @@
       </select>
     </div>
   </div>
-  <div ng-show="paymentMethodList.length > 0">
+  <div ng-show="paymentMethodList.length > 0" class="payment-method">
     <p>Select a payment method</p>
     <select class="plumb-input" ng-model="checkout.payment_method" ng-options="payment_method as (getPaymentMethodType(payment_method) + ': ' + payment_method.nickname) for payment_method in paymentMethodList"><option value>New Credit Card</option></select>
   </div>
@@ -41,6 +48,37 @@
     </div>
   </div>
   <div class="order-total">
+    <a href class="plumb-link" ng-click="toggleDetail()"><span ng-show="!showDetail">Show</span><span ng-show="showDetail">Hide</span> Order Details</a>
+    <div ng-show="showDetail">
+      <div class="order-detail products">
+        <div class="product-list">
+          <ul class="cart-products">
+            <li class="cart-product" ng-repeat="product in cart">
+              <div class="clearfix">
+                <div class="left">
+                  <div class="name" ng-bind="product.name"></div>
+                  <div class="sku" ng-show="product.sku" ng-bind="product.sku"></div>
+                  <span class="quantity-in-box" ng-show="product.quantity_in_box > 1">({{product.quantity_in_box}} in box)</span>
+                </div>
+                <div class="right">
+                  <div class="price"><span ng-bind-html="displayProductPrice(product)"></span></div>
+                </div>
+              </div>
+              <div class="clearfix">
+                <div class="left">
+                  <div class="variants" ng-repeat="v in product.variants">{{v.name}}: {{v.value}}</div>
+                  <div class="quantity">Quantity: <input ng-model="product.qty" ng-change="updateQuantity(product)" ng-model-options="{updateOn: 'blur'}"></div>
+                </div>
+                <div class="right">
+                  <div class="variants" ng-repeat="v in product.variants" ng-bind-html="displayVariantPrice(v)"></div>
+                  <div class="remove"><a href ng-click="removeProduct(product)">remove</a></div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
     <ul class="cart-products">
       <li class="cart-product total">
         <div class="left">Product Total</div>
