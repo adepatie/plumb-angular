@@ -9,7 +9,7 @@
       <div class="clearfix">
         <div class="left">
           <div class="name" ng-bind="product.name"></div>
-          <div class="sku" ng-show="product.sku" ng-bind="product.sku"></div>
+          <div class="sku" ng-show="product.sku" ng-bind="menuService.buildSKU(product, product.variants)"></div>
           <span class="quantity-in-box" ng-show="product.quantity_in_box > 1">({{product.quantity_in_box}} in box)</span>
         </div>
         <div class="right">

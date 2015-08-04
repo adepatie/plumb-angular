@@ -1768,6 +1768,35 @@
           return $filter('currency')(p / 100);
         };
 
+        $scope.buildSKU = function(product, attributes) {
+          if(!attributes || !attributes.length) {
+            return product.sku;
+          }
+
+          var newSku = product.sku;
+          if(typeof newSku === 'object') {
+            newSku = '[' + newSku.toString() + ']';
+          }
+          for(var i = 0; i < attributes.length; i++) {
+            var opt = attributes[i];
+
+            if(!opt.sku) {
+              continue;
+            }
+
+            if(opt.sku.charAt(0) === '@') {
+              var split = opt.sku.split('[');
+              if(split.length !== 2) {
+                continue;
+              }
+              var loc = split[0].slice(1);
+              var sku = split[1].slice(0, -1);
+              newSku = newSku.replace('[' + loc + ']', sku);
+            }
+          }
+          return newSku;
+        };
+
         $scope.setVariant = function(product, name, value) {
           if(!product.variants) {
             product.variants = [];
