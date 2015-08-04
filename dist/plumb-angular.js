@@ -2,7 +2,7 @@
  * plumb-angular
  * https://github.com/typefoo/plumb-angular
 
- * Version: 0.1.16 - 2015-08-04
+ * Version: 0.1.17 - 2015-08-04
  * License: AGPL
  */
 /**
@@ -2270,6 +2270,10 @@
               scope.shippingAddressCopied = true;
             };
             scope.getTaxes = function () {
+              if (!scope.product_total) {
+                scope.tax_total = 0;
+                return scope.updateFinalTotal();
+              }
               scope.discount_total = getDiscountTotal();
               var total = scope.product_total + scope.shipping_total;
               if (total < 0) {
