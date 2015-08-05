@@ -2,14 +2,18 @@
 <p>Please complete the form below to finish checkout</p>
 <form>
   <div ng-show="requiresShipping" class="shipping-method">
-    <p><b>Select a shipping method for:</b></p>
+    <p><b>Shipping to:</b></p>
     <div class="float-right"><a href class="small-link" ng-click="menuService.toggle('checkout', 'cart')">Edit</a></div>
     <div class="shipping-address">
+      <p>{{checkout.shipment.ship_to.name}}</p>
+      <p ng-show="checkout.shipment.ship_to.company_name">{{checkout.shipment.ship_to.company_name}}</p>
       <p>{{checkout.shipment.ship_to.address.address_1}}</p>
       <p ng-show="checkout.shipment.ship_to.address.address_2">{{checkout.shipment.ship_to.address.addres_2}}</p>
       <p>{{checkout.shipment.ship_to.address.city}}, {{checkout.shipment.ship_to.address.state_code}} {{checkout.shipment.ship_to.address.postal_code}}</p>
       <p>{{checkout.shipment.ship_to.address.country_code}}</p>
+      <p ng-show="checkout.shipment.ship_to.phone">{{checkout.shipment.ship_to.phone}}</p>
     </div>
+    <p><b>Select a shipping method:</b></p>
     <div ng-repeat="package in packages" ng-show="package.rates.length">
       <label class="plumb-label" ng-show="packages.length > 1">Package {{$index+1}}</label>
       <select class="plumb-input" ng-model="selectedRate[$index]" ng-disabled="rates.length <= 0" ng-options="rate as ((rate.cost | currency) + ' - ' + rate.name) for rate in package.rates">
@@ -18,11 +22,11 @@
     </div>
   </div>
   <div ng-show="paymentMethodList.length > 0" class="payment-method">
-    <p>Select a payment method</p>
+    <p><b>Select a payment method</b></p>
     <select class="plumb-input" ng-model="checkout.payment_method" ng-options="payment_method as (getPaymentMethodType(payment_method) + ': ' + payment_method.nickname) for payment_method in paymentMethodList"><option value>New Credit Card</option></select>
   </div>
   <div ng-show="final_total > 0 && (!checkout.payment_method || !checkout.payment_method._id)">
-    <p>Enter your payment information</p>
+    <p><b>Enter your payment information</b></p>
     <ul class="payment-options" ng-show="plumb.options.session.enable_po">
       <li><a href class="plumb-button tiny" ng-class="getActivePayment('credit_card')" ng-click="switchPaymentMethod('credit_card')">Credit Card</a></li>
       <li><a href class="plumb-button tiny" ng-class="getActivePayment('purchase_order')" ng-click="switchPaymentMethod('purchase_order')">PO Number</a></li>
@@ -36,6 +40,7 @@
     </div>
     <div ng-show="checkout.payment_method.type === 'purchase_order'">
       <input class="plumb-input" type="text" ng-model="checkout.payment_method.reference_number" placeholder="Enter PO Number">
+      <input class="plumb-input" type="text" ng-model="checkout.payment_method.reference_number_2" placeholder="Enter Reference Number (optional)">
     </div>
   </div>
   <div>
@@ -51,7 +56,7 @@
     <!--<a href class="plumb-link" ng-click="toggleDetail()"><span ng-show="!showDetail">Show</span><span ng-show="showDetail">Hide</span> Order Details</a>-->
     <div ng-show="showDetail">
       <div class="order-detail products">
-        <div class="detail-heading">Products in Order</div>
+        <div class="detail-heading"><b>Products in Order</b></div>
         <div class="product-list">
           <ul class="cart-products">
             <li class="cart-product" ng-repeat="product in cart">
@@ -63,7 +68,7 @@
                 </div>
                 <div class="right">
                   <div class="price">{{product.qty}} x <span ng-bind-html="displayProductPrice(product)"></span></div>
-                  <div class="total-price">Line Total: ${{((product.qty * product.price/100)).toFixed(2)}}</div>
+                  <div class="total-price">Line Total: {{menuService.getTotalPrice(product)}}</div>
                 </div>
               </div>
             </li>

@@ -1768,6 +1768,22 @@
           return $filter('currency')(p / 100);
         };
 
+        $scope.getTotalPrice = function(product) {
+          if(!product) {
+            return 'N/A';
+          }
+          var p = product.price;
+          if(!product.variants) {
+            return $filter('currency')((product.qty * p) / 100);
+          }
+          for(var i = 0; i < product.variants.length; i++) {
+            if(product.variants[i].price) {
+              p += parseInt(product.variants[i].price, 10);
+            }
+          }
+          return $filter('currency')((product.qty * p) / 100);
+        };
+
         $scope.buildSKU = function(product, attributes) {
           if(!attributes || !attributes.length) {
             return product.sku;
