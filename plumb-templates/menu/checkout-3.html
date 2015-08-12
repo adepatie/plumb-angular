@@ -21,10 +21,6 @@
       </select>
     </div>
   </div>
-  <div ng-show="paymentMethodList.length > 0" class="payment-method">
-    <p><b>Select a payment method</b></p>
-    <select class="plumb-input" ng-model="checkout.payment_method" ng-options="payment_method as (getPaymentMethodType(payment_method) + ': ' + payment_method.nickname) for payment_method in paymentMethodList"><option value>New Credit Card</option></select>
-  </div>
   <div ng-show="final_total > 0 && (!checkout.payment_method || !checkout.payment_method._id)">
     <p><b>Enter your payment information</b></p>
     <ul class="payment-options" ng-show="plumb.options.session.enable_po">
@@ -32,6 +28,10 @@
       <li><a href class="plumb-button tiny" ng-class="getActivePayment('purchase_order')" ng-click="switchPaymentMethod('purchase_order')">PO Number</a></li>
     </ul>
     <div ng-show="checkout.payment_method.type === 'credit_card'">
+      <div ng-show="paymentMethodList.length > 0" class="payment-method">
+        <p><b>Select a payment method</b></p>
+        <select class="plumb-input" ng-model="checkout.payment_method" ng-options="payment_method as (getPaymentMethodType(payment_method) + ': ' + payment_method.nickname) for payment_method in paymentMethodList"><option value>New Credit Card</option></select>
+      </div>
       <input class="plumb-input" type="text" ng-model="checkout.payment_method.card.name" placeholder="Name on card">
       <input class="plumb-input" type="number" ng-model="checkout.payment_method.card.card_number" placeholder="Card number">
       <select class="plumb-input" class="expiration" ng-model="checkout.payment_method.card.expiration_month" ng-options="option.value as option.name for option in expirationMonths"><option value>Expiration Month</option></select>
