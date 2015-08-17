@@ -1,1 +1,6 @@
-<a ng-click="menuService.toggle('cart')" plumb-popover="shoppingCartPopoverText" showing="{{cartAddActive}}" ng-class="menuService.checkClass('cart')"><span class="kicon-cart"></span><span class="count">{{quantity_total}}</span></a>
+<md-button class="md-fab md-raised md-mini" ng-click="menuService.toggle('cart')" ng-class="menuService.checkClass('cart')">
+  <md-tooltip md-visible="cartAddActive">
+    {{shoppingCartPopoverText}}
+  </md-tooltip>
+  <span class="material-icons">shopping_cart</span><span class="count">{{quantity_total}}</span>
+</md-button>

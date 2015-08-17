@@ -1,6 +1,6 @@
 {
   "name": "plumb-angular",
-  "version": "0.1.20",
+  "version": "0.2.0",
   "description": "Plumb AngularJS Library",
   "main": [
     "dist/plumb-angular.js",
@@ -48,5 +48,8 @@
     "karma": "^0.12.16",
     "node-markdown": "^0.1.1",
     "semver": "^2.3.1"
+  },
+  "dependencies": {
+    "grunt-wiredep": "^2.0.0"
   }
 }

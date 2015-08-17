@@ -72,7 +72,7 @@
   }
 
   function setupPlumb() {
-    w[PLUMB_CONFIG.ANGULAR].module('PlumbApp', []);
+    w[PLUMB_CONFIG.ANGULAR].module('PlumbApp', ['ngMaterial', 'ngMdIcons']);
     //$templateCache
     w[PLUMB_CONFIG.ANGULAR].module('PlumbApp')
       .provider('plumbConfig', function() {
@@ -88,6 +88,8 @@
           test: 'http://0.0.0.0:3458/jsapi',
           production: 'https://www.plummb.com/api/jsapi'
         };
+        this.menuDirection = 'left';
+        this.menuOpen = false;
         this.display_price_breakdown = true;
         this.months = [
           {
@@ -1948,14 +1950,14 @@
         $scope.addMenuItem({
           name: 'Sign In',
           tag: 'login',
-          icon: 'kicon-login',
+          icon: 'lock',
           template: 'plumb-templates/menu/sign-in.html',
           showLoggedIn: false,
           showLoggedOut: true
         }).addMenuItem({
           name: 'Account',
           tag: 'account',
-          icon: 'kicon-account',
+          icon: 'account-circle',
           template: 'plumb-templates/menu/account.html',
           showLoggedIn: true,
           showLoggedOut: false
@@ -1995,7 +1997,7 @@
         $scope.addMenuItem({
           name: 'Sign Out',
           tag: 'sign-out',
-          icon: 'kicon-sign_out',
+          icon: 'exit-to-app',
           onClick: function (evt) {
             plumb.auth.signOut();
           },
@@ -2905,6 +2907,7 @@
 
     if(w.PLUMB_CONFIG) {
       // we are using plumb from an embed standpoint
+      /*
       if(!w.PLUMB_CONFIG.integrated) {
         w[PLUMB_CONFIG.ANGULAR].injector(['ng', 'PlumbApp']).invoke(['$compile', '$rootScope', 'plumb', 'plumbConfig', 'plumbMenuService', function ($compile, $rootScope, plumb, plumbConfig, plumbMenuService) {
           var body = w[PLUMB_CONFIG.ANGULAR].element(d).find('body');
@@ -2916,21 +2919,21 @@
             w[PLUMB_CONFIG.ANGULAR].bootstrap(body[0], ['PlumbApp']);
           }
         }]);
-
-        if(!w.PLUMB_CONFIG.GOOGLE_FONTS || w.PLUMB_CONFIG.GOOGLE_FONTS === true) {
-          w.WebFontConfig = {
-            google: { families: [ 'Questrial::latin' ] }
-          };
-          (function () {
-            var wf = document.createElement('script');
-            wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-              '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-            wf.type = 'text/javascript';
-            wf.async = 'true';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(wf, s);
-          })();
-        }
+      }
+      */
+      if(typeof w.PLUMB_CONFIG.GOOGLE_FONTS === 'undefined' || w.PLUMB_CONFIG.GOOGLE_FONTS === true) {
+        w.WebFontConfig = {
+          google: { families: [ 'Questrial::latin', 'Material+Icons' ] }
+        };
+        (function () {
+          var wf = document.createElement('script');
+          wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
+            '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
+          wf.type = 'text/javascript';
+          wf.async = 'true';
+          var s = document.getElementsByTagName('script')[0];
+          s.parentNode.insertBefore(wf, s);
+        })();
       }
     }
 

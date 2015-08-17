@@ -67,8 +67,6 @@
   top: 0;
   right: 0;
   height: 100%;
-  color: @defaultColor;
-  font-family: @defaultFontFamily, 'Helvetica', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   .transform(translate3d(0, 0, 0));
@@ -198,10 +196,12 @@
 
   .plumb-loading {
     position: absolute;
-    left: 53px;
+    left: 0;
     top: 0;
     width: 340px;
     height: 100%;
+    color: @defaultColor;
+    font-family: @defaultFontFamily, 'Helvetica', sans-serif;
     background-color: @loadingBgColor;
     z-index: -1;
     .transition(opacity .5s);
@@ -222,12 +222,14 @@
 
   .plumb-sidebar {
     position: absolute;
-    left: 53px;
+    left: 0;
     top: 0;
     width: 340px;
     height: 100%;
     overflow: hidden;
     overflow-y: auto;
+    color: @defaultColor;
+    font-family: @defaultFontFamily, 'Helvetica', sans-serif;
     background-color: @windowBgColor;
     -webkit-overflow-scrolling: touch;
     .transition(all .5s);

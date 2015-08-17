@@ -5,6 +5,9 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <title>Plumb Angular Examples</title>
 
+  <!-- bower:css -->
+  <link rel="stylesheet" href="bower_components/angular-material/angular-material.css" />
+  <!-- endbower -->
   <link rel="stylesheet" href="/dist/styles/plumb-angular.css">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 </head>
@@ -13,8 +16,14 @@
     <!--<plumb-product id="'54eb46218b582a502224da96'"></plumb-product>-->
     <plumb-product id="'55b25ab67897c657375317eb'"></plumb-product>
   </div>
-
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.min.js"></script>
+  <plumb-menu></plumb-menu>
+  <!-- bower:js -->
+  <script src="bower_components/angular/angular.js"></script>
+  <script src="bower_components/angular-animate/angular-animate.js"></script>
+  <script src="bower_components/angular-aria/angular-aria.js"></script>
+  <script src="bower_components/angular-material/angular-material.js"></script>
+  <script src="bower_components/angular-material-icons/angular-material-icons.min.js"></script>
+  <!-- endbower -->
   <script src="dist/plumb-angular.js"></script>
   <script>
     angular.module('plumbExampleApp', ['PlumbApp']);

@@ -18,12 +18,13 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-conventional-changelog');
   grunt.loadNpmTasks('grunt-ngdocs');
   grunt.loadNpmTasks('grunt-ngmin');
+  grunt.loadNpmTasks('grunt-wiredep');
 
   // Project configuration.
   grunt.util.linefeed = '\n';
 
   grunt.initConfig({
-    ngversion: '1.2.18',
+    ngversion: '1.4.4',
     modules: [],//to be filled in by build task
     pkg: grunt.file.readJSON('package.json'),
     dist: 'dist',
@@ -88,7 +89,7 @@ module.exports = function(grunt) {
           'plumb-templates/**/*.html',
           'src/**/*.js'
         ],
-        tasks: ['build'],
+        tasks: ['wiredep', 'build'],
         options: {
           livereload: '<%= connect.options.livereload %>'
         }
@@ -126,6 +127,15 @@ module.exports = function(grunt) {
             ];
           }
         }
+      }
+    },
+    wiredep: {
+      options: {
+        cwd: '.'
+      },
+      app: {
+        src: ['examples/index.html'],
+        ignorePath:  /\.\.\//
       }
     },
     less: {
@@ -198,6 +208,7 @@ module.exports = function(grunt) {
   grunt.registerTask('build', 'Create plumb build files', function() {
     var _ = grunt.util._;
     grunt.task.run(['clean:build']);
+    grunt.task.run(['wiredep']);
 
     //If arguments define what modules to build, build those. Else, everything
     var modules = [];
