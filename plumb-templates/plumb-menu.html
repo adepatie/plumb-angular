@@ -1,9 +1,11 @@
 <div class="plumb-menu" ng-class="{'logged-in': plumb.auth.loggedIn(), 'open': menuService.showing}">
   <div class="menu-dial">
+    <div class="plumb-cart-add-tooltip" ng-class="{active: cartAddActive}">{{shoppingCartPopoverText}}</div>
     <md-fab-speed-dial md-direction="{{config.menuDirection}}" class="md-fling">
       <md-fab-trigger>
         <md-button aria-label="plumb-menu" class="md-fab md-primary">
           <i class="material-icons">store</i>
+          <span class="count" ng-show="quantity_total > 0">{{quantity_total}}</span>
         </md-button>
       </md-fab-trigger>
       <md-fab-actions>

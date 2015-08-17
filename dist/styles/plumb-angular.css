@@ -1242,6 +1242,39 @@ textarea.plumb-input {
     transform: translate3d(-320px, 0, 0);
   }
 }
+.plumb-cart-add-tooltip {
+  position: fixed;
+  top: 24px;
+  right: 90px;
+  zoom: 1;
+  filter: alpha(opacity=0);
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+  opacity: 0;
+  pointer-events: none;
+  font-size: 9px;
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  white-space: nowrap;
+  padding: 4px 10px;
+  -webkit-border-radius: 3px;
+  -webkit-background-clip: padding-box;
+  -moz-border-radius: 3px;
+  -moz-background-clip: padding;
+  border-radius: 3px;
+  background-clip: padding-box;
+  -webkit-transition: all 0.5s;
+  -moz-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+}
+.plumb-cart-add-tooltip.active {
+  zoom: 1;
+  filter: alpha(opacity=10000);
+  -webkit-opacity: 100;
+  -moz-opacity: 100;
+  opacity: 100;
+}
 @font-face {
   font-family: 'KurrencyIcons';
   src: url('https://assets.plummb.com/fonts/KurrencyIcons.eot?-orzlfj');

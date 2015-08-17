@@ -2198,7 +2198,7 @@
             scope.discount_total = 0;
             scope.final_total = 0;
             scope.cartAddText = plumbConfig.cartAddText ? plumbConfig.cartAddText : 'Added to cart';
-            scope.shoppingCartPopoverText = 'Shopping Cart';
+            scope.shoppingCartPopoverText = 'Added to cart';
             scope.cartAddActive = false;
             scope.order = null;
             scope.settings = null;

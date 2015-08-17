@@ -1,6 +1,6 @@
 <md-button class="md-fab md-raised md-mini" ng-click="menuService.toggle('cart')" ng-class="menuService.checkClass('cart')">
-  <md-tooltip md-visible="cartAddActive">
-    {{shoppingCartPopoverText}}
+  <md-tooltip>
+    {{mi.name}}
   </md-tooltip>
-  <span class="material-icons">shopping_cart</span><span class="count">{{quantity_total}}</span>
+  <span class="material-icons">shopping_cart</span>
 </md-button>
