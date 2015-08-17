@@ -1957,7 +1957,7 @@
         }).addMenuItem({
           name: 'Account',
           tag: 'account',
-          icon: 'account-circle',
+          icon: 'account_circle',
           template: 'plumb-templates/menu/account.html',
           showLoggedIn: true,
           showLoggedOut: false
@@ -1997,7 +1997,7 @@
         $scope.addMenuItem({
           name: 'Sign Out',
           tag: 'sign-out',
-          icon: 'exit-to-app',
+          icon: 'exit_to_app',
           onClick: function (evt) {
             plumb.auth.signOut();
           },
