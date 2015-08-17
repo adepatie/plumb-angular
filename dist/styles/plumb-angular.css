@@ -31,6 +31,9 @@
   line-height: 42px;
   vertical-align: middle;
 }
+.plumb-menu .material-icons {
+  vertical-align: middle;
+}
 .plumb-menu .plumb-link {
   font-weight: bold;
   color: #6f6e6e;
@@ -45,6 +48,15 @@
 }
 .plumb-menu .float-right {
   float: right;
+}
+.plumb-menu > .menu-dial {
+  z-index: 1;
+  position: absolute;
+  right: 100%;
+  -webkit-transition: all 0.25s;
+  -moz-transition: all 0.25s;
+  -o-transition: all 0.25s;
+  transition: all 0.25s;
 }
 .plumb-menu > .menu-wrapper {
   display: block;
@@ -142,6 +154,9 @@
   -o-transform: translate3d(-340px, 0, 0);
   -ms-transform: translate3d(-340px, 0, 0);
   transform: translate3d(-340px, 0, 0);
+}
+.plumb-menu.open .menu-dial {
+  left: 0;
 }
 .plumb-menu .plumb-loading {
   position: absolute;

@@ -72,7 +72,7 @@
   }
 
   function setupPlumb() {
-    w[PLUMB_CONFIG.ANGULAR].module('PlumbApp', ['ngMaterial', 'ngMdIcons']);
+    w[PLUMB_CONFIG.ANGULAR].module('PlumbApp', ['ngMaterial']);
     //$templateCache
     w[PLUMB_CONFIG.ANGULAR].module('PlumbApp')
       .provider('plumbConfig', function() {

@@ -77,6 +77,10 @@
     vertical-align: middle;
   }
 
+  .material-icons {
+    vertical-align: middle;
+  }
+
   .plumb-link {
     font-weight: bold;
     color: @defaultColor;
@@ -94,6 +98,13 @@
 
   .float-right {
     float: right;
+  }
+
+  > .menu-dial {
+    z-index: 1;
+    position: absolute;
+    right: 100%;
+    .transition(all .25s);
   }
 
   > .menu-wrapper {
@@ -192,6 +203,9 @@
 
   &.open {
     .transform(translate3d(-340px, 0, 0));
+    .menu-dial {
+      left: 0;
+    }
   }
 
   .plumb-loading {
