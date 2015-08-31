@@ -4,7 +4,7 @@
     "dist/plumb-angular.js",
     "dist/styles/plumb-angular.css"
   ],
-  "version": "0.2.0",
+  "version": "0.2.1",
   "authors": [
     {
       "name": "typefoo",
@@ -33,7 +33,7 @@
     "package.json"
   ],
   "devDependencies": {
-    "angular": "~1.4.4"
+    "angular": "~1.4.5"
   },
   "dependencies": {
     "angular-material": "~0.10.1"
