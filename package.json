@@ -1,6 +1,6 @@
 {
   "name": "plumb-angular",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "Plumb AngularJS Library",
   "main": [
     "dist/plumb-angular.js",
@@ -45,11 +45,9 @@
     "grunt-conventional-changelog": "^1.1.0",
     "grunt-ngdocs": "^0.2.2",
     "grunt-ngmin": "0.0.3",
+    "grunt-wiredep": "^2.0.0",
     "karma": "^0.12.16",
     "node-markdown": "^0.1.1",
     "semver": "^2.3.1"
-  },
-  "dependencies": {
-    "grunt-wiredep": "^2.0.0"
   }
 }
