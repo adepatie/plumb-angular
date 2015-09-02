@@ -91,6 +91,7 @@
         this.menuDirection = 'left';
         this.menuOpen = false;
         this.menuIcon = 'store';
+        this.menuTooltipDirection = 'top';
         this.display_price_breakdown = true;
         this.months = [
           {
