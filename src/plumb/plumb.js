@@ -89,9 +89,19 @@
           production: 'https://www.plummb.com/api/jsapi'
         };
         this.menuDirection = 'left';
+        this.menuHidden = false;
         this.menuOpen = false;
         this.menuIcon = 'store';
-        this.menuTooltipDirection = 'top';
+        this.menuHover = true;
+        this.menuMouseEnter = function($evt) {
+          if(this.menuHover === false) return false;
+          this.menuOpen = true;
+        };
+        this.menuMouseLeave = function($evt) {
+          if(this.menuHover === false) return false;
+          this.menuOpen = false;
+        };
+        this.menuTooltipDirection = 'bottom';
         this.display_price_breakdown = true;
         this.months = [
           {
