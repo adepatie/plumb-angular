@@ -1432,7 +1432,9 @@
            */
           function shipment(options) {
             var $scope = this;
+            $scope._id = undefined;
             $scope.rate = null;
+            $scope.type = 'shipping';
             $scope.ship_to = {
               name: undefined,
               company_name: undefined,
@@ -1485,6 +1487,7 @@
           function customer(options) {
             var $scope = this;
             $scope._id = undefined;
+            $scope.type = 'billing';
             $scope.ship_to = {
               name: undefined,
               company_name: undefined,
