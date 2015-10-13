@@ -2,7 +2,7 @@
  * plumb-angular
  * https://github.com/typefoo/plumb-angular
 
- * Version: 0.2.9 - 2015-09-19
+ * Version: 0.2.10 - 2015-10-13
  * License: AGPL
  */
 /**
@@ -2436,7 +2436,7 @@
                       card: { card_token: card_id }
                     });
                   }).catch(function (err) {
-                    scope.addMessage('error', err);
+                    scope.addMessage('error', err.message);
                     scope.apiLoading--;
                   });
                 } else {
