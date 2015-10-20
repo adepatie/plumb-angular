@@ -1120,12 +1120,30 @@
           };
 
           products.prototype.getProductPrice = function(product) {
+            var use_vendor_pricing = false;
+            var userProfile = $scope.options.user && $scope.options.user.current_profile && $scope.options.user.current_profile[$scope.options.session.data._groups] ? $scope.options.user.current_profile[$scope.options.session.data._groups] : null;
+            if(userProfile && userProfile.profile_template.use_vendor_pricing) {
+              use_vendor_pricing = true;
+            }
+            if(!product) {
+              return 'N/A';
+            }
             var p = product.price;
+            if(use_vendor_pricing) {
+              if(product.vendor_price) {
+                p = product.vendor_price;
+              }
+            }
             if(!product.variants) {
+              product.variants = [];
               return p;
             }
             for(var i = 0; i < product.variants.length; i++) {
-              if(product.variants[i].price) {
+              if(product.variants[i].price && !use_vendor_pricing) {
+                p += parseInt(product.variants[i].price, 10);
+              } else if(product.variants[i].vendor_price && use_vendor_pricing) {
+                p += parseInt(product.variants[i].vendor_price, 10);
+              } else if(product.variants[i].price) {
                 p += parseInt(product.variants[i].price, 10);
               }
             }
@@ -1373,19 +1391,6 @@
             return weight;
           }
 
-          function getProductPrice(p) {
-            var price = p.price;
-            if(!p.variants) {
-              p.variants = [];
-            }
-            for(var i = 0; i < p.variants.length; i++) {
-              if(p.variants[i].price && p.variants[i].price > 0) {
-                price += parseInt(p.variants[i].price, 10);
-              }
-            }
-            return price;
-          }
-
           shipping.prototype.rates = function (data, cb, errCb) {
             if (!data.products) {
               return cb(new Error('Missing products'), null);
@@ -1402,7 +1407,7 @@
             params.products = [];
             for (var i = 0; i < data.products.length; i++) {
               params.packages[0].weight += getProductWeight(data.products[i]) * data.products[i].qty;
-              params.packages[0].price += getProductPrice(data.products[i]) * data.products[i].qty;
+              params.packages[0].price += $scope.products.getProductPrice(data.products[i]) * data.products[i].qty;
               params.products.push(data.products[i]);
             }
 
@@ -1838,16 +1843,19 @@
             if(product.variants[i].name === name) {
               if(value === null) {
                 product.variants.splice(i, 1);
-                return;
+                return product;
               }
               product.variants[i].value = value.name;
               product.variants[i].price = value.price;
+              product.variants[i].vendor_price = value.vendor_price;
               product.variants[i].weight = value.weight;
+              product.variants[i].sku = value.sku;
+              product.variants[i].manufacturer_sku = value.manufacturer_sku;
               return product;
             }
           }
 
-          product.variants.push({name: name, value: value.name, price: value.price, weight: value.weight});
+          product.variants.push({name: name, value: value.name, price: value.price, vendor_price: value.vendor_price, weight: value.weight, sku: value.sku, manufacturer_sku: value.manufacturer_sku});
           return product;
         };
 
@@ -1858,11 +1866,11 @@
           for(var i = 0; i < product.variants.length; i++) {
             if(product.variants[i].name === name && product.variants[i].value === option.name) {
               product.variants.splice(i, 1);
-              return;
+              return product;
             }
           }
 
-          product.variants.push({name: name, value: option.name, price: option.price, weight: option.weight});
+          product.variants.push({name: name, value: option.name, price: option.price, vendor_price: option.vendor_price, weight: option.weight, sku: option.sku, manufacturer_sku: option.manufacturer_sku});
           return product;
         };
 
@@ -2276,18 +2284,7 @@
               }
             };
 
-            scope.getProductPrice = function(product) {
-              var p = product.price;
-              if(!product.variants) {
-                return p;
-              }
-              for(var i = 0; i < product.variants.length; i++) {
-                if(product.variants[i].price) {
-                  p += parseInt(product.variants[i].price, 10);
-                }
-              }
-              return p;
-            };
+            scope.getProductPrice = plumb.products.getProductPrice;
 
             scope.lookupGeoCode = function(address, postal_code, obj) {
               if(!postal_code || postal_code.length < 5) {
