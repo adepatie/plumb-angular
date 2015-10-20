@@ -154,7 +154,7 @@
           }
         ];
         // this is so inefficient lol, change
-        this.years = [
+        /*this.years = [
           {
             name: new Date().getFullYear(),
             value: new Date().getFullYear()
@@ -187,7 +187,22 @@
             name: new Date().getFullYear()+7,
             value: new Date().getFullYear()+7
           }
-        ];
+        ];*/
+        
+        this.years = function() {
+          var array = [];
+          
+          for(var count = 1; count < 8; count++) {
+            var date = new Date().getFullYear() + count;
+            array.push({
+              name: date,
+              value: date
+            });
+          }
+          
+          return array;
+        }
+        
         this.states =
           [
             {
