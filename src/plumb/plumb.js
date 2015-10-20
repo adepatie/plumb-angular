@@ -192,7 +192,7 @@
         this.years = function() {
           var array = [];
           
-          for(var count = 1; count < 8; count++) {
+          for(var count = 0; count < 8; count++) {
             var date = new Date().getFullYear() + count;
             array.push({
               name: date,
