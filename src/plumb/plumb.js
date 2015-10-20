@@ -2450,7 +2450,7 @@
             };
 
             scope.copyShippingAddress = function() {
-              scope.checkout.billing.ship_to = w[PLUMB_CONFIG.ANGULAR].extend(scope.checkout.billing.ship_to, scope.checkout.shipment.ship_to);
+              scope.checkout.billing.ship_to = w[PLUMB_CONFIG.ANGULAR].copy(scope.checkout.shipment.ship_to);
               scope.shippingAddressCopied = true;
             };
 
