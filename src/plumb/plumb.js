@@ -1126,7 +1126,7 @@
               use_vendor_pricing = true;
             }
             if(!product) {
-              return 'N/A';
+              return null;
             }
             var p = product.price;
             if(use_vendor_pricing) {
@@ -1778,15 +1778,7 @@
           if(!product) {
             return 'N/A';
           }
-          var p = product.price;
-          if(!product.variants) {
-            return $filter('currency')(p / 100);
-          }
-          for(var i = 0; i < product.variants.length; i++) {
-            if(product.variants[i].price) {
-              p += parseInt(product.variants[i].price, 10);
-            }
-          }
+          var p = plumb.products.getProductPrice(product);
           return $filter('currency')(p / 100);
         };
 
